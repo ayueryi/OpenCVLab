@@ -1,0 +1,99 @@
+﻿<Window
+    x:Class="OpenCVLab.View.MainForm"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:OpenCVLab.View"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="OPENCV实验大师"
+    Width="1800"
+    Height="1000"
+    d:DataContext="{d:DesignInstance local:MainForm,
+                                     IsDesignTimeCreatable=False}"
+    AllowsTransparency="True"
+    Background="Transparent"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+
+    <Border
+        Background="White"
+        BorderBrush="#f4b641"
+        BorderThickness="1"
+        Effect="{StaticResource EffectShadow3}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.Effect>
+                <DropShadowEffect
+                    BlurRadius="10"
+                    Opacity="0.4"
+                    ShadowDepth="0"
+                    Color="#FFAAAAAA" />
+            </Grid.Effect>
+
+            <!--  标题栏  -->
+            <Grid
+                x:Name="TitlePanel"
+                Grid.Row="0"
+                Height="45"
+                HorizontalAlignment="Stretch"
+                Effect="{StaticResource EffectShadow3}"
+                MouseDown="TitlePanel_MouseDown">
+                <Grid.Background>
+                    <ImageBrush ImageSource="pack://application:,,,/OpenCVLab;component/Resources/Images/TitleWellPaper.jpg" TileMode="None" />
+                </Grid.Background>
+                <StackPanel
+                    Margin="4"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <Image
+                        x:Name="ImageLogo"
+                        Width="38"
+                        Height="28"
+                        Margin="5"
+                        VerticalAlignment="Top"
+                        Source="pack://application:,,,/OpenCVLab;component/Resources/logo.png" />
+                    <TextBlock
+                        x:Name="SwName"
+                        VerticalAlignment="Center"
+                        FontSize="20"
+                        Foreground="#FF373737"
+                        Text="图像处理实验大师" />
+                </StackPanel>
+
+                <StackPanel
+                    Margin="4"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+
+                    <Button Margin="5" Click="Sw_Minus_Click">
+                        <materialDesign:PackIcon Kind="Minus" />
+                    </Button>
+
+                    <Button Margin="5" Click="Sw_Maxus_Click">
+                        <materialDesign:PackIcon Kind="Maximize" />
+                    </Button>
+
+                    <Button Margin="5" Click="Sw_Closeus_Click">
+                        <materialDesign:PackIcon Kind="Close" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <materialDesign:DialogHost
+                x:Name="RootDialog"
+                Grid.Row="1"
+                materialDesign:TransitionAssist.DisableTransitions="True"
+                CloseOnClickAway="False"
+                DialogTheme="Inherit"
+                Identifier="RootDialog">
+                <ContentControl Content="{Binding ViewModel.BasicPage}" />
+            </materialDesign:DialogHost>
+        </Grid>
+    </Border>
+</Window>

@@ -1,0 +1,76 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+	<AssemblyVersion>0.0.1</AssemblyVersion>
+	<FileVersion>0.0.1</FileVersion>
+	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	<ApplicationIcon>Resources\logo.ico</ApplicationIcon>
+  </PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<FileAlignment>4096</FileAlignment>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+		<FileAlignment>4096</FileAlignment>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<FileAlignment>4096</FileAlignment>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+		<FileAlignment>4096</FileAlignment>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Include="Resources\logo.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="OpenCvSharp4" Version="4.10.0.20241108" />
+		<PackageReference Include="OpenCvSharp4.runtime.win" Version="4.10.0.20241108" />
+		<PackageReference Include="OpenCvSharp4.WpfExtensions" Version="4.10.0.20241108" />
+		<PackageReference Include="HandyControl" Version="3.5.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Yu.UI\Yu.UI.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\Images\TitleWellPaper.jpg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\logo.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\logo.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Tips\MorphologyEx\Morphology_2_Tutorial_Theory_BlackHat.png" />
+	  <Resource Include="Resources\Tips\MorphologyEx\Morphology_2_Tutorial_Theory_Closing.png" />
+	  <Resource Include="Resources\Tips\MorphologyEx\Morphology_2_Tutorial_Theory_Dilation.png" />
+	  <Resource Include="Resources\Tips\MorphologyEx\Morphology_2_Tutorial_Theory_Erosion.png" />
+	  <Resource Include="Resources\Tips\MorphologyEx\Morphology_2_Tutorial_Theory_Gradient.png" />
+	  <Resource Include="Resources\Tips\MorphologyEx\Morphology_2_Tutorial_Theory_Opening.png" />
+	  <Resource Include="Resources\Tips\MorphologyEx\Morphology_2_Tutorial_Theory_TopHat.png" />
+	  <Resource Include="Resources\Tips\Threshold\Threshold_Tutorial_Theory_Base_Figure.png" />
+	  <Resource Include="Resources\Tips\Threshold\Threshold_Tutorial_Theory_Binary.png" />
+	  <Resource Include="Resources\Tips\Threshold\Threshold_Tutorial_Theory_Binary_Inverted.png" />
+	  <Resource Include="Resources\Tips\Threshold\Threshold_Tutorial_Theory_Truncate.png" />
+	  <Resource Include="Resources\Tips\Threshold\Threshold_Tutorial_Theory_Zero.png" />
+	  <Resource Include="Resources\Tips\Threshold\Threshold_Tutorial_Theory_Zero_Inverted.png" />
+	</ItemGroup>
+
+</Project>

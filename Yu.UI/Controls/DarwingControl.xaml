@@ -1,0 +1,79 @@
+﻿<UserControl
+    x:Class="Yu.UI.Controls.DarwingControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="500"
+    d:DesignWidth="500"
+    mc:Ignorable="d">
+    <Grid ClipToBounds="True">
+        <StackPanel
+            Margin="5,20"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Panel.ZIndex="1"
+            Orientation="Horizontal">
+
+            <Slider
+                x:Name="Slider"
+                Width="150"
+                VerticalAlignment="Bottom"
+                Maximum="20"
+                Minimum="1"
+                Orientation="Horizontal"
+                ToolTip="放大缩小"
+                ValueChanged="Slider_ValueChanged"
+                Visibility="Visible" />
+            <TextBlock
+                HorizontalAlignment="Center"
+                FontWeight="Bold"
+                Foreground="White"
+                TextAlignment="Center" />
+            <TextBlock
+                x:Name="MouseXy"
+                Margin="10,0"
+                FontWeight="Bold"
+                Foreground="White" />
+            <TextBlock
+                Width="60"
+                HorizontalAlignment="Center"
+                FontWeight="Bold"
+                Foreground="White"
+                Text="{Binding ElementName=Slider, Path=Value, StringFormat=放大:{0:0.0}}"
+                TextAlignment="Center" />
+        </StackPanel>
+
+        <ScrollViewer
+            x:Name="ScrollViewer"
+            Background="#FFAAAAAA"
+            HorizontalScrollBarVisibility="Visible"
+            IsDeferredScrollingEnabled="True"
+            MouseMove="ScrollViewer_MouseMove"
+            PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"
+            ScrollChanged="ScrollViewer_ScrollChanged"
+            VerticalScrollBarVisibility="Visible">
+            <Grid
+                Name="Scrollgrid"
+                Width="500"
+                Height="500"
+                RenderTransformOrigin="0.5,0.5">
+                <Grid.LayoutTransform>
+                    <TransformGroup>
+                        <ScaleTransform x:Name="ScaleTransform" />
+                    </TransformGroup>
+                </Grid.LayoutTransform>
+                <Image
+                    x:Name="DrawingImage"
+                    RenderOptions.BitmapScalingMode="NearestNeighbor"
+                    Source="{Binding ImageSource, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    Stretch="Uniform" />
+                <Canvas
+                    x:Name="Drawcanvas"
+                    Width="{Binding ElementName=DrawingImage, Path=ActualWidth}"
+                    Height="{Binding ElementName=DrawingImage, Path=ActualHeight}"
+                    Panel.ZIndex="1" />
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
