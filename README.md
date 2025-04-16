@@ -2,7 +2,7 @@
 
 # OpenCVLab
 
-<img src="C:\Docs\Codes\Incube\9.OPENCV实验大师\doc\assets\image-20250416224750088-1744814875108-1.png" alt="image-20250416224750088" style="zoom:50%;" />
+<img src=".\doc\assets\image-20250416224750088-1744814875108-1.png" alt="image-20250416224750088" style="zoom:50%;" />
 
 ## What is it?
 
