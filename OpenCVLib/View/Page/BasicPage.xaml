@@ -199,7 +199,10 @@
                         <materialDesign:PackIcon Kind="Analytics" />
                     </MenuItem.Icon>
 
-                    <MenuItem Command="{Binding ViewModel.DrawHistCommand}" Header="计算直方图" />
+                    <MenuItem Command="{Binding ViewModel.DrawHistCommand}" Header="绘制直方图" />
+                    <MenuItem Command="{Binding ViewModel.Draw2dHistCommand}" Header="绘制2D直方图" />
+                    <MenuItem Command="{Binding ViewModel.EqualizeHistCommand}" Header="直方图均衡化" />
+                    <MenuItem Command="{Binding ViewModel.CreateCLAHECommand}" Header="自适应直方图均衡化" />
                 </MenuItem>
 
                 <MenuItem Header="边缘检测">
@@ -354,6 +357,15 @@
                         Style="{StaticResource BorderRegion}">
                         <StackPanel>
                             <StackPanel Margin="2" Orientation="Horizontal">
+                                <TextBlock Text="图像通道" />
+                                <TextBlock
+                                    Margin="4,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="12"
+                                    Text="{Binding ViewModel.SelectOperation.Channels}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="2" Orientation="Horizontal">
                                 <TextBlock Text="图像维度" />
                                 <TextBlock
                                     Margin="4,0"
@@ -398,7 +410,10 @@
             Margin="3,1,3,1"
             Effect="{StaticResource EffectShadow3}"
             Style="{StaticResource BorderRegion}">
-            <ListBox ItemsSource="{Binding ViewModel.OperationsCollection}" SelectedItem="{Binding ViewModel.SelectOperation}">
+            <ListBox
+                d:ItemsSource="{d:SampleData ItemCount=5}"
+                ItemsSource="{Binding ViewModel.OperationsCollection}"
+                SelectedItem="{Binding ViewModel.SelectOperation}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
@@ -413,11 +428,32 @@
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="VerticalAlignment" Value="Stretch" />
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#FFD6E4FF" />
+                                <Setter Property="BorderBrush" Value="#FF2E62A3" />
+                                <Setter Property="BorderThickness" Value="2" />
+                                <Setter Property="Foreground" Value="Black" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Orientation="Horizontal" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding ViewModel.DeleteOperationCommand}" Header="删除选中" />
+                    </ContextMenu>
+                </ListBox.ContextMenu>
             </ListBox>
         </Border>
     </Grid>

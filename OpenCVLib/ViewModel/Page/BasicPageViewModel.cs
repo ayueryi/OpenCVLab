@@ -729,6 +729,7 @@ public partial class BasicPageViewModel : ObservableObject
     private Task OtsuThreshold()
     {
         if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
+
         try
         {
             Mat dst = new Mat();
@@ -752,6 +753,10 @@ public partial class BasicPageViewModel : ObservableObject
 
     #region 直方图
 
+    /// <summary>
+    /// 绘制直方图
+    /// </summary>
+    /// <returns></returns>
     [RelayCommand]
     private Task DrawHist()
     {
@@ -759,45 +764,116 @@ public partial class BasicPageViewModel : ObservableObject
 
         if (src is null || src.Empty() || src.Channels() > 1)
         {
-            Console.WriteLine("无法读取图像！");
+            Growl.ErrorGlobal("无法读取图像！");
             return Task.CompletedTask;
         }
 
-        // 定义直方图参数
-        int histSize = 256;
-        Rangef histRange = new Rangef(0, 256);
-        bool uniform = true;
-        bool accumulate = false;
-
-        // 计算直方图
-        Mat[] images = { src };
-        Mat hist = new Mat();
-        int[] channels = { 0 };
-        Mat mask = new Mat();
-        Cv2.CalcHist(images, channels, mask, hist, 1, new int[] { histSize }, new Rangef[] { histRange }, uniform, accumulate);
-
-        // 创建直方图图像
-        int hist_w = 512;
-        int hist_h = 400;
-        int bin_w = (int)Math.Round((double)hist_w / histSize);
-
-        Mat histImage = new Mat(hist_h, hist_w, MatType.CV_8UC3, Scalar.All(0));
-
-        // 归一化直方图
-        Cv2.Normalize(hist, hist, 0, histImage.Rows, NormTypes.MinMax, -1, new Mat());
-
-        // 绘制直方图
-        for (int i = 1; i < histSize; i++)
+        try
         {
-            Cv2.Line(histImage, new Point(bin_w * (i - 1), hist_h - (int)Math.Round(hist.Get<float>(i - 1))),
-                             new Point(bin_w * (i), hist_h - (int)Math.Round(hist.Get<float>(i))),
-                             new Scalar(255, 255, 255), 2, LineTypes.AntiAlias, 0);
+            // 定义直方图参数
+            int histSize = 256;
+            Rangef histRange = new Rangef(0, 256);
+            bool uniform = true;
+            bool accumulate = false;
+
+            // 计算直方图
+            Mat[] images = { src };
+            Mat hist = new Mat();
+            int[] channels = { 0 };
+            Mat mask = new Mat();
+            Cv2.CalcHist(images, channels, mask, hist, 1, new int[] { histSize }, new Rangef[] { histRange }, uniform, accumulate);
+
+            // 创建直方图图像
+            int hist_w = 512;
+            int hist_h = 400;
+            int bin_w = (int)Math.Round((double)hist_w / histSize);
+
+            Mat histImage = new Mat(hist_h, hist_w, MatType.CV_8UC3, Scalar.All(0));
+
+            // 归一化直方图
+            Cv2.Normalize(hist, hist, 0, histImage.Rows, NormTypes.MinMax, -1, new Mat());
+
+            // 绘制直方图
+            for (int i = 1; i < histSize; i++)
+            {
+                Cv2.Line(histImage, new Point(bin_w * (i - 1), hist_h - (int)Math.Round(hist.Get<float>(i - 1))),
+                                 new Point(bin_w * (i), hist_h - (int)Math.Round(hist.Get<float>(i))),
+                                 new Scalar(255, 255, 255), 2, LineTypes.AntiAlias, 0);
+            }
+
+            HistImageSource = histImage.ToBitmapSource();
+        }
+        catch (Exception exception)
+        {
+            Growl.ErrorGlobal("绘制直方图异常:" + exception.Message);
         }
 
-        HistImageSource = histImage.ToBitmapSource();
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// 绘制2d直方图
+    /// </summary>
+    /// <returns></returns>
+    [RelayCommand]
+    private Task Draw2dHist()
+    {
+        Mat? src = SelectOperation?.ImageMat;
+
+        if (src is null || src.Empty() || src.Channels() < 2)
+        {
+            Growl.ErrorGlobal("无法读取图像或图像通道数不足 2！");
+            return Task.CompletedTask;
+        }
+
+        try
+        {
+            // 定义直方图参数
+            int[] histSize = { 256, 256 }; // 两个维度的直方图大小
+            Rangef[] histRange = { new Rangef(0, 256), new Rangef(0, 256) }; // 两个维度的范围
+            bool uniform = true;
+            bool accumulate = false;
+
+            // 计算 2D 直方图
+            Mat[] images = { src };
+            Mat hist = new Mat();
+            int[] channels = { 0, 1 }; // 选择两个通道
+            Mat mask = new Mat();
+            Cv2.CalcHist(images, channels, mask, hist, 2, histSize, histRange, uniform, accumulate);
+
+            // 归一化直方图
+            Cv2.Normalize(hist, hist, 0, 255, NormTypes.MinMax, -1, new Mat());
+
+            // 创建直方图图像
+            int hist_w = 512;
+            int hist_h = 512;
+            Mat histImage = new Mat(hist_h, hist_w, MatType.CV_8UC3, Scalar.All(0));
+
+            // 绘制 2D 直方图
+            for (int i = 0; i < histSize[0]; i++)
+            {
+                for (int j = 0; j < histSize[1]; j++)
+                {
+                    int intensity = (int)hist.Get<float>(i, j);
+                    Scalar color = new Scalar(intensity, intensity, intensity);
+                    histImage.Set(i * (hist_h / histSize[0]), j * (hist_w / histSize[1]), color);
+                }
+            }
+
+            HistImageSource = histImage.ToBitmapSource();
+        }
+        catch (Exception exception)
+        {
+            Growl.ErrorGlobal("绘制 2D 直方图异常:" + exception.Message);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// 直方图均衡化
+    /// </summary>
+    /// <returns></returns>
     [RelayCommand]
     private Task EqualizeHist()
     {
@@ -805,20 +881,67 @@ public partial class BasicPageViewModel : ObservableObject
 
         if (src is null || src.Empty() || src.Channels() > 1)
         {
-            Console.WriteLine("无法读取图像！");
+            Growl.ErrorGlobal("无法读取图像！");
             return Task.CompletedTask;
         }
 
-        // 直方图均衡化
-        Mat dst = new Mat();
-        Cv2.EqualizeHist(src, dst);
+        try
+        {
+            // 直方图均衡化
+            Mat dst = new Mat();
+            Cv2.EqualizeHist(src, dst);
 
-        Operation operation = new Operation();
-        operation.ImageMat = dst;
-        operation.ImageName = $"{SelectOperation!.ImageName}_EqualizeHist";
+            Operation operation = new Operation();
+            operation.ImageMat = dst;
+            operation.ImageName = $"{SelectOperation!.ImageName}_EqualizeHist";
 
-        OperationsCollection.Add(operation);
-        SelectOperation = operation;
+            OperationsCollection.Add(operation);
+            SelectOperation = operation;
+        }
+        catch (Exception exception)
+        {
+            Growl.ErrorGlobal($"{exception.Message}");
+        }
+
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// 自适应直方图均衡
+    /// </summary>
+    /// <returns></returns>
+    [RelayCommand]
+    private Task CreateCLAHE()
+    {
+        Mat? src = SelectOperation?.ImageMat;
+
+        if (src is null || src.Empty() || src.Channels() > 1)
+        {
+            Growl.ErrorGlobal("无法读取图像！");
+            return Task.CompletedTask;
+        }
+
+        try
+        {
+            // 创建CLAHE对象
+            CLAHE clahe = Cv2.CreateCLAHE(40, new Size(8, 8));
+
+            // 应用CLAHE
+            Mat dst = new Mat();
+            clahe.Apply(src, dst);
+
+            Operation operation = new Operation();
+            operation.ImageMat = dst;
+
+            operation.ImageName = $"{SelectOperation!.ImageName}_CreateCLAHE";
+            OperationsCollection.Add(operation);
+            SelectOperation = operation;
+        }
+        catch (Exception exception)
+        {
+            Growl.ErrorGlobal($"{exception.Message}");
+        }
+
         return Task.CompletedTask;
     }
 
@@ -1004,10 +1127,30 @@ public partial class BasicPageViewModel : ObservableObject
 
     #endregion
 
+    #region 辅助命令
+
+    /// <summary>
+    /// 删除选中操作
+    /// </summary>
+    [RelayCommand]
+    private Task DeleteOperation()
+    {
+        if (SelectOperation is null) return Task.CompletedTask;
+        OperationsCollection.Remove(SelectOperation);
+        SelectOperation = OperationsCollection.LastOrDefault();
+        ResetCanvas();
+        return Task.CompletedTask;
+    }
+
+    #endregion
+
     #endregion
 
     #region 辅助方法
 
+    /// <summary>
+    /// 重置画布
+    /// </summary>
     private void ResetCanvas()
     {
         if (App.ServiceProvider.GetService(typeof(BasicPage)) is BasicPage basicPage)

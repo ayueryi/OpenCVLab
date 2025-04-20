@@ -35,5 +35,7 @@ public partial class Operation : ObservableObject
         }
     }
 
+    public int Channels => ImageMat?.Channels() ?? -1;
+
     #endregion
 }
