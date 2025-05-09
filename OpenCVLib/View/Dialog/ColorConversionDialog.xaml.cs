@@ -2,13 +2,13 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
-using Yu.UI;
-
 using OpenCVLab.Help;
 
-namespace OpenCVLab.View.Dialog;
+using Yu.UI;
 
 #pragma warning disable CS8625
+
+namespace OpenCVLab.View.Dialog;
 
 [Inject]
 [ObservableObject]

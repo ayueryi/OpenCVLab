@@ -1066,7 +1066,7 @@ public partial class BasicPageViewModel : ObservableObject
     #region 轮廓检测
 
     /// <summary>
-    /// 
+    /// 寻找轮廓
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
@@ -1123,6 +1123,53 @@ public partial class BasicPageViewModel : ObservableObject
             return Task.CompletedTask;
         }
         return Task.CompletedTask;
+    }
+
+    [RelayCommand]
+    private async Task DrawBoundingRect()
+    {
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty())
+        {
+            Growl.ErrorGlobal("图像为空");
+            return;
+        }
+
+        if (App.ServiceProvider.GetKeyedService(typeof(IContentControl), nameof(OperationChooseDialog)) is not OperationChooseDialog operationChooseDialog)
+        {
+            Growl.ErrorGlobal("Operation对话框未找到");
+            return;
+        }
+
+        operationChooseDialog.OperationsCollection = OperationsCollection;
+        await contentDialogService.ShowContentAsync(operationChooseDialog);
+
+        Operation? operation = operationChooseDialog.SelectOperation;
+        if (operation is null)
+        {
+            Growl.ErrorGlobal("未选择Operation");
+            return;
+        }
+
+        Mat? clone = operation.ImageMat?.Clone();
+        if (clone is null)
+        {
+            return;
+        }
+
+        foreach (ContourObject rectangleObject in SelectOperation.ContourObjectList)
+        {
+            Cv2.Rectangle(clone, rectangleObject.BoundingRect, Scalar.LightGreen);
+        }
+
+        Operation op = new Operation();
+
+        op.ImageMat = clone;
+        op.ImageName = $"{SelectOperation.ImageName}_DrawingBoundingRect";
+
+        OperationsCollection.Add(op);
+        SelectOperation = op;
+
+        return;
     }
 
     #endregion

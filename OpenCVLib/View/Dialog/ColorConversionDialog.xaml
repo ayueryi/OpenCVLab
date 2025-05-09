@@ -44,16 +44,22 @@
                             <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Button Click="Confirm">
+                        <Button
+                            Grid.Column="0"
+                            Width="200"
+                            Click="Confirm">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="ConfirmationNumber" />
+                                <materialDesign:PackIcon Kind="CheckCircleOutline" />
                                 <TextBlock>确认</TextBlock>
                             </StackPanel>
                         </Button>
 
-                        <Button Grid.Column="1" Click="Cancel">
+                        <Button
+                            Grid.Column="1"
+                            Width="200"
+                            Click="Cancel">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Cancel" />
+                                <materialDesign:PackIcon Kind="CloseCircleOutline" />
                                 <TextBlock>取消</TextBlock>
                             </StackPanel>
                         </Button>

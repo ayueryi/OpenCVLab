@@ -222,6 +222,7 @@
                     </MenuItem.Icon>
 
                     <MenuItem Command="{Binding ViewModel.FindContoursCommand}" Header="检测轮廓" />
+                    <MenuItem Command="{Binding ViewModel.DrawBoundingRectCommand}" Header="绘制外接轮廓" />
                 </MenuItem>
             </Menu>
         </Border>
@@ -233,6 +234,11 @@
             Style="{StaticResource BorderRegion}">
             <Grid>
                 <ui:ImagePreviewControl x:Name="uiImagePreviewControl" ImageSource="{Binding ViewModel.SelectOperation.BitmapSource, Mode=OneWay}" />
+
+                <Canvas
+                    x:Name="uiImageCanvasControl"
+                    Width="{Binding ElementName=uiImagePreviewControl, Path=ActualWidth}"
+                    Height="{Binding ElementName=uiImagePreviewControl, Path=ActualHeight}" />
 
                 <Expander
                     Margin="10"
@@ -350,7 +356,7 @@
                     VerticalAlignment="Bottom"
                     ExpandDirection="Up"
                     Header="图像属性"
-                    IsExpanded="True">
+                    IsEnabled="True">
                     <Border
                         Padding="4"
                         Effect="{StaticResource EffectShadow3}"
@@ -402,6 +408,51 @@
                     VerticalAlignment="Bottom"
                     Effect="{StaticResource EffectShadow3}"
                     Source="{Binding ViewModel.HistImageSource}" />
+
+                <Expander
+                    Margin="10"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    ExpandDirection="Right"
+                    IsExpanded="False">
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock>
+                                <TextBlock.LayoutTransform>
+                                    <RotateTransform Angle="90" />
+                                </TextBlock.LayoutTransform>
+                                作
+                            </TextBlock>
+                            <TextBlock>
+                                <TextBlock.LayoutTransform>
+                                    <RotateTransform Angle="90" />
+                                </TextBlock.LayoutTransform>
+                                操
+                            </TextBlock>
+                            <TextBlock>
+                                <TextBlock.LayoutTransform>
+                                    <RotateTransform Angle="90" />
+                                </TextBlock.LayoutTransform>
+                                像
+                            </TextBlock>
+                            <TextBlock>
+                                <TextBlock.LayoutTransform>
+                                    <RotateTransform Angle="90" />
+                                </TextBlock.LayoutTransform>
+                                图
+                            </TextBlock>
+                        </StackPanel>
+                    </Expander.Header>
+
+                    <Border
+                        Padding="4"
+                        Effect="{StaticResource EffectShadow3}"
+                        Style="{StaticResource BorderRegion}">
+                        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <ToggleButton Unchecked="ClearCanvas" Checked="DrawBoundingRectCanvas" Content="绘制轮廓矩形" Style="{StaticResource ToggleButtonSwitch}" />
+                        </StackPanel>
+                    </Border>
+                </Expander>
             </Grid>
         </Border>
 

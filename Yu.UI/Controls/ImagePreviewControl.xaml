@@ -12,7 +12,7 @@
         HorizontalScrollBarVisibility="Auto"
         VerticalScrollBarVisibility="Auto">
         <Canvas
-            Name="CanvasMap"
+            x:Name="CanvasMap"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Background="LightGray"
@@ -24,6 +24,11 @@
                 <MatrixTransform x:Name="Matrix" />
             </Canvas.RenderTransform>
             <Image x:Name="DrawingImage" />
+            <Canvas
+                x:Name="CanvasOut"
+                Width="{Binding ElementName=CanvasDiv, Path=ActualWidth}"
+                Height="{Binding ElementName=CanvasDiv, Path=ActualHeight}"
+                Background="Transparent" />
         </Canvas>
         <ScrollViewer.ContextMenu>
             <ContextMenu>

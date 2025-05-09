@@ -18,12 +18,14 @@ public partial class ImagePreviewControl : UserControl
     /// <summary>
     /// 记录下最后一次鼠标左键按下的位置。用于实现拖动功能。
     /// </summary>
-    private System.Windows.Point MarkPoint;
+    private Point MarkPoint;
 
     /// <summary>
     /// 标记是否正在移动Canvas。用于确定鼠标移动事件是否需要执行移动操作。
     /// </summary>
     private bool MoveCanvas;
+
+    public Canvas Canvas => CanvasOut;
 
     public ImagePreviewControl()
     {
@@ -69,7 +71,7 @@ public partial class ImagePreviewControl : UserControl
     private void Canvas_Map_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
     {
         // 获取鼠标在Canvas上的位置
-        System.Windows.Point pt2 = e.GetPosition(CanvasMap);
+        Point pt2 = e.GetPosition(CanvasMap);
         MatrixTransform scal = new MatrixTransform();
 
         // 计算缩放比例，缩放因子根据滚轮滚动的delta值计算
@@ -78,7 +80,7 @@ public partial class ImagePreviewControl : UserControl
         double offY = pt2.Y - pt2.Y * Zooms; // 计算Y方向的偏移
 
         // 获取Canvas的实际宽度和高度，并应用当前矩阵变换
-        System.Windows.Point p = new System.Windows.Point(CanvasMap.ActualWidth, CanvasMap.ActualHeight);
+        Point p = new Point(CanvasMap.ActualWidth, CanvasMap.ActualHeight);
         p = p * Matrix.Matrix;
 
         // 创建缩放矩阵
@@ -109,7 +111,7 @@ public partial class ImagePreviewControl : UserControl
         }
 
         // 获取当前鼠标位置
-        System.Windows.Point ptNow = e.GetPosition(CanvasMap);
+        Point ptNow = e.GetPosition(CanvasMap);
         MatrixTransform scal = new MatrixTransform();
 
         // 计算Canvas在X和Y方向上的偏移量
@@ -121,11 +123,11 @@ public partial class ImagePreviewControl : UserControl
         MatrixTransform scal2 = new MatrixTransform();
 
         // 获取Canvas的实际宽度和高度，并应用当前矩阵变换
-        System.Windows.Point p = new System.Windows.Point(CanvasMap.ActualWidth, CanvasMap.ActualHeight);
+        Point p = new Point(CanvasMap.ActualWidth, CanvasMap.ActualHeight);
         p = p * Matrix.Matrix;
 
         // 创建平移矩阵
-        scal.Matrix = new System.Windows.Media.Matrix(Zooms, 0, 0, Zooms, offX, offY);
+        scal.Matrix = new Matrix(Zooms, 0, 0, Zooms, offX, offY);
 
         // 更新Canvas的变换矩阵
         Matrix.Matrix = scal.Matrix * Matrix.Matrix;
