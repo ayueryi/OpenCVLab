@@ -1125,6 +1125,10 @@ public partial class BasicPageViewModel : ObservableObject
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// 通过轮廓绘制边界矩形
+    /// </summary>
+    /// <returns></returns>
     [RelayCommand]
     private async Task DrawBoundingRect()
     {
