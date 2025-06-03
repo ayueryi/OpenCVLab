@@ -67,7 +67,11 @@ public partial class ImagePreviewControl : UserControl
 
     #region Canvas缩放拖动
 
-    // 处理鼠标滚轮事件以实现图像缩放
+    /// <summary>
+    /// 处理鼠标滚轮事件以实现图像缩放
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void Canvas_Map_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
     {
         // 获取鼠标在Canvas上的位置
@@ -90,7 +94,11 @@ public partial class ImagePreviewControl : UserControl
         Matrix.Matrix = scal.Matrix * Matrix.Matrix;
     }
 
-    // 处理鼠标左键按下事件以开始移动Canvas
+    /// <summary>
+    /// 处理鼠标左键按下事件以开始移动Canvas
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void Canvas_Map_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
         // 记录鼠标按下时的位置
@@ -98,10 +106,18 @@ public partial class ImagePreviewControl : UserControl
         MoveCanvas = true; // 设置标志表示开始移动Canvas
     }
 
-    // 处理鼠标左键释放事件以停止移动Canvas
+    /// <summary>
+    /// 处理鼠标左键释放事件以停止移动Canvas
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void Canvas_Map_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e) => MoveCanvas = false;
 
-    // 处理鼠标移动事件以移动Canvas
+    /// <summary>
+    /// 处理鼠标移动事件以移动Canvas
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void Canvas_Map_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
     {
         // 如果没有设置移动标志，退出函数

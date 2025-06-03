@@ -45,10 +45,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Yu.UI\Yu.UI.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <Resource Include="Resources\Images\TitleWellPaper.jpg">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>

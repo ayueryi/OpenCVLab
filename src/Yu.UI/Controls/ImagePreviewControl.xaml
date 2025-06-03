@@ -7,6 +7,7 @@
     d:DesignHeight="450"
     d:DesignWidth="450"
     mc:Ignorable="d">
+    
     <ScrollViewer
         x:Name="ScrollViewerMap"
         HorizontalScrollBarVisibility="Auto"
@@ -24,11 +25,7 @@
                 <MatrixTransform x:Name="Matrix" />
             </Canvas.RenderTransform>
             <Image x:Name="DrawingImage" />
-            <Canvas
-                x:Name="CanvasOut"
-                Width="{Binding ElementName=CanvasDiv, Path=ActualWidth}"
-                Height="{Binding ElementName=CanvasDiv, Path=ActualHeight}"
-                Background="Transparent" />
+            <Canvas x:Name="CanvasOut" Background="Transparent" />
         </Canvas>
         <ScrollViewer.ContextMenu>
             <ContextMenu>

@@ -2,9 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCVLab", "OpenCVLib\OpenCVLab.csproj", "{71FBECC6-0FB9-4D8F-BA84-C2F89C14D24A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yu.UI", "src\Yu.UI\Yu.UI.csproj", "{37437288-7630-2BFB-9063-A05CFF0C8C24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yu.UI", "Yu.UI\Yu.UI.csproj", "{1967E6FA-BD6F-7AE6-8024-1EA6C98969EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCVLab", "src\OpenCVLib\OpenCVLab.csproj", "{5EC001BE-4C00-C814-1473-1FF5DC6B7FD2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,14 +12,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{71FBECC6-0FB9-4D8F-BA84-C2F89C14D24A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{71FBECC6-0FB9-4D8F-BA84-C2F89C14D24A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{71FBECC6-0FB9-4D8F-BA84-C2F89C14D24A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{71FBECC6-0FB9-4D8F-BA84-C2F89C14D24A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1967E6FA-BD6F-7AE6-8024-1EA6C98969EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1967E6FA-BD6F-7AE6-8024-1EA6C98969EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1967E6FA-BD6F-7AE6-8024-1EA6C98969EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1967E6FA-BD6F-7AE6-8024-1EA6C98969EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37437288-7630-2BFB-9063-A05CFF0C8C24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37437288-7630-2BFB-9063-A05CFF0C8C24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37437288-7630-2BFB-9063-A05CFF0C8C24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37437288-7630-2BFB-9063-A05CFF0C8C24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EC001BE-4C00-C814-1473-1FF5DC6B7FD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EC001BE-4C00-C814-1473-1FF5DC6B7FD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EC001BE-4C00-C814-1473-1FF5DC6B7FD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EC001BE-4C00-C814-1473-1FF5DC6B7FD2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

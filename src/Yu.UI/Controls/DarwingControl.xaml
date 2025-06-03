@@ -9,7 +9,7 @@
     mc:Ignorable="d">
     <Grid ClipToBounds="True">
         <StackPanel
-            Margin="5,20"
+            Margin="10"
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
             Panel.ZIndex="1"

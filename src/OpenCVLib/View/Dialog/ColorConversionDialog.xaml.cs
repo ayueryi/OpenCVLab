@@ -10,7 +10,6 @@ using Yu.UI;
 
 namespace OpenCVLab.View.Dialog;
 
-[Inject]
 [ObservableObject]
 [KeyedInject(typeof(IContentControl), nameof(ColorConversionDialog), Lifecycle.Singleton)]
 public partial class ColorConversionDialog : IContentControl
