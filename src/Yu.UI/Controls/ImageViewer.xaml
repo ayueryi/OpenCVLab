@@ -55,11 +55,6 @@
                     <Image x:Name="DrawingImage" />
                     <Canvas x:Name="CanvasOut" Background="Transparent" />
                 </Canvas>
-                <ScrollViewer.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Click="FlushCanvas" Header="重置" />
-                    </ContextMenu>
-                </ScrollViewer.ContextMenu>
             </ScrollViewer>
 
             <StackPanel Grid.Row="2" Orientation="Horizontal">

@@ -1,19 +1,27 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net9.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <LangVersion>12</LangVersion>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>14</LangVersion>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="HandyControl" Version="3.5.1" />
-    <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
-    <PackageReference Include="System.Drawing.Common" Version="8.0.12" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="HandyControl" Version="3.5.1" />
+		<PackageReference Include="MaterialDesignThemes" Version="5.3.0" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+		<PackageReference Include="System.Drawing.Common" Version="10.0.0" />
+	</ItemGroup>
+
+	<!-- Workaround for https://github.com/dotnet/wpf/issues/11246 -->
+	<!-- Copy from https://github.com/dotnet/sdk/issues/51173#issuecomment-3392609295 -->
+	<!--<Target Name="_AddDrawingReference" AfterTargets="ResolveTargetingPackAssets">
+		<ItemGroup>
+			<Reference Condition="'%(Reference.FileName)' == 'PresentationCore'" Include="%(Reference.RootDir)%(Reference.Directory)System.Drawing.Common.dll;&#xD;&#xA;%(Reference.RootDir)%(Reference.Directory)System.Private.Windows.GdiPlus.dll" />
+		</ItemGroup>
+	</Target>-->
 
 </Project>
