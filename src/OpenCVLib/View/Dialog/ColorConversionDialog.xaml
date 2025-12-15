@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:OpenCVLab.View.Dialog"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://Yu-UI.com//2024/xaml"
     d:DataContext="{d:DesignInstance local:ColorConversionDialog,
@@ -12,58 +11,56 @@
     d:DesignHeight="180"
     d:DesignWidth="500"
     mc:Ignorable="d">
-    <Border Effect="{StaticResource EffectShadow3}" Style="{StaticResource BorderRegion}">
+    <Border Effect="{StaticResource EffectShadow3}"
+            Style="{StaticResource OpenCVLabDialogRootBorder}">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <ui:Title MainTitle="颜色空间转换" SubTitle="Color Space Conversions" />
+            <ui:Title MainTitle="颜色空间转换"
+                    SubTitle="Color Space Conversions"/>
 
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
-                <StackPanel Margin="15" Orientation="Vertical">
+                <StackPanel Margin="20"
+                        Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center">转换方法</TextBlock>
                         <ComboBox
                             Width="200"
                             Margin="10,0,0,0"
                             ItemsSource="{Binding ColorConversionCollection}"
-                            SelectedValue="{Binding ColorConversionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            SelectedValue="{Binding ColorConversionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                 </StackPanel>
 
-                <Border Grid.Row="1" Style="{StaticResource BorderRegion}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Button
-                            Grid.Column="0"
-                            Width="200"
-                            Click="Confirm">
+                <Border Grid.Row="1"
+                        Style="{StaticResource OpenCVLabDialogFooterBorder}">
+                    <UniformGrid Columns="2">
+                        <Button Click="Confirm"
+                                Style="{StaticResource OpenCVLabDialogPrimaryButton}">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="CheckCircleOutline" />
-                                <TextBlock>确认</TextBlock>
+                                <ui:Icon Kind="CheckCircleOutline"
+                                        Margin="0,0,8,0"/>
+                                <TextBlock VerticalAlignment="Center">确认</TextBlock>
                             </StackPanel>
                         </Button>
 
-                        <Button
-                            Grid.Column="1"
-                            Width="200"
-                            Click="Cancel">
+                        <Button Click="Cancel"
+                                Style="{StaticResource OpenCVLabDialogSecondaryButton}">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="CloseCircleOutline" />
-                                <TextBlock>取消</TextBlock>
+                                <ui:Icon Kind="CloseCircleOutline"
+                                        Margin="0,0,8,0"/>
+                                <TextBlock VerticalAlignment="Center">取消</TextBlock>
                             </StackPanel>
                         </Button>
-                    </Grid>
+                    </UniformGrid>
                 </Border>
             </Grid>
         </Grid>

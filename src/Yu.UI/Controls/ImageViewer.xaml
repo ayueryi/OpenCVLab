@@ -4,31 +4,33 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Yu.UI.Controls"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-    <Border Effect="{StaticResource EffectShadow3}" Style="{StaticResource BorderRegion}">
+    <Border Effect="{StaticResource EffectShadow3}"
+            Style="{StaticResource BorderRegion}">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
             <!--  功能栏  -->
-            <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <StackPanel Grid.Row="0"
+                    Orientation="Horizontal">
                 <Button ToolTip="自适应画布">
                     <Button.Content>
-                        <materialDesign:PackIcon Kind="AspectRatio" />
+                        <local:Icon Kind="AspectRatio"/>
                     </Button.Content>
                 </Button>
 
-                <Button Margin="4,0" ToolTip="十字线提示">
+                <Button Margin="4,0"
+                        ToolTip="十字线提示">
                     <Button.Content>
-                        <materialDesign:PackIcon Kind="BorderInside" />
+                        <local:Icon Kind="BorderInside"/>
                     </Button.Content>
                 </Button>
             </StackPanel>
@@ -50,14 +52,16 @@
                     MouseMove="Canvas_Map_MouseMove"
                     MouseWheel="Canvas_Map_MouseWheel">
                     <Canvas.RenderTransform>
-                        <MatrixTransform x:Name="Matrix" />
+                        <MatrixTransform x:Name="Matrix"/>
                     </Canvas.RenderTransform>
-                    <Image x:Name="DrawingImage" />
-                    <Canvas x:Name="CanvasOut" Background="Transparent" />
+                    <Image x:Name="DrawingImage"/>
+                    <Canvas x:Name="CanvasOut"
+                            Background="Transparent"/>
                 </Canvas>
             </ScrollViewer>
 
-            <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <StackPanel Grid.Row="2"
+                    Orientation="Horizontal">
                 <TextBlock>信息:</TextBlock>
             </StackPanel>
 
@@ -74,30 +78,33 @@
                     Effect="{StaticResource EffectShadow3}"
                     Style="{StaticResource BorderRegion}">
                     <StackPanel>
-                        <StackPanel Margin="2" Orientation="Horizontal">
-                            <TextBlock Text="图像通道" />
+                        <StackPanel Margin="2"
+                                Orientation="Horizontal">
+                            <TextBlock Text="图像通道"/>
                             <TextBlock
                                 Margin="4,0"
                                 VerticalAlignment="Center"
                                 FontSize="12"
-                                Text="{Binding ViewModel.SelectOperation.Channels}" />
+                                Text="{Binding ViewModel.SelectOperation.Channels}"/>
                         </StackPanel>
 
-                        <StackPanel Margin="2" Orientation="Horizontal">
-                            <TextBlock Text="图像大小" />
+                        <StackPanel Margin="2"
+                                Orientation="Horizontal">
+                            <TextBlock Text="图像大小"/>
                             <TextBlock
                                 Margin="1,0"
                                 VerticalAlignment="Center"
                                 FontSize="12"
-                                Text="{Binding ViewModel.SelectOperation.ImageMat.Cols}" />
-                            <TextBlock Margin="1,0" VerticalAlignment="Center">
+                                Text="{Binding ViewModel.SelectOperation.ImageMat.Cols}"/>
+                            <TextBlock Margin="1,0"
+                                    VerticalAlignment="Center">
                                 ×
                             </TextBlock>
                             <TextBlock
                                 Margin="1,0"
                                 VerticalAlignment="Center"
                                 FontSize="12"
-                                Text="{Binding ViewModel.SelectOperation.ImageMat.Rows}" />
+                                Text="{Binding ViewModel.SelectOperation.ImageMat.Rows}"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>

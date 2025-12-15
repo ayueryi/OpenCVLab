@@ -5,7 +5,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:OpenCVLab.View.Dialog"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://Yu-UI.com//2024/xaml"
     d:DataContext="{d:DesignInstance local:OperationChooseDialog,
@@ -15,7 +14,7 @@
     mc:Ignorable="d">
 
     <Border Effect="{StaticResource EffectShadow3}"
-            Style="{StaticResource BorderRegion}">
+            Style="{StaticResource OpenCVLabDialogRootBorder}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -23,7 +22,7 @@
             </Grid.RowDefinitions>
 
             <ui:Title MainTitle="操作选择"
-                    SubTitle="Operation Choose"/>
+                      SubTitle="Operation Choose"/>
 
             <Button
                 Margin="4"
@@ -31,7 +30,7 @@
                 VerticalAlignment="Top"
                 Click="Cancel">
                 <StackPanel Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="Close"/>
+                    <ui:Icon Kind="Close"/>
                     <TextBlock>关闭</TextBlock>
                 </StackPanel>
             </Button>
@@ -75,11 +74,11 @@
                                     Value="Stretch"/>
                             <Style.Triggers>
                                 <Trigger Property="IsSelected"
-                                        Value="True">
+                                         Value="True">
                                     <Setter Property="Background"
-                                            Value="#FFD6E4FF"/>
+                                            Value="{StaticResource OpenCVLab.Brush.Accent.Light}"/>
                                     <Setter Property="BorderBrush"
-                                            Value="#FF2E62A3"/>
+                                            Value="{StaticResource OpenCVLab.Brush.Accent}"/>
                                     <Setter Property="BorderThickness"
                                             Value="2"/>
                                     <Setter Property="Foreground"

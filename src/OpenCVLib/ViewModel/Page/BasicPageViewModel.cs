@@ -5,8 +5,6 @@ using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using HandyControl.Controls;
-
 using Microsoft.Win32;
 
 using OpenCVLab.Help;
@@ -338,7 +336,19 @@ public partial class BasicPageViewModel : ObservableObject
             return;
         }
 
-        Enum.TryParse(colorConversionDialog.ColorConversionName, out ColorConversionCodes colorConversionCode);
+        var requestedName = colorConversionDialog.ColorConversionName;
+        Enum.TryParse(requestedName, out ColorConversionCodes colorConversionCode);
+
+        // Most images load as BGR, but some formats (e.g. PNG) may load as BGRA.
+        // If the user selects a BGR conversion against a 4-channel source, OpenCV will throw.
+        // Map the common cases so the operation still produces an output.
+        var srcChannels = SelectOperation.ImageMat.Channels();
+        if (srcChannels == 4 && string.Equals(requestedName, "BGR2GRAY", StringComparison.OrdinalIgnoreCase))
+        {
+            if (Enum.TryParse("BGRA2GRAY", out ColorConversionCodes bgra2Gray))
+                colorConversionCode = bgra2Gray;
+            requestedName = "BGRA2GRAY";
+        }
         try
         {
             Mat dst = new Mat();
@@ -346,18 +356,16 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_{colorConversionDialog.ColorConversionName}";
+            operation.ImageName = $"{SelectOperation.ImageName}_{requestedName}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
+            Growl.SuccessGlobal($"颜色空间转换完成: {requestedName}");
         }
         catch (Exception exception)
         {
-            Growl.ErrorGlobal("颜色空间转换失败" + exception.Message);
-            return;
+            Growl.ErrorGlobal("颜色空间转换失败: " + exception.Message);
         }
-
-        return;
     }
 
     #endregion
@@ -387,20 +395,24 @@ public partial class BasicPageViewModel : ObservableObject
             Mat dst = new Mat();
             Cv2.Blur(SelectOperation.ImageMat, dst, new Size(BlockSize, BlockSize));
 
+            if (dst.Empty())
+            {
+                Growl.ErrorGlobal("滤波结果为空");
+                return;
+            }
+
             Operation operation = new Operation();
             operation.ImageMat = dst;
             operation.ImageName = $"{SelectOperation.ImageName}_Blur_k{BlockSize}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
+            Growl.SuccessGlobal($"归一化滤波完成，卷积核: {BlockSize}");
         }
         catch (Exception exception)
         {
-            Growl.ErrorGlobal("归一化滤波失败" + exception.Message);
-            return;
+            Growl.ErrorGlobal("归一化滤波失败: " + exception.Message);
         }
-
-        return;
     }
 
     /// <summary>
@@ -438,14 +450,12 @@ public partial class BasicPageViewModel : ObservableObject
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
+            Growl.SuccessGlobal($"高斯滤波完成，卷积核: {BlockSize}");
         }
         catch (Exception exception)
         {
-            Growl.ErrorGlobal("高斯滤波失败" + exception.Message);
-            return;
+            Growl.ErrorGlobal("高斯滤波失败: " + exception.Message);
         }
-
-        return;
     }
 
     /// <summary>
@@ -482,13 +492,12 @@ public partial class BasicPageViewModel : ObservableObject
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
+            Growl.SuccessGlobal($"中值滤波完成，卷积核: {BlockSize}");
         }
         catch (Exception exception)
         {
-            Growl.ErrorGlobal("中值滤波失败" + exception.Message);
-            return;
+            Growl.ErrorGlobal("中值滤波失败: " + exception.Message);
         }
-        return;
     }
 
     /// <summary>
@@ -519,13 +528,12 @@ public partial class BasicPageViewModel : ObservableObject
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
+            Growl.SuccessGlobal($"双边滤波完成，参数: {BlockSize}");
         }
         catch (Exception exception)
         {
-            Growl.ErrorGlobal("双边滤波失败" + exception.Message);
-            return;
+            Growl.ErrorGlobal("双边滤波失败: " + exception.Message);
         }
-        return;
     }
 
     #endregion
@@ -565,9 +573,7 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("腐蚀失败" + exception.Message);
-            return;
         }
-        return;
     }
 
     /// <summary>
@@ -603,9 +609,7 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("膨胀失败" + exception.Message);
-            return;
         }
-        return;
     }
 
     #endregion
@@ -645,9 +649,7 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("形态学[开运算]操作失败" + exception.Message);
-            return;
         }
-        return;
     }
 
     /// <summary>
@@ -683,9 +685,7 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("形态学[闭运算]操作失败" + exception.Message);
-            return;
         }
-        return;
     }
 
     /// <summary>
@@ -721,9 +721,7 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("形态学[梯度]操作失败" + exception.Message);
-            return;
         }
-        return;
     }
 
     /// <summary>
@@ -759,9 +757,7 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("形态学[顶帽]操作失败" + exception.Message);
-            return;
         }
-        return;
     }
 
     /// <summary>
@@ -797,9 +793,7 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("形态学[黑帽]操作失败" + exception.Message);
-            return;
         }
-        return;
     }
     #endregion
 
@@ -832,13 +826,12 @@ public partial class BasicPageViewModel : ObservableObject
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
+            Growl.SuccessGlobal($"阈值处理完成: {ThresholdType}");
         }
         catch (Exception exception)
         {
-            Growl.ErrorGlobal("阈值处理失败" + exception.Message);
-            return;
+            Growl.ErrorGlobal("阈值处理失败: " + exception.Message);
         }
-        return;
     }
 
     /// <summary>
@@ -873,9 +866,7 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("自适应阈值处理失败" + exception.Message);
-            return;
         }
-        return;
     }
 
     /// <summary>
@@ -905,9 +896,7 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("Otsu阈值处理失败" + exception.Message);
-            return;
         }
-        return;
     }
     #endregion
 
@@ -1281,9 +1270,7 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("Canny边缘检测失败" + exception.Message);
-            return;
         }
-        return;
     }
 
     /// <summary>
@@ -1432,9 +1419,7 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("轮廓检测失败" + exception.Message);
-            return;
         }
-        return;
     }
 
     /// <summary>
@@ -1484,8 +1469,6 @@ public partial class BasicPageViewModel : ObservableObject
 
         OperationsCollection.Add(op);
         SelectOperation = op;
-
-        return;
     }
 
     #endregion
@@ -1528,12 +1511,8 @@ public partial class BasicPageViewModel : ObservableObject
         await contentDialogService.ShowContentAsync(
             dialog,
             succCallback: _ => tcs.TrySetResult(true),
-            cancelCallback: _ => tcs.TrySetResult(false));
-
-        if (!tcs.Task.IsCompleted)
-        {
-            tcs.TrySetResult(false);
-        }
+            cancelCallback: _ => tcs.TrySetResult(false),
+            closeCallback: _ => tcs.TrySetResult(false));
 
         return await tcs.Task;
     }

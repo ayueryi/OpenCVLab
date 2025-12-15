@@ -1,6 +1,5 @@
 ﻿using Yu.UI.Controls.ContentDialog;
-
-using MaterialDesignThemes.Wpf;
+using Yu.UI.Controls;
 
 namespace Yu.UI;
 
@@ -15,28 +14,28 @@ public class ContentDialogService : IContentDialogService
 
     public string? GetDialogHost() => _dialogIdentifier;
 
-    public Task ShowSampleTipAsync(string title, string msg, Action? confim, Action? cancel)
+    private ContentDialogHost GetHostOrThrow()
     {
-        if (_dialogIdentifier == null)
+        if (string.IsNullOrWhiteSpace(_dialogIdentifier))
             throw new InvalidOperationException("The DialogHost was never set.");
 
-        if (DialogHost.IsDialogOpen(_dialogIdentifier))
-            return Task.CompletedTask;
+        if (!ContentDialogHostRegistry.TryGet(_dialogIdentifier, out var host))
+            throw new InvalidOperationException($"Dialog host '{_dialogIdentifier}' was not found.");
 
-        TipDialog v = new TipDialog();
-        v.SuccCallback = confim;
-        v.FailCallback = cancel;
+        return host;
+    }
 
-        Action finlly = () => { _ = CloseDialog(); };
-        v.SuccCallback += finlly;
-        v.FailCallback += finlly;
+    public Task ShowSampleTipAsync(string title, string msg, Action? confim, Action? cancel)
+    {
+        var v = new TipDialog
+        {
+            TipTitle = title,
+            TipContent = msg
+        };
 
-        v.TipTitle = title;
-        v.TipContent = msg;
-
-        DialogHost.Show(v, _dialogIdentifier, v.DialogClosingEventHandler);
-
-        return Task.CompletedTask;
+        return ShowContentAsync(v,
+            succCallback: _ => confim?.Invoke(),
+            cancelCallback: _ => cancel?.Invoke());
     }
 
     public async Task ShowContentAsync(IContentControl? userControl,
@@ -48,11 +47,8 @@ public class ContentDialogService : IContentDialogService
         if (userControl == null)
             throw new ArgumentNullException(nameof(userControl));
 
-        if (_dialogIdentifier == null)
-            throw new InvalidOperationException("The DialogHost was never set.");
-
-        if (DialogHost.IsDialogOpen(_dialogIdentifier))
-            return;
+        var host = GetHostOrThrow();
+        if (host.IsOpen) return;
 
         userControl.CloseCallback += closeCallback ?? (o => CloseDialog());
         userControl.SuccCallback += succCallback;
@@ -60,13 +56,17 @@ public class ContentDialogService : IContentDialogService
         userControl.CancelCallback += cancelCallback;
         userControl.SuccCallback += (o) => CloseDialog();
         userControl.CancelCallback += (o) => CloseDialog();
-        await DialogHost.Show(userControl, _dialogIdentifier);
+
+        if (userControl is not System.Windows.Controls.UserControl uc)
+            throw new InvalidOperationException("Dialog content must be a WPF UserControl.");
+
+        await host.ShowAsync(uc);
     }
 
     public Task CloseDialog()
     {
-        if (DialogHost.IsDialogOpen(_dialogIdentifier))
-            DialogHost.Close(_dialogIdentifier);
+        var host = GetHostOrThrow();
+        if (host.IsOpen) host.Close();
 
         return Task.CompletedTask;
     }

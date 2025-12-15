@@ -1,7 +1,7 @@
 namespace Yu.UI;
 
 /// <summary>
-/// ContentDialogService Design Base MaterialDesignFramework
+/// ContentDialogService
 /// </summary>
 public interface IContentDialogService
 {

@@ -1,14 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-using MaterialDesignThemes.Wpf;
-
 namespace Yu.UI.Controls.ContentDialog;
 
 /// <summary>
 /// 简单弹窗
 /// </summary>
 [ObservableObject]
-public partial class TipDialog
+public partial class TipDialog : Yu.UI.IContentControl
 {
     #region ViewModels
 
@@ -24,9 +22,10 @@ public partial class TipDialog
 
     #region Properties
 
-    public Action? SuccCallback;
-
-    public Action? FailCallback;
+    public Action<object>? CloseCallback { get; set; }
+    public Action<object>? SuccCallback { get; set; }
+    public Action<object>? FailCallback { get; set; }
+    public Action<object>? CancelCallback { get; set; }
 
     #endregion
 
@@ -36,19 +35,7 @@ public partial class TipDialog
         InitializeComponent();
     }
 
-    public void DialogClosingEventHandler(object sender, DialogClosingEventArgs eventArgs)
-    {
-        if (eventArgs.Parameter == null)
-        {
-            return;
-        }
-        if ((string)eventArgs.Parameter == "Success")
-        {
-            SuccCallback?.Invoke();
-        }
-        if ((string)eventArgs.Parameter == "Cancel")
-        {
-            FailCallback?.Invoke();
-        }
-    }
+    private void Confirm_Click(object sender, System.Windows.RoutedEventArgs e) => SuccCallback?.Invoke(null!);
+
+    private void Cancel_Click(object sender, System.Windows.RoutedEventArgs e) => CancelCallback?.Invoke(null!);
 }

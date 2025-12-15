@@ -1,0 +1,622 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--  Elegant Minimalist Palette - Enhanced  -->
+    <SolidColorBrush x:Key="OpenCVLab.Brush.Surface" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="OpenCVLab.Brush.Background" Color="#F5F7FA" />
+    <!--  Softer, airier background  -->
+    <SolidColorBrush x:Key="OpenCVLab.Brush.Border" Color="#E8ECEF" />
+    <!--  Subtle border  -->
+    <SolidColorBrush x:Key="OpenCVLab.Brush.Text" Color="#1A1D1F" />
+    <!--  Deeper, richer black  -->
+    <SolidColorBrush x:Key="OpenCVLab.Brush.TextMuted" Color="#6B7280" />
+    <!--  Balanced gray  -->
+    <SolidColorBrush x:Key="OpenCVLab.Brush.TextLight" Color="#9CA3AF" />
+    <!--  Light hint text  -->
+
+    <!--  Brand Accent - Refined Gradients  -->
+    <SolidColorBrush x:Key="OpenCVLab.Brush.Accent" Color="#0984E3" />
+    <LinearGradientBrush x:Key="OpenCVLab.Brush.Gradient.Primary" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#0984E3" />
+        <GradientStop Offset="1" Color="#74B9FF" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="OpenCVLab.Brush.Gradient.Accent" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Offset="0" Color="#667EEA" />
+        <GradientStop Offset="1" Color="#764BA2" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="OpenCVLab.Brush.Gradient.Ocean" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#4A90E2" />
+        <GradientStop Offset="1" Color="#50C9E8" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="OpenCVLab.Brush.Accent.Hover" Color="#74B9FF" />
+    <SolidColorBrush x:Key="OpenCVLab.Brush.Accent.Pressed" Color="#0770C4" />
+    <SolidColorBrush x:Key="OpenCVLab.Brush.Accent.Light" Color="#EBF5FF" />
+    <!--  Lighter selection  -->
+
+    <SolidColorBrush x:Key="OpenCVLab.Brush.Overlay" Color="#50000000" />
+    <!--  Stronger overlay  -->
+    <SolidColorBrush x:Key="OpenCVLab.Brush.Hover" Color="#0A000000" />
+    <!--  Refined hover  -->
+    <SolidColorBrush x:Key="OpenCVLab.Brush.Pressed" Color="#14000000" />
+    <!--  Stronger press  -->
+    <SolidColorBrush x:Key="OpenCVLab.Brush.Chrome" Color="#FFFFFF" />
+
+    <!--  Semantic Colors  -->
+    <SolidColorBrush x:Key="OpenCVLab.Brush.Success" Color="#10B981" />
+    <SolidColorBrush x:Key="OpenCVLab.Brush.Warning" Color="#F59E0B" />
+    <SolidColorBrush x:Key="OpenCVLab.Brush.Error" Color="#EF4444" />
+
+    <!--  Shared primitives for Yu.UI controls  -->
+    <SolidColorBrush x:Key="YuUI.Brush.Surface" Color="{Binding Color, Source={StaticResource OpenCVLab.Brush.Surface}}" />
+    <SolidColorBrush x:Key="YuUI.Brush.Border" Color="{Binding Color, Source={StaticResource OpenCVLab.Brush.Border}}" />
+    <SolidColorBrush x:Key="YuUI.Brush.Text" Color="{Binding Color, Source={StaticResource OpenCVLab.Brush.Text}}" />
+    <SolidColorBrush x:Key="YuUI.Brush.TextMuted" Color="{Binding Color, Source={StaticResource OpenCVLab.Brush.TextMuted}}" />
+    <SolidColorBrush x:Key="YuUI.Brush.Accent" Color="{Binding Color, Source={StaticResource OpenCVLab.Brush.Accent}}" />
+    <SolidColorBrush x:Key="YuUI.Brush.Overlay" Color="{Binding Color, Source={StaticResource OpenCVLab.Brush.Overlay}}" />
+    <SolidColorBrush x:Key="YuUI.Brush.Hover" Color="{Binding Color, Source={StaticResource OpenCVLab.Brush.Hover}}" />
+    <SolidColorBrush x:Key="YuUI.Brush.Pressed" Color="{Binding Color, Source={StaticResource OpenCVLab.Brush.Pressed}}" />
+
+    <!--  Subtle, Diffused Shadows - Layered Depth  -->
+    <DropShadowEffect
+        x:Key="EffectShadow1"
+        BlurRadius="8"
+        Opacity="0.04"
+        ShadowDepth="1"
+        Color="#000000" />
+
+    <DropShadowEffect
+        x:Key="EffectShadow2"
+        BlurRadius="16"
+        Opacity="0.06"
+        ShadowDepth="4"
+        Color="#000000" />
+
+    <DropShadowEffect
+        x:Key="EffectShadow3"
+        BlurRadius="28"
+        Opacity="0.08"
+        ShadowDepth="8"
+        Color="#000000" />
+
+    <DropShadowEffect
+        x:Key="EffectShadow4"
+        BlurRadius="40"
+        Opacity="0.10"
+        ShadowDepth="12"
+        Color="#000000" />
+
+    <DropShadowEffect
+        x:Key="EffectShadowSmall"
+        BlurRadius="12"
+        Opacity="0.05"
+        ShadowDepth="2"
+        Color="#000000" />
+
+    <!--  Colored Accent Shadows  -->
+    <DropShadowEffect
+        x:Key="EffectShadowAccent"
+        BlurRadius="20"
+        Opacity="0.25"
+        ShadowDepth="4"
+        Color="#0984E3" />
+
+    <DropShadowEffect
+        x:Key="YuUI.Effect.Shadow3"
+        BlurRadius="24"
+        Opacity="0.08"
+        ShadowDepth="8"
+        Color="#000000" />
+
+    <!--  Card Style: Clean, Rounded, Subtle Shadow - Responsive  -->
+    <Style x:Key="BorderRegion" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource OpenCVLab.Brush.Surface}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="Effect" Value="{StaticResource EffectShadow2}" />
+        <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <ScaleTransform ScaleX="1" ScaleY="1" />
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Effect" Value="{StaticResource EffectShadow3}" />
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                To="1.005"
+                                Duration="0:0:0.2">
+                                <DoubleAnimation.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut" />
+                                </DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                To="1.005"
+                                Duration="0:0:0.2">
+                                <DoubleAnimation.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut" />
+                                </DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                To="1"
+                                Duration="0:0:0.2">
+                                <DoubleAnimation.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut" />
+                                </DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                To="1"
+                                Duration="0:0:0.2">
+                                <DoubleAnimation.EasingFunction>
+                                    <CubicEase EasingMode="EaseOut" />
+                                </DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--  Button Base with Enhanced Micro-Interaction  -->
+    <Style x:Key="OpenCVLabButtonBase" TargetType="Button">
+        <Setter Property="Foreground" Value="{StaticResource OpenCVLab.Brush.Text}" />
+        <Setter Property="Background" Value="{StaticResource OpenCVLab.Brush.Surface}" />
+        <Setter Property="BorderBrush" Value="{StaticResource OpenCVLab.Brush.Border}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="24,12" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Border
+                            x:Name="PART_Border"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="12"
+                            RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                            </Border.RenderTransform>
+                            <Grid>
+                                <ContentPresenter
+                                    x:Name="PART_Content"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                <Border
+                                    x:Name="PART_StateOverlay"
+                                    Background="Transparent"
+                                    CornerRadius="12"
+                                    Opacity="0" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_Border" Property="Effect" Value="{StaticResource EffectShadow2}" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="PART_StateOverlay"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1"
+                                            Duration="0:0:0.15" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="PART_StateOverlay"
+                                            Storyboard.TargetProperty="Background.Color"
+                                            To="#0A000000"
+                                            Duration="0:0:0.15" />
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="PART_Border"
+                                            Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                            To="1.02"
+                                            Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="PART_Border"
+                                            Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                            To="1.02"
+                                            Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="PART_StateOverlay"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0"
+                                            Duration="0:0:0.15" />
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="PART_Border"
+                                            Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                            To="1"
+                                            Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="PART_Border"
+                                            Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                            To="1"
+                                            Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="PART_StateOverlay" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="#14000000" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="PART_StateOverlay" Property="Opacity" Value="1" />
+                            <Setter TargetName="PART_Border" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="0.98" ScaleY="0.98" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5" />
+                            <Setter Property="Cursor" Value="Arrow" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        x:Key="OpenCVLabDialogPrimaryButton"
+        BasedOn="{StaticResource OpenCVLabButtonBase}"
+        TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource OpenCVLab.Brush.Gradient.Primary}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Effect" Value="{StaticResource EffectShadowAccent}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect
+                            BlurRadius="24"
+                            Opacity="0.35"
+                            ShadowDepth="4"
+                            Color="#0984E3" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Effect" Value="{StaticResource EffectShadow2}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="OpenCVLabDialogSecondaryButton"
+        BasedOn="{StaticResource OpenCVLabButtonBase}"
+        TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{StaticResource OpenCVLab.Brush.Border}" />
+        <Setter Property="Foreground" Value="{StaticResource OpenCVLab.Brush.Text}" />
+    </Style>
+
+    <Style x:Key="OpenCVLabTitleBarButton" TargetType="Button">
+        <Setter Property="Width" Value="46" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        x:Name="PART_Bg"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="8">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_Bg" Property="Background" Value="{StaticResource OpenCVLab.Brush.Hover}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="PART_Bg" Property="Background" Value="{StaticResource OpenCVLab.Brush.Pressed}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.6" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--  Menu Styles: Clean & Airy  -->
+    <Style TargetType="Menu">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{StaticResource OpenCVLab.Brush.Text}" />
+    </Style>
+
+    <Style TargetType="MenuItem">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{StaticResource OpenCVLab.Brush.Text}" />
+        <Setter Property="Padding" Value="16,10" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border
+                        x:Name="templateRoot"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="6"
+                        SnapsToDevicePixels="True">
+                        <Grid VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter
+                                x:Name="Icon"
+                                Width="16"
+                                Height="16"
+                                Margin="4"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Content="{TemplateBinding Icon}"
+                                ContentSource="Icon"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <ContentPresenter
+                                Grid.Column="1"
+                                Margin="{TemplateBinding Padding}"
+                                Content="{TemplateBinding Header}"
+                                ContentSource="Header"
+                                ContentStringFormat="{TemplateBinding HeaderStringFormat}"
+                                ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                RecognizesAccessKey="True"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <Popup
+                                x:Name="PART_Popup"
+                                AllowsTransparency="True"
+                                Focusable="False"
+                                IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                Placement="Bottom"
+                                PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}">
+                                <Border
+                                    x:Name="SubMenuBorder"
+                                    Padding="4"
+                                    Background="{StaticResource OpenCVLab.Brush.Surface}"
+                                    BorderBrush="{StaticResource OpenCVLab.Brush.Border}"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Effect="{StaticResource EffectShadow3}">
+                                    <ScrollViewer x:Name="SubMenuScrollViewer" Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
+                                        <Grid RenderOptions.ClearTypeHint="Enabled">
+                                            <Canvas
+                                                Width="0"
+                                                Height="0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top">
+                                                <Rectangle
+                                                    x:Name="OpaqueRect"
+                                                    Width="{Binding ActualWidth, ElementName=SubMenuBorder}"
+                                                    Height="{Binding ActualHeight, ElementName=SubMenuBorder}"
+                                                    Fill="{Binding Background, ElementName=SubMenuBorder}" />
+                                            </Canvas>
+                                            <ItemsPresenter
+                                                x:Name="ItemsPresenter"
+                                                Grid.IsSharedSizeScope="True"
+                                                KeyboardNavigation.DirectionalNavigation="Cycle"
+                                                KeyboardNavigation.TabNavigation="Cycle"
+                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSuspendingPopupAnimation" Value="True">
+                            <Setter TargetName="PART_Popup" Property="PopupAnimation" Value="None" />
+                        </Trigger>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="templateRoot" Property="Background" Value="{StaticResource OpenCVLab.Brush.Hover}" />
+                            <Setter TargetName="templateRoot" Property="BorderBrush" Value="Transparent" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="templateRoot" Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--  Dialog Styles: Immersive  -->
+    <Style
+        x:Key="OpenCVLabDialogRootBorder"
+        BasedOn="{StaticResource BorderRegion}"
+        TargetType="Border">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+        <Setter Property="Opacity" Value="0" />
+        <Setter Property="Effect" Value="{StaticResource EffectShadow3}" />
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="0.95" ScaleY="0.95" />
+                    <TranslateTransform Y="20" />
+                </TransformGroup>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation
+                            Storyboard.TargetProperty="Opacity"
+                            To="1"
+                            Duration="0:0:0.25">
+                            <DoubleAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut" />
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+
+                        <DoubleAnimation
+                            Storyboard.TargetProperty="RenderTransform.(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"
+                            To="1"
+                            Duration="0:0:0.3">
+                            <DoubleAnimation.EasingFunction>
+                                <BackEase Amplitude="0.3" EasingMode="EaseOut" />
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                        <DoubleAnimation
+                            Storyboard.TargetProperty="RenderTransform.(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"
+                            To="1"
+                            Duration="0:0:0.3">
+                            <DoubleAnimation.EasingFunction>
+                                <BackEase Amplitude="0.3" EasingMode="EaseOut" />
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                        <DoubleAnimation
+                            Storyboard.TargetProperty="RenderTransform.(TransformGroup.Children)[1].(TranslateTransform.Y)"
+                            To="0"
+                            Duration="0:0:0.3">
+                            <DoubleAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut" />
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="OpenCVLabDialogFooterBorder"
+        BasedOn="{StaticResource BorderRegion}"
+        TargetType="Border">
+        <Setter Property="Padding" Value="16" />
+        <Setter Property="Background" Value="{StaticResource OpenCVLab.Brush.Background}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="0,0,16,16" />
+        <Setter Property="Effect" Value="{x:Null}" />
+    </Style>
+
+    <Style
+        x:Key="OpenCVLabDialogActionButton"
+        BasedOn="{StaticResource OpenCVLabButtonBase}"
+        TargetType="Button">
+        <Setter Property="Padding" Value="24,12" />
+    </Style>
+
+    <Style x:Key="ToggleButtonSwitch" TargetType="ToggleButton">
+        <Setter Property="Foreground" Value="{StaticResource OpenCVLab.Brush.Text}" />
+        <Setter Property="Background" Value="{StaticResource OpenCVLab.Brush.Surface}" />
+        <Setter Property="BorderBrush" Value="{StaticResource OpenCVLab.Brush.Border}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="10,6" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid SnapsToDevicePixels="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border
+                            Grid.ColumnSpan="2"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8">
+                            <ContentPresenter
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                RecognizesAccessKey="True" />
+                        </Border>
+
+                        <Border
+                            Grid.Column="1"
+                            Width="40"
+                            Height="22"
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Center"
+                            Background="{StaticResource OpenCVLab.Brush.Border}"
+                            CornerRadius="11">
+                            <Ellipse
+                                x:Name="PART_Thumb"
+                                Width="18"
+                                Height="18"
+                                Margin="2"
+                                HorizontalAlignment="Left"
+                                Effect="{StaticResource EffectShadowSmall}"
+                                Fill="White" />
+                        </Border>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Foreground" Value="White" />
+                            <Setter Property="Background" Value="{StaticResource OpenCVLab.Brush.Accent}" />
+                            <Setter Property="BorderBrush" Value="{StaticResource OpenCVLab.Brush.Accent}" />
+                            <Setter TargetName="PART_Thumb" Property="HorizontalAlignment" Value="Right" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" Value="0.92" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.6" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
