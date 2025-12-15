@@ -16,9 +16,9 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="8*" />
-            <RowDefinition Height="150" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="150"/>
         </Grid.RowDefinitions>
 
         <Border
@@ -29,103 +29,118 @@
             <Menu>
                 <MenuItem Header="文件操作">
                     <MenuItem.Icon>
-                        <materialDesign:PackIcon Kind="Image" />
+                        <materialDesign:PackIcon Kind="Image"/>
                     </MenuItem.Icon>
 
-                    <MenuItem Command="{Binding ViewModel.OpenImageCommand}" Header="打开图像">
+                    <MenuItem Command="{Binding ViewModel.OpenImageCommand}"
+                              Header="打开图像">
                         <MenuItem.Icon>
-                            <materialDesign:PackIcon Kind="OpenInBrowser" />
+                            <materialDesign:PackIcon Kind="OpenInBrowser"/>
                         </MenuItem.Icon>
                     </MenuItem>
 
-                    <MenuItem Command="{Binding ViewModel.SaveImageCommand}" Header="保存图像">
+                    <MenuItem Command="{Binding ViewModel.SaveImageCommand}"
+                              Header="保存图像">
                         <MenuItem.Icon>
-                            <materialDesign:PackIcon Kind="DropSaver" />
+                            <materialDesign:PackIcon Kind="DropSaver"/>
                         </MenuItem.Icon>
                     </MenuItem>
 
-                    <MenuItem Command="{Binding ViewModel.ShowImageCommand}" Header="显示图像(CV2)">
+                    <MenuItem Command="{Binding ViewModel.ShowImageCommand}"
+                              Header="显示图像(CV2)">
                         <MenuItem.Icon>
-                            <materialDesign:PackIcon Kind="ShowOutline" />
+                            <materialDesign:PackIcon Kind="ShowOutline"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
 
                 <MenuItem Header="基础操作">
                     <MenuItem.Icon>
-                        <materialDesign:PackIcon Kind="User" />
+                        <materialDesign:PackIcon Kind="User"/>
                     </MenuItem.Icon>
 
                     <MenuItem Header="色彩空间">
                         <MenuItem.Icon>
-                            <materialDesign:PackIcon Kind="Color" />
+                            <materialDesign:PackIcon Kind="Color"/>
                         </MenuItem.Icon>
 
-                        <MenuItem Command="{Binding ViewModel.ConvertColorCommand}" Header="颜色空间转换" />
+                        <MenuItem Command="{Binding ViewModel.ConvertColorCommand}"
+                                  Header="颜色空间转换"/>
                     </MenuItem>
 
                     <MenuItem Header="平滑图像(Blur)">
                         <MenuItem.Icon>
-                            <materialDesign:PackIcon Kind="ImageFilterBlackWhite" />
+                            <materialDesign:PackIcon Kind="ImageFilterBlackWhite"/>
                         </MenuItem.Icon>
 
-                        <MenuItem Command="{Binding ViewModel.NormalizedBlockFilterCommand}" Header="归一化滤波" />
-                        <MenuItem Command="{Binding ViewModel.GaussianFilterCommand}" Header="高斯滤波" />
-                        <MenuItem Command="{Binding ViewModel.MedianFilterCommand}" Header="中值滤波" />
-                        <MenuItem Command="{Binding ViewModel.BilateralFilterCommand}" Header="双边滤波" />
+                        <MenuItem Command="{Binding ViewModel.NormalizedBlockFilterCommand}"
+                                  Header="归一化滤波"/>
+                        <MenuItem Command="{Binding ViewModel.GaussianFilterCommand}"
+                                  Header="高斯滤波"/>
+                        <MenuItem Command="{Binding ViewModel.MedianFilterCommand}"
+                                  Header="中值滤波"/>
+                        <MenuItem Command="{Binding ViewModel.BilateralFilterCommand}"
+                                  Header="双边滤波"/>
                     </MenuItem>
 
                     <MenuItem Header="形态学">
                         <MenuItem.Icon>
-                            <materialDesign:PackIcon Kind="Blur" />
+                            <materialDesign:PackIcon Kind="Blur"/>
                         </MenuItem.Icon>
 
-                        <MenuItem Command="{Binding ViewModel.DilateCommand}" Header="膨胀">
+                        <MenuItem Command="{Binding ViewModel.DilateCommand}"
+                                  Header="膨胀">
                             <MenuItem.ToolTip>
-                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Dilation.png" />
+                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Dilation.png"/>
                             </MenuItem.ToolTip>
                         </MenuItem>
 
-                        <MenuItem Command="{Binding ViewModel.ErodeCommand}" Header="腐蚀">
+                        <MenuItem Command="{Binding ViewModel.ErodeCommand}"
+                                  Header="腐蚀">
                             <MenuItem.ToolTip>
-                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Erosion.png" />
+                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Erosion.png"/>
                             </MenuItem.ToolTip>
                         </MenuItem>
 
-                        <MenuItem Command="{Binding ViewModel.MorphologyExOpenCommand}" Header="开运算">
+                        <MenuItem Command="{Binding ViewModel.MorphologyExOpenCommand}"
+                                  Header="开运算">
                             <MenuItem.ToolTip>
-                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Opening.png" />
+                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Opening.png"/>
                             </MenuItem.ToolTip>
                         </MenuItem>
 
-                        <MenuItem Command="{Binding ViewModel.MorphologyExCloseCommand}" Header="闭运算">
+                        <MenuItem Command="{Binding ViewModel.MorphologyExCloseCommand}"
+                                  Header="闭运算">
                             <MenuItem.ToolTip>
-                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Closing.png" />
+                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Closing.png"/>
                             </MenuItem.ToolTip>
                         </MenuItem>
 
-                        <MenuItem Command="{Binding ViewModel.MorphologyExGradientCommand}" Header="形态学梯度">
+                        <MenuItem Command="{Binding ViewModel.MorphologyExGradientCommand}"
+                                  Header="形态学梯度">
                             <MenuItem.ToolTip>
-                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Gradient.png" />
+                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Gradient.png"/>
                             </MenuItem.ToolTip>
                         </MenuItem>
 
-                        <MenuItem Command="{Binding ViewModel.MorphologyExTopHatCommand}" Header="顶帽">
+                        <MenuItem Command="{Binding ViewModel.MorphologyExTopHatCommand}"
+                                  Header="顶帽">
                             <MenuItem.ToolTip>
-                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Tophat.png" />
+                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Tophat.png"/>
                             </MenuItem.ToolTip>
                         </MenuItem>
 
-                        <MenuItem Command="{Binding ViewModel.MorphologyExBlackHatCommand}" Header="黑帽">
+                        <MenuItem Command="{Binding ViewModel.MorphologyExBlackHatCommand}"
+                                  Header="黑帽">
                             <MenuItem.ToolTip>
-                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Blackhat.png" />
+                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Blackhat.png"/>
                             </MenuItem.ToolTip>
                         </MenuItem>
                     </MenuItem>
 
                     <MenuItem Header="阈值处理">
                         <MenuItem.Icon>
-                            <materialDesign:PackIcon Kind="ImageArea" />
+                            <materialDesign:PackIcon Kind="ImageArea"/>
                         </MenuItem.Icon>
 
                         <MenuItem
@@ -134,8 +149,8 @@
                             Header="标准二值化">
                             <MenuItem.ToolTip>
                                 <StackPanel>
-                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Base_Figure.png" />
-                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Binary.png" />
+                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Base_Figure.png"/>
+                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Binary.png"/>
                                 </StackPanel>
                             </MenuItem.ToolTip>
                         </MenuItem>
@@ -146,8 +161,8 @@
                             Header="反转二值化">
                             <MenuItem.ToolTip>
                                 <StackPanel>
-                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Base_Figure.png" />
-                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Binary_Inverted.png" />
+                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Base_Figure.png"/>
+                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Binary_Inverted.png"/>
                                 </StackPanel>
                             </MenuItem.ToolTip>
                         </MenuItem>
@@ -158,8 +173,8 @@
                             Header="截断二值化">
                             <MenuItem.ToolTip>
                                 <StackPanel>
-                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Base_Figure.png" />
-                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Truncate.png" />
+                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Base_Figure.png"/>
+                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Truncate.png"/>
                                 </StackPanel>
                             </MenuItem.ToolTip>
                         </MenuItem>
@@ -170,8 +185,8 @@
                             Header="阈值至零">
                             <MenuItem.ToolTip>
                                 <StackPanel>
-                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Base_Figure.png" />
-                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Zero.png" />
+                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Base_Figure.png"/>
+                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Zero.png"/>
                                 </StackPanel>
                             </MenuItem.ToolTip>
                         </MenuItem>
@@ -182,47 +197,63 @@
                             Header="阈值至零反转">
                             <MenuItem.ToolTip>
                                 <StackPanel>
-                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Base_Figure.png" />
-                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Zero_Inverted.png" />
+                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Base_Figure.png"/>
+                                    <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/Threshold/Threshold_Tutorial_Theory_Zero_Inverted.png"/>
                                 </StackPanel>
                             </MenuItem.ToolTip>
                         </MenuItem>
 
-                        <MenuItem Command="{Binding ViewModel.OtsuThresholdCommand}" Header="OTSU阈值方法" />
+                        <MenuItem Command="{Binding ViewModel.OtsuThresholdCommand}"
+                                  Header="OTSU阈值方法"/>
 
-                        <MenuItem Command="{Binding ViewModel.AdaptiveThresholdCommand}" Header="自适应阈值方法" />
+                        <MenuItem Command="{Binding ViewModel.AdaptiveThresholdCommand}"
+                                  Header="自适应阈值方法"/>
                     </MenuItem>
                 </MenuItem>
 
                 <MenuItem Header="直方图">
                     <MenuItem.Icon>
-                        <materialDesign:PackIcon Kind="Analytics" />
+                        <materialDesign:PackIcon Kind="Analytics"/>
                     </MenuItem.Icon>
 
-                    <MenuItem Command="{Binding ViewModel.DrawHistCommand}" Header="绘制直方图" />
-                    <MenuItem Command="{Binding ViewModel.Draw2dHistCommand}" Header="绘制2D直方图" />
-                    <MenuItem Command="{Binding ViewModel.EqualizeHistCommand}" Header="直方图均衡化" />
-                    <MenuItem Command="{Binding ViewModel.CreateCLAHECommand}" Header="自适应直方图均衡化" />
+                    <MenuItem Command="{Binding ViewModel.DrawHistCommand}"
+                              Header="绘制直方图"/>
+                    <MenuItem Command="{Binding ViewModel.Draw2dHistCommand}"
+                              Header="绘制2D直方图"/>
+                    <MenuItem Command="{Binding ViewModel.EqualizeHistCommand}"
+                              Header="直方图均衡化"/>
+                    <MenuItem Command="{Binding ViewModel.CreateCLAHECommand}"
+                              Header="自适应直方图均衡化"/>
+                    <MenuItem Command="{Binding ViewModel.LinearGrayTransformCommand}"
+                              Header="灰度线性变换"/>
+                    <MenuItem Command="{Binding ViewModel.PiecewiseLinearGrayTransformCommand}"
+                              Header="分段线性灰度变换"/>
                 </MenuItem>
 
                 <MenuItem Header="边缘检测">
                     <MenuItem.Icon>
-                        <materialDesign:PackIcon Kind="Blur" />
+                        <materialDesign:PackIcon Kind="Blur"/>
                     </MenuItem.Icon>
 
-                    <MenuItem Command="{Binding ViewModel.CannyCommand}" Header="Canny边缘检测" />
-                    <MenuItem Command="{Binding ViewModel.SobelCommand}" Header="Sobel 算子" />
-                    <MenuItem Command="{Binding ViewModel.ScharrCommand}" Header="Scharr 算子" />
-                    <MenuItem Command="{Binding ViewModel.LaplacianCommand}" Header="Laplacian 算子" />
+                    <MenuItem Command="{Binding ViewModel.CannyCommand}"
+                              Header="Canny边缘检测"/>
+                    <MenuItem Command="{Binding ViewModel.SobelCommand}"
+                              Header="Sobel 算子"/>
+                    <MenuItem Command="{Binding ViewModel.ScharrCommand}"
+                              Header="Scharr 算子"/>
+                    <MenuItem Command="{Binding ViewModel.LaplacianCommand}"
+                              Header="Laplacian 算子"/>
                 </MenuItem>
 
                 <MenuItem Header="轮廓检测">
                     <MenuItem.Icon>
-                        <materialDesign:PackIcon Kind="ContactlessPaymentCircle" />
+                        <materialDesign:PackIcon Kind="ContactlessPaymentCircle"/>
                     </MenuItem.Icon>
 
-                    <MenuItem Command="{Binding ViewModel.FindContoursCommand}" Header="检测轮廓" />
-                    <MenuItem Command="{Binding ViewModel.DrawBoundingRectCommand}" Header="绘制外接轮廓" />
+                    <MenuItem Command="{Binding ViewModel.FindContoursCommand}"
+                              Header="检测轮廓"/>
+                    <MenuItem Command="{Binding ViewModel.DrawBoundingRectCommand}"
+                              Header="绘制外接轮廓"/>
                 </MenuItem>
             </Menu>
         </Border>
@@ -233,122 +264,13 @@
             Effect="{StaticResource EffectShadow3}"
             Style="{StaticResource BorderRegion}">
             <Grid>
-                <ui:ImagePreviewControl x:Name="uiImagePreviewControl" ImageSource="{Binding ViewModel.SelectOperation.BitmapSource, Mode=OneWay}" />
+                <ui:ImagePreviewControl x:Name="uiImagePreviewControl"
+                                        ImageSource="{Binding ViewModel.SelectOperation.BitmapSource, Mode=OneWay}"/>
 
                 <Canvas
                     x:Name="uiImageCanvasControl"
                     Width="{Binding ElementName=uiImagePreviewControl, Path=ActualWidth}"
-                    Height="{Binding ElementName=uiImagePreviewControl, Path=ActualHeight}" />
-
-                <Expander
-                    Margin="10"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    Header="算法阈值"
-                    IsExpanded="True">
-                    <Border
-                        Padding="4"
-                        Effect="{StaticResource EffectShadow3}"
-                        Style="{StaticResource BorderRegion}">
-                        <Grid>
-                            <StackPanel>
-                                <StackPanel Margin="2,4" Orientation="Horizontal">
-                                    <TextBlock
-                                        Margin="4,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="12"
-                                        Text="卷积核大小" />
-                                    <hc:NumericUpDown Margin="4,0" Value="{Binding ViewModel.BlockSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-
-                                <StackPanel Margin="2,4" Orientation="Horizontal">
-                                    <TextBlock
-                                        Margin="4,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="12"
-                                        Text="形态学次数" />
-                                    <hc:NumericUpDown Margin="4,0" Value="{Binding ViewModel.Iterations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-
-                                <StackPanel Margin="2,4" Orientation="Horizontal">
-                                    <TextBlock
-                                        Margin="4,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="12"
-                                        Text="卷积核形状" />
-                                    <ComboBox Margin="4,0" SelectedIndex="{Binding ViewModel.SelectedKernelShape, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                        <ComboBoxItem Content="矩形" />
-                                        <ComboBoxItem Content="椭圆" />
-                                        <ComboBoxItem Content="十字形" />
-                                    </ComboBox>
-                                </StackPanel>
-
-                                <StackPanel Margin="2,4" Orientation="Horizontal">
-                                    <TextBlock
-                                        Margin="4,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="12"
-                                        Text="二值化阈值" />
-                                    <hc:NumericUpDown Margin="4,0" Value="{Binding ViewModel.ThresholdValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-
-                                <StackPanel Margin="2,4" Orientation="Horizontal">
-                                    <TextBlock
-                                        Margin="4,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="12"
-                                        Text="二值化赋值" />
-                                    <hc:NumericUpDown Margin="4,0" Value="{Binding ViewModel.ThresholdMaxValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-                </Expander>
-
-                <Expander
-                    Margin="10"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Header="算法参数"
-                    IsExpanded="True">
-                    <Border
-                        Padding="4"
-                        Effect="{StaticResource EffectShadow3}"
-                        Style="{StaticResource BorderRegion}">
-                        <Grid>
-                            <StackPanel>
-                                <StackPanel Margin="2,4" Orientation="Horizontal">
-                                    <TextBlock
-                                        Margin="4,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="12"
-                                        Text="轮廓检索算法" />
-                                    <ComboBox Margin="4,0" SelectedIndex="{Binding ViewModel.SelectedRetrievalModes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                        <ComboBoxItem Content="External" />
-                                        <ComboBoxItem Content="List" />
-                                        <ComboBoxItem Content="CComp" />
-                                        <ComboBoxItem Content="Tree" />
-                                        <ComboBoxItem Content="FloodFill" />
-                                    </ComboBox>
-                                </StackPanel>
-
-                                <StackPanel Margin="2,4" Orientation="Horizontal">
-                                    <TextBlock
-                                        Margin="4,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="12"
-                                        Text="轮廓逼近算法" />
-                                    <ComboBox Margin="4,0" SelectedIndex="{Binding ViewModel.SelectedContourApproximationModes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                        <ComboBoxItem Content="ApproxNone" />
-                                        <ComboBoxItem Content="ApproxSimple" />
-                                        <ComboBoxItem Content="ApproxTC89L1" />
-                                        <ComboBoxItem Content="ApproxTC89KCOS" />
-                                    </ComboBox>
-                                </StackPanel>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-                </Expander>
+                    Height="{Binding ElementName=uiImagePreviewControl, Path=ActualHeight}"/>
 
                 <Expander
                     Margin="10"
@@ -362,39 +284,43 @@
                         Effect="{StaticResource EffectShadow3}"
                         Style="{StaticResource BorderRegion}">
                         <StackPanel>
-                            <StackPanel Margin="2" Orientation="Horizontal">
-                                <TextBlock Text="图像通道" />
+                            <StackPanel Margin="2"
+                                        Orientation="Horizontal">
+                                <TextBlock Text="图像通道"/>
                                 <TextBlock
                                     Margin="4,0"
                                     VerticalAlignment="Center"
                                     FontSize="12"
-                                    Text="{Binding ViewModel.SelectOperation.Channels}" />
+                                    Text="{Binding ViewModel.SelectOperation.Channels}"/>
                             </StackPanel>
 
-                            <StackPanel Margin="2" Orientation="Horizontal">
-                                <TextBlock Text="图像维度" />
+                            <StackPanel Margin="2"
+                                        Orientation="Horizontal">
+                                <TextBlock Text="图像维度"/>
                                 <TextBlock
                                     Margin="4,0"
                                     VerticalAlignment="Center"
                                     FontSize="12"
-                                    Text="{Binding ViewModel.SelectOperation.ImageMat.Dims}" />
+                                    Text="{Binding ViewModel.SelectOperation.ImageMat.Dims}"/>
                             </StackPanel>
 
-                            <StackPanel Margin="2" Orientation="Horizontal">
-                                <TextBlock Text="图像大小" />
+                            <StackPanel Margin="2"
+                                        Orientation="Horizontal">
+                                <TextBlock Text="图像大小"/>
                                 <TextBlock
                                     Margin="1,0"
                                     VerticalAlignment="Center"
                                     FontSize="12"
-                                    Text="{Binding ViewModel.SelectOperation.ImageMat.Cols}" />
-                                <TextBlock Margin="1,0" VerticalAlignment="Center">
+                                    Text="{Binding ViewModel.SelectOperation.ImageMat.Cols}"/>
+                                <TextBlock Margin="1,0"
+                                           VerticalAlignment="Center">
                                     ×
                                 </TextBlock>
                                 <TextBlock
                                     Margin="1,0"
                                     VerticalAlignment="Center"
                                     FontSize="12"
-                                    Text="{Binding ViewModel.SelectOperation.ImageMat.Rows}" />
+                                    Text="{Binding ViewModel.SelectOperation.ImageMat.Rows}"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -407,7 +333,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Effect="{StaticResource EffectShadow3}"
-                    Source="{Binding ViewModel.HistImageSource}" />
+                    Source="{Binding ViewModel.HistImageSource}"/>
 
                 <Expander
                     Margin="10"
@@ -419,25 +345,25 @@
                         <StackPanel Orientation="Horizontal">
                             <TextBlock>
                                 <TextBlock.LayoutTransform>
-                                    <RotateTransform Angle="90" />
+                                    <RotateTransform Angle="90"/>
                                 </TextBlock.LayoutTransform>
                                 作
                             </TextBlock>
                             <TextBlock>
                                 <TextBlock.LayoutTransform>
-                                    <RotateTransform Angle="90" />
+                                    <RotateTransform Angle="90"/>
                                 </TextBlock.LayoutTransform>
                                 操
                             </TextBlock>
                             <TextBlock>
                                 <TextBlock.LayoutTransform>
-                                    <RotateTransform Angle="90" />
+                                    <RotateTransform Angle="90"/>
                                 </TextBlock.LayoutTransform>
                                 像
                             </TextBlock>
                             <TextBlock>
                                 <TextBlock.LayoutTransform>
-                                    <RotateTransform Angle="90" />
+                                    <RotateTransform Angle="90"/>
                                 </TextBlock.LayoutTransform>
                                 图
                             </TextBlock>
@@ -448,8 +374,12 @@
                         Padding="4"
                         Effect="{StaticResource EffectShadow3}"
                         Style="{StaticResource BorderRegion}">
-                        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
-                            <ToggleButton Unchecked="ClearCanvas" Checked="DrawBoundingRectCanvas" Content="绘制轮廓矩形" Style="{StaticResource ToggleButtonSwitch}" />
+                        <StackPanel HorizontalAlignment="Left"
+                                    VerticalAlignment="Center">
+                            <ToggleButton Unchecked="ClearCanvas"
+                                          Checked="DrawBoundingRectCanvas"
+                                          Content="绘制轮廓矩形"
+                                          Style="{StaticResource ToggleButtonSwitch}"/>
                         </StackPanel>
                     </Border>
                 </Expander>
@@ -471,38 +401,51 @@
                             <Image
                                 Width="200"
                                 Height="100"
-                                Source="{Binding BitmapSource}" />
+                                Source="{Binding BitmapSource}"/>
                             <TextBlock
+                                Width="200"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Text="{Binding Name}" />
+                                Text="{Binding DisplayName}"
+                                TextTrimming="CharacterEllipsis"
+                                TextWrapping="NoWrap"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
-                        <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="BorderThickness" Value="0" />
-                        <Setter Property="HorizontalAlignment" Value="Stretch" />
-                        <Setter Property="VerticalAlignment" Value="Stretch" />
+                        <Setter Property="Background"
+                                Value="Transparent"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="HorizontalAlignment"
+                                Value="Stretch"/>
+                        <Setter Property="VerticalAlignment"
+                                Value="Stretch"/>
                         <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="#FFD6E4FF" />
-                                <Setter Property="BorderBrush" Value="#FF2E62A3" />
-                                <Setter Property="BorderThickness" Value="2" />
-                                <Setter Property="Foreground" Value="Black" />
+                            <Trigger Property="IsSelected"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="#FFD6E4FF"/>
+                                <Setter Property="BorderBrush"
+                                        Value="#FF2E62A3"/>
+                                <Setter Property="BorderThickness"
+                                        Value="2"/>
+                                <Setter Property="Foreground"
+                                        Value="Black"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" />
+                        <WrapPanel Orientation="Horizontal"/>
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Command="{Binding ViewModel.DeleteOperationCommand}" Header="删除选中" />
+                        <MenuItem Command="{Binding ViewModel.DeleteOperationCommand}"
+                                  Header="删除选中"/>
                     </ContextMenu>
                 </ListBox.ContextMenu>
             </ListBox>

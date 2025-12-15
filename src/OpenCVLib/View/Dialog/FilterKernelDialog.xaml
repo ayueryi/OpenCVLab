@@ -1,0 +1,74 @@
+<UserControl
+    x:Class="OpenCVLab.View.Dialog.FilterKernelDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:OpenCVLab.View.Dialog"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://Yu-UI.com//2024/xaml"
+    d:DataContext="{d:DesignInstance local:FilterKernelDialog, IsDesignTimeCreatable=False}"
+    d:DesignHeight="180"
+    d:DesignWidth="560"
+    mc:Ignorable="d">
+
+    <Border Effect="{StaticResource EffectShadow3}"
+            Style="{StaticResource BorderRegion}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <ui:Title MainTitle="滤波参数"
+                    SubTitle="Filter Parameters"/>
+
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Margin="15"
+                        Orientation="Vertical">
+                    <StackPanel Margin="0,4"
+                            Orientation="Horizontal">
+                        <TextBlock Width="110"
+                                VerticalAlignment="Center">核大小</TextBlock>
+                        <hc:NumericUpDown Width="200"
+                                Value="{Binding BlockSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <Border Grid.Row="1"
+                        Style="{StaticResource BorderRegion}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0"
+                                Width="200"
+                                Click="Confirm">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="CheckCircleOutline"/>
+                                <TextBlock>确认</TextBlock>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Grid.Column="1"
+                                Width="200"
+                                Click="Cancel">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="CloseCircleOutline"/>
+                                <TextBlock>取消</TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

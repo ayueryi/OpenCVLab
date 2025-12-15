@@ -76,6 +76,36 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     [ObservableProperty] private int _ThresholdMaxValue = 255;
 
+    /// <summary>
+    /// 线性灰度变换：输出最小灰度
+    /// </summary>
+    [ObservableProperty] private int _linearOutMin = 0;
+
+    /// <summary>
+    /// 线性灰度变换：输出最大灰度
+    /// </summary>
+    [ObservableProperty] private int _linearOutMax = 255;
+
+    /// <summary>
+    /// 分段线性灰度变换参数：r1
+    /// </summary>
+    [ObservableProperty] private int _piecewiseR1 = 70;
+
+    /// <summary>
+    /// 分段线性灰度变换参数：s1
+    /// </summary>
+    [ObservableProperty] private int _piecewiseS1 = 30;
+
+    /// <summary>
+    /// 分段线性灰度变换参数：r2
+    /// </summary>
+    [ObservableProperty] private int _piecewiseR2 = 180;
+
+    /// <summary>
+    /// 分段线性灰度变换参数：s2
+    /// </summary>
+    [ObservableProperty] private int _piecewiseS2 = 220;
+
     #endregion
 
     #region 算法参数
@@ -302,7 +332,11 @@ public partial class BasicPageViewModel : ObservableObject
             return;
         }
 
-        await contentDialogService.ShowContentAsync(colorConversionDialog);
+        var confirmed = await ShowConfirmDialogAsync(colorConversionDialog);
+        if (!confirmed)
+        {
+            return;
+        }
 
         Enum.TryParse(colorConversionDialog.ColorConversionName, out ColorConversionCodes colorConversionCode);
         try
@@ -335,9 +369,18 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task NormalizedBlockFilter()
+    private async Task NormalizedBlockFilter()
     {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
+
+        var confirmed = await ConfirmFilterKernelAsync();
+        if (!confirmed) return;
+
+        if (BlockSize <= 0)
+        {
+            Growl.ErrorGlobal("卷积核大小必须大于 0");
+            return;
+        }
 
         try
         {
@@ -346,7 +389,7 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_Blur";
+            operation.ImageName = $"{SelectOperation.ImageName}_Blur_k{BlockSize}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
@@ -354,10 +397,10 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("归一化滤波失败" + exception.Message);
-            return Task.CompletedTask;
+            return;
         }
 
-        return Task.CompletedTask;
+        return;
     }
 
     /// <summary>
@@ -365,9 +408,24 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task GaussianFilter()
+    private async Task GaussianFilter()
     {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
+
+        var confirmed = await ConfirmFilterKernelAsync();
+        if (!confirmed) return;
+
+        if (BlockSize <= 0)
+        {
+            Growl.ErrorGlobal("卷积核大小必须大于 0");
+            return;
+        }
+
+        if (BlockSize % 2 == 0)
+        {
+            Growl.ErrorGlobal("高斯滤波卷积核大小必须为奇数");
+            return;
+        }
 
         try
         {
@@ -376,7 +434,7 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_GaussianBlur";
+            operation.ImageName = $"{SelectOperation.ImageName}_GaussianBlur_k{BlockSize}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
@@ -384,10 +442,10 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("高斯滤波失败" + exception.Message);
-            return Task.CompletedTask;
+            return;
         }
 
-        return Task.CompletedTask;
+        return;
     }
 
     /// <summary>
@@ -395,9 +453,24 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task MedianFilter()
+    private async Task MedianFilter()
     {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
+
+        var confirmed = await ConfirmFilterKernelAsync();
+        if (!confirmed) return;
+
+        if (BlockSize <= 1)
+        {
+            Growl.ErrorGlobal("中值滤波核大小必须大于 1");
+            return;
+        }
+
+        if (BlockSize % 2 == 0)
+        {
+            Growl.ErrorGlobal("中值滤波核大小必须为奇数");
+            return;
+        }
         try
         {
             Mat dst = new Mat();
@@ -405,7 +478,7 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_MedianBlur";
+            operation.ImageName = $"{SelectOperation.ImageName}_MedianBlur_k{BlockSize}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
@@ -413,9 +486,9 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("中值滤波失败" + exception.Message);
-            return Task.CompletedTask;
+            return;
         }
-        return Task.CompletedTask;
+        return;
     }
 
     /// <summary>
@@ -423,9 +496,18 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task BilateralFilter()
+    private async Task BilateralFilter()
     {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
+
+        var confirmed = await ConfirmFilterKernelAsync();
+        if (!confirmed) return;
+
+        if (BlockSize <= 0)
+        {
+            Growl.ErrorGlobal("双边滤波参数必须大于 0");
+            return;
+        }
         try
         {
             Mat dst = new Mat();
@@ -433,7 +515,7 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_BilateralBlur";
+            operation.ImageName = $"{SelectOperation.ImageName}_BilateralBlur_d{BlockSize}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
@@ -441,9 +523,9 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("双边滤波失败" + exception.Message);
-            return Task.CompletedTask;
+            return;
         }
-        return Task.CompletedTask;
+        return;
     }
 
     #endregion
@@ -455,9 +537,18 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task Erode()
+    private async Task Erode()
     {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
+
+        var confirmed = await ConfirmMorphologyAsync();
+        if (!confirmed) return;
+
+        if (BlockSize <= 0 || Iterations <= 0)
+        {
+            Growl.ErrorGlobal("卷积核大小/次数必须大于 0");
+            return;
+        }
         try
         {
             Mat dst = new Mat();
@@ -466,7 +557,7 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_Erode";
+            operation.ImageName = $"{SelectOperation.ImageName}_Erode_k{BlockSize}_it{Iterations}_s{SelectedKernelShape}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
@@ -474,9 +565,9 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("腐蚀失败" + exception.Message);
-            return Task.CompletedTask;
+            return;
         }
-        return Task.CompletedTask;
+        return;
     }
 
     /// <summary>
@@ -484,9 +575,18 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task Dilate()
+    private async Task Dilate()
     {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
+
+        var confirmed = await ConfirmMorphologyAsync();
+        if (!confirmed) return;
+
+        if (BlockSize <= 0 || Iterations <= 0)
+        {
+            Growl.ErrorGlobal("卷积核大小/次数必须大于 0");
+            return;
+        }
         try
         {
             Mat dst = new Mat();
@@ -495,7 +595,7 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_Dilate";
+            operation.ImageName = $"{SelectOperation.ImageName}_Dilate_k{BlockSize}_it{Iterations}_s{SelectedKernelShape}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
@@ -503,9 +603,9 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("膨胀失败" + exception.Message);
-            return Task.CompletedTask;
+            return;
         }
-        return Task.CompletedTask;
+        return;
     }
 
     #endregion
@@ -517,9 +617,18 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task MorphologyExOpen()
+    private async Task MorphologyExOpen()
     {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
+
+        var confirmed = await ConfirmMorphologyAsync();
+        if (!confirmed) return;
+
+        if (BlockSize <= 0 || Iterations <= 0)
+        {
+            Growl.ErrorGlobal("卷积核大小/次数必须大于 0");
+            return;
+        }
         try
         {
             Mat dst = new Mat();
@@ -528,7 +637,7 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_MorphologyExOpen";
+            operation.ImageName = $"{SelectOperation.ImageName}_MorphologyExOpen_k{BlockSize}_it{Iterations}_s{SelectedKernelShape}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
@@ -536,9 +645,9 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("形态学[开运算]操作失败" + exception.Message);
-            return Task.CompletedTask;
+            return;
         }
-        return Task.CompletedTask;
+        return;
     }
 
     /// <summary>
@@ -546,9 +655,18 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task MorphologyExClose()
+    private async Task MorphologyExClose()
     {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
+
+        var confirmed = await ConfirmMorphologyAsync();
+        if (!confirmed) return;
+
+        if (BlockSize <= 0 || Iterations <= 0)
+        {
+            Growl.ErrorGlobal("卷积核大小/次数必须大于 0");
+            return;
+        }
         try
         {
             Mat dst = new Mat();
@@ -557,7 +675,7 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_MorphologyExClose";
+            operation.ImageName = $"{SelectOperation.ImageName}_MorphologyExClose_k{BlockSize}_it{Iterations}_s{SelectedKernelShape}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
@@ -565,9 +683,9 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("形态学[闭运算]操作失败" + exception.Message);
-            return Task.CompletedTask;
+            return;
         }
-        return Task.CompletedTask;
+        return;
     }
 
     /// <summary>
@@ -575,9 +693,18 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task MorphologyExGradient()
+    private async Task MorphologyExGradient()
     {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
+
+        var confirmed = await ConfirmMorphologyAsync();
+        if (!confirmed) return;
+
+        if (BlockSize <= 0 || Iterations <= 0)
+        {
+            Growl.ErrorGlobal("卷积核大小/次数必须大于 0");
+            return;
+        }
         try
         {
             Mat dst = new Mat();
@@ -586,7 +713,7 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_MorphologyExGradient";
+            operation.ImageName = $"{SelectOperation.ImageName}_MorphologyExGradient_k{BlockSize}_it{Iterations}_s{SelectedKernelShape}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
@@ -594,9 +721,9 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("形态学[梯度]操作失败" + exception.Message);
-            return Task.CompletedTask;
+            return;
         }
-        return Task.CompletedTask;
+        return;
     }
 
     /// <summary>
@@ -604,9 +731,18 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task MorphologyExTopHat()
+    private async Task MorphologyExTopHat()
     {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
+
+        var confirmed = await ConfirmMorphologyAsync();
+        if (!confirmed) return;
+
+        if (BlockSize <= 0 || Iterations <= 0)
+        {
+            Growl.ErrorGlobal("卷积核大小/次数必须大于 0");
+            return;
+        }
         try
         {
             Mat dst = new Mat();
@@ -615,7 +751,7 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_MorphologyExTopHat";
+            operation.ImageName = $"{SelectOperation.ImageName}_MorphologyExTopHat_k{BlockSize}_it{Iterations}_s{SelectedKernelShape}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
@@ -623,9 +759,9 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("形态学[顶帽]操作失败" + exception.Message);
-            return Task.CompletedTask;
+            return;
         }
-        return Task.CompletedTask;
+        return;
     }
 
     /// <summary>
@@ -633,9 +769,18 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task MorphologyExBlackHat()
+    private async Task MorphologyExBlackHat()
     {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
+
+        var confirmed = await ConfirmMorphologyAsync();
+        if (!confirmed) return;
+
+        if (BlockSize <= 0 || Iterations <= 0)
+        {
+            Growl.ErrorGlobal("卷积核大小/次数必须大于 0");
+            return;
+        }
         try
         {
             Mat dst = new Mat();
@@ -644,7 +789,7 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_MorphologyExBlackHat";
+            operation.ImageName = $"{SelectOperation.ImageName}_MorphologyExBlackHat_k{BlockSize}_it{Iterations}_s{SelectedKernelShape}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
@@ -652,9 +797,9 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("形态学[黑帽]操作失败" + exception.Message);
-            return Task.CompletedTask;
+            return;
         }
-        return Task.CompletedTask;
+        return;
     }
     #endregion
 
@@ -667,9 +812,12 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task Threshold(string ThresholdType)
+    private async Task Threshold(string ThresholdType)
     {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
+
+        var confirmed = await ConfirmThresholdAsync();
+        if (!confirmed) return;
 
         Enum.TryParse(ThresholdType, out ThresholdTypes thresholdType);
 
@@ -680,7 +828,7 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_Threshold_{ThresholdType}";
+            operation.ImageName = $"{SelectOperation.ImageName}_Threshold_{ThresholdType}_th{ThresholdValue}_max{ThresholdMaxValue}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
@@ -688,9 +836,9 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("阈值处理失败" + exception.Message);
-            return Task.CompletedTask;
+            return;
         }
-        return Task.CompletedTask;
+        return;
     }
 
     /// <summary>
@@ -698,9 +846,18 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task AdaptiveThreshold()
+    private async Task AdaptiveThreshold()
     {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
+
+        var confirmed = await ConfirmAdaptiveThresholdAsync();
+        if (!confirmed) return;
+
+        if (BlockSize <= 1 || BlockSize % 2 == 0)
+        {
+            Growl.ErrorGlobal("自适应阈值 BlockSize 必须为大于 1 的奇数");
+            return;
+        }
         try
         {
             Mat dst = new Mat();
@@ -708,7 +865,7 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_AdaptiveThreshold";
+            operation.ImageName = $"{SelectOperation.ImageName}_AdaptiveThreshold_k{BlockSize}_tt{SelectedThresholdTypes}_max{ThresholdMaxValue}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
@@ -716,9 +873,9 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("自适应阈值处理失败" + exception.Message);
-            return Task.CompletedTask;
+            return;
         }
-        return Task.CompletedTask;
+        return;
     }
 
     /// <summary>
@@ -726,9 +883,12 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task OtsuThreshold()
+    private async Task OtsuThreshold()
     {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
+
+        var confirmed = await ConfirmMaxValueAsync();
+        if (!confirmed) return;
 
         try
         {
@@ -737,7 +897,7 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_OtsuThreshold";
+            operation.ImageName = $"{SelectOperation.ImageName}_OtsuThreshold_max{ThresholdMaxValue}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
@@ -745,9 +905,9 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("Otsu阈值处理失败" + exception.Message);
-            return Task.CompletedTask;
+            return;
         }
-        return Task.CompletedTask;
+        return;
     }
     #endregion
 
@@ -945,6 +1105,152 @@ public partial class BasicPageViewModel : ObservableObject
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// 图像灰度的线性变换（线性拉伸/对比度拉伸）
+    /// </summary>
+    [RelayCommand]
+    private async Task LinearGrayTransform()
+    {
+        Mat? src = SelectOperation?.ImageMat;
+
+        if (src is null || src.Empty() || src.Channels() > 1)
+        {
+            Growl.ErrorGlobal("无法读取图像！");
+            return;
+        }
+
+        var confirmed = await ConfirmLinearGrayTransformAsync();
+        if (!confirmed) return;
+
+        if (LinearOutMin is < 0 or > 255 || LinearOutMax is < 0 or > 255)
+        {
+            Growl.ErrorGlobal("输出灰度范围必须在 0~255 之间");
+            return;
+        }
+
+        if (LinearOutMin >= LinearOutMax)
+        {
+            Growl.ErrorGlobal("输出最小灰度必须小于输出最大灰度");
+            return;
+        }
+
+        try
+        {
+            double minVal;
+            double maxVal;
+            Cv2.MinMaxLoc(src, out minVal, out maxVal);
+
+            if (Math.Abs(maxVal - minVal) < 1e-12)
+            {
+                Growl.ErrorGlobal("图像灰度范围为常量，无法进行线性拉伸");
+                return;
+            }
+
+            var alpha = (LinearOutMax - LinearOutMin) / (maxVal - minVal);
+            var beta = LinearOutMin - (minVal * alpha);
+
+            Mat dst = new Mat();
+            src.ConvertTo(dst, MatType.CV_8UC1, alpha, beta);
+
+            Operation operation = new Operation();
+            operation.ImageMat = dst;
+            operation.ImageName = $"{SelectOperation!.ImageName}_LinearGrayTransform_min{LinearOutMin}_max{LinearOutMax}";
+
+            OperationsCollection.Add(operation);
+            SelectOperation = operation;
+        }
+        catch (Exception exception)
+        {
+            Growl.ErrorGlobal("灰度线性变换失败：" + exception.Message);
+        }
+    }
+
+    /// <summary>
+    /// 图像分段线性灰度变换
+    /// (0,0) -> (r1,s1) -> (r2,s2) -> (255,255)
+    /// </summary>
+    [RelayCommand]
+    private async Task PiecewiseLinearGrayTransform()
+    {
+        Mat? src = SelectOperation?.ImageMat;
+
+        if (src is null || src.Empty() || src.Channels() > 1)
+        {
+            Growl.ErrorGlobal("无法读取图像！");
+            return;
+        }
+
+        var confirmed = await ConfirmPiecewiseLinearGrayTransformAsync();
+        if (!confirmed) return;
+
+        if (PiecewiseR1 is < 0 or > 255 || PiecewiseR2 is < 0 or > 255 ||
+            PiecewiseS1 is < 0 or > 255 || PiecewiseS2 is < 0 or > 255)
+        {
+            Growl.ErrorGlobal("参数必须在 0~255 之间");
+            return;
+        }
+
+        if (PiecewiseR1 >= PiecewiseR2)
+        {
+            Growl.ErrorGlobal("必须满足 r1 < r2");
+            return;
+        }
+
+        try
+        {
+            byte[] lutBytes = BuildPiecewiseLut(PiecewiseR1, PiecewiseS1, PiecewiseR2, PiecewiseS2);
+            using Mat lut = Mat.FromArray(lutBytes);
+
+            Mat dst = new Mat();
+            Cv2.LUT(src, lut, dst);
+
+            Operation operation = new Operation();
+            operation.ImageMat = dst;
+            operation.ImageName = $"{SelectOperation!.ImageName}_PiecewiseLinearGrayTransform_r1{PiecewiseR1}_s1{PiecewiseS1}_r2{PiecewiseR2}_s2{PiecewiseS2}";
+
+            OperationsCollection.Add(operation);
+            SelectOperation = operation;
+        }
+        catch (Exception exception)
+        {
+            Growl.ErrorGlobal("分段线性灰度变换失败：" + exception.Message);
+        }
+    }
+
+    private static byte[] BuildPiecewiseLut(int r1, int s1, int r2, int s2)
+    {
+        static byte Clamp(double v)
+        {
+            if (v < 0) return 0;
+            if (v > 255) return 255;
+            return (byte)Math.Round(v);
+        }
+
+        var lut = new byte[256];
+
+        for (int i = 0; i < 256; i++)
+        {
+            double v;
+
+            if (i <= r1)
+            {
+                v = r1 == 0 ? s1 : (double)s1 * i / r1;
+            }
+            else if (i <= r2)
+            {
+                v = (double)s1 + (double)(s2 - s1) * (i - r1) / (r2 - r1);
+            }
+            else
+            {
+                v = r2 == 255 ? 255 : (double)s2 + (double)(255 - s2) * (i - r2) / (255 - r2);
+            }
+
+            lut[i] = Clamp(v);
+        }
+
+        return lut;
+    }
+
     #endregion
 
     #region 边缘检测
@@ -954,9 +1260,12 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task Canny()
+    private async Task Canny()
     {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
+
+        var confirmed = await ConfirmCannyAsync();
+        if (!confirmed) return;
         try
         {
             Mat dst = new Mat();
@@ -964,7 +1273,7 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_Canny";
+            operation.ImageName = $"{SelectOperation.ImageName}_Canny_t1{ThresholdValue}_t2{ThresholdMaxValue}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
@@ -972,9 +1281,9 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("Canny边缘检测失败" + exception.Message);
-            return Task.CompletedTask;
+            return;
         }
-        return Task.CompletedTask;
+        return;
     }
 
     /// <summary>
@@ -1070,13 +1379,16 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task FindContours()
+    private async Task FindContours()
     {
         if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty())
         {
             Growl.ErrorGlobal("图像为空");
-            return Task.CompletedTask;
+            return;
         }
+
+        var confirmed = await ConfirmAlgorithmParametersAsync();
+        if (!confirmed) return;
 
         try
         {
@@ -1111,7 +1423,7 @@ public partial class BasicPageViewModel : ObservableObject
 
             Operation operation = new Operation();
             operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_FindContours";
+            operation.ImageName = $"{SelectOperation.ImageName}_FindContours_rm{SelectedRetrievalModes}_am{SelectedContourApproximationModes}";
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
@@ -1120,9 +1432,9 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("轮廓检测失败" + exception.Message);
-            return Task.CompletedTask;
+            return;
         }
-        return Task.CompletedTask;
+        return;
     }
 
     /// <summary>
@@ -1198,6 +1510,210 @@ public partial class BasicPageViewModel : ObservableObject
     #endregion
 
     #region 辅助方法
+
+    private static void ResetDialogCallbacks(IContentControl dialog)
+    {
+        dialog.CloseCallback = null;
+        dialog.SuccCallback = null;
+        dialog.FailCallback = null;
+        dialog.CancelCallback = null;
+    }
+
+    private async Task<bool> ShowConfirmDialogAsync(IContentControl dialog)
+    {
+        ResetDialogCallbacks(dialog);
+
+        var tcs = new TaskCompletionSource<bool>();
+
+        await contentDialogService.ShowContentAsync(
+            dialog,
+            succCallback: _ => tcs.TrySetResult(true),
+            cancelCallback: _ => tcs.TrySetResult(false));
+
+        if (!tcs.Task.IsCompleted)
+        {
+            tcs.TrySetResult(false);
+        }
+
+        return await tcs.Task;
+    }
+
+    private async Task<bool> ConfirmFilterKernelAsync()
+    {
+        if (App.ServiceProvider.GetKeyedService(typeof(IContentControl), nameof(FilterKernelDialog)) is not FilterKernelDialog dialog)
+        {
+            Growl.ErrorGlobal("滤波参数对话框未找到");
+            return false;
+        }
+
+        dialog.BlockSize = BlockSize;
+
+        var confirmed = await ShowConfirmDialogAsync(dialog);
+        if (!confirmed) return false;
+
+        BlockSize = dialog.BlockSize;
+        return true;
+    }
+
+    private async Task<bool> ConfirmMorphologyAsync()
+    {
+        if (App.ServiceProvider.GetKeyedService(typeof(IContentControl), nameof(MorphologyDialog)) is not MorphologyDialog dialog)
+        {
+            Growl.ErrorGlobal("形态学参数对话框未找到");
+            return false;
+        }
+
+        dialog.BlockSize = BlockSize;
+        dialog.Iterations = Iterations;
+        dialog.SelectedKernelShape = SelectedKernelShape;
+
+        var confirmed = await ShowConfirmDialogAsync(dialog);
+        if (!confirmed) return false;
+
+        BlockSize = dialog.BlockSize;
+        Iterations = dialog.Iterations;
+        SelectedKernelShape = dialog.SelectedKernelShape;
+        return true;
+    }
+
+    private async Task<bool> ConfirmThresholdAsync()
+    {
+        if (App.ServiceProvider.GetKeyedService(typeof(IContentControl), nameof(ThresholdDialog)) is not ThresholdDialog dialog)
+        {
+            Growl.ErrorGlobal("阈值参数对话框未找到");
+            return false;
+        }
+
+        dialog.ThresholdValue = ThresholdValue;
+        dialog.ThresholdMaxValue = ThresholdMaxValue;
+
+        var confirmed = await ShowConfirmDialogAsync(dialog);
+        if (!confirmed) return false;
+
+        ThresholdValue = dialog.ThresholdValue;
+        ThresholdMaxValue = dialog.ThresholdMaxValue;
+        return true;
+    }
+
+    private async Task<bool> ConfirmAdaptiveThresholdAsync()
+    {
+        if (App.ServiceProvider.GetKeyedService(typeof(IContentControl), nameof(AdaptiveThresholdDialog)) is not AdaptiveThresholdDialog dialog)
+        {
+            Growl.ErrorGlobal("自适应阈值参数对话框未找到");
+            return false;
+        }
+
+        dialog.BlockSize = BlockSize;
+        dialog.SelectedThresholdTypes = SelectedThresholdTypes;
+        dialog.ThresholdMaxValue = ThresholdMaxValue;
+
+        var confirmed = await ShowConfirmDialogAsync(dialog);
+        if (!confirmed) return false;
+
+        BlockSize = dialog.BlockSize;
+        SelectedThresholdTypes = dialog.SelectedThresholdTypes;
+        ThresholdMaxValue = dialog.ThresholdMaxValue;
+        return true;
+    }
+
+    private async Task<bool> ConfirmMaxValueAsync()
+    {
+        if (App.ServiceProvider.GetKeyedService(typeof(IContentControl), nameof(MaxValueDialog)) is not MaxValueDialog dialog)
+        {
+            Growl.ErrorGlobal("MaxValue 参数对话框未找到");
+            return false;
+        }
+
+        dialog.ThresholdMaxValue = ThresholdMaxValue;
+
+        var confirmed = await ShowConfirmDialogAsync(dialog);
+        if (!confirmed) return false;
+
+        ThresholdMaxValue = dialog.ThresholdMaxValue;
+        return true;
+    }
+
+    private async Task<bool> ConfirmLinearGrayTransformAsync()
+    {
+        if (App.ServiceProvider.GetKeyedService(typeof(IContentControl), nameof(LinearGrayTransformDialog)) is not LinearGrayTransformDialog dialog)
+        {
+            Growl.ErrorGlobal("灰度线性变换参数对话框未找到");
+            return false;
+        }
+
+        dialog.OutMin = LinearOutMin;
+        dialog.OutMax = LinearOutMax;
+
+        var confirmed = await ShowConfirmDialogAsync(dialog);
+        if (!confirmed) return false;
+
+        LinearOutMin = dialog.OutMin;
+        LinearOutMax = dialog.OutMax;
+        return true;
+    }
+
+    private async Task<bool> ConfirmPiecewiseLinearGrayTransformAsync()
+    {
+        if (App.ServiceProvider.GetKeyedService(typeof(IContentControl), nameof(PiecewiseLinearGrayTransformDialog)) is not PiecewiseLinearGrayTransformDialog dialog)
+        {
+            Growl.ErrorGlobal("分段线性灰度变换参数对话框未找到");
+            return false;
+        }
+
+        dialog.R1 = PiecewiseR1;
+        dialog.S1 = PiecewiseS1;
+        dialog.R2 = PiecewiseR2;
+        dialog.S2 = PiecewiseS2;
+
+        var confirmed = await ShowConfirmDialogAsync(dialog);
+        if (!confirmed) return false;
+
+        PiecewiseR1 = dialog.R1;
+        PiecewiseS1 = dialog.S1;
+        PiecewiseR2 = dialog.R2;
+        PiecewiseS2 = dialog.S2;
+
+        return true;
+    }
+
+    private async Task<bool> ConfirmCannyAsync()
+    {
+        if (App.ServiceProvider.GetKeyedService(typeof(IContentControl), nameof(CannyDialog)) is not CannyDialog dialog)
+        {
+            Growl.ErrorGlobal("Canny 参数对话框未找到");
+            return false;
+        }
+
+        dialog.Threshold1 = ThresholdValue;
+        dialog.Threshold2 = ThresholdMaxValue;
+
+        var confirmed = await ShowConfirmDialogAsync(dialog);
+        if (!confirmed) return false;
+
+        ThresholdValue = dialog.Threshold1;
+        ThresholdMaxValue = dialog.Threshold2;
+        return true;
+    }
+
+    private async Task<bool> ConfirmAlgorithmParametersAsync()
+    {
+        if (App.ServiceProvider.GetKeyedService(typeof(IContentControl), nameof(AlgorithmParameterDialog)) is not AlgorithmParameterDialog dialog)
+        {
+            Growl.ErrorGlobal("算法参数对话框未找到");
+            return false;
+        }
+
+        dialog.SelectedRetrievalModes = SelectedRetrievalModes;
+        dialog.SelectedContourApproximationModes = SelectedContourApproximationModes;
+
+        var confirmed = await ShowConfirmDialogAsync(dialog);
+        if (!confirmed) return false;
+
+        SelectedRetrievalModes = dialog.SelectedRetrievalModes;
+        SelectedContourApproximationModes = dialog.SelectedContourApproximationModes;
+
+        return true;
+    }
 
     /// <summary>
     /// 重置画布
