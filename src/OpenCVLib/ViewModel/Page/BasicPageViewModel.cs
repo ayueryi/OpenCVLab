@@ -301,22 +301,6 @@ public partial class BasicPageViewModel : ObservableObject
         return Task.CompletedTask;
     }
 
-    /// <summary>
-    /// 显示图像
-    /// </summary>
-    /// <returns></returns>
-    [RelayCommand]
-    private Task ShowImage()
-    {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty())
-            return Task.CompletedTask;
-
-        Cv2.ImShow("img", SelectOperation.ImageMat);
-        Cv2.WaitKey();
-
-        return Task.CompletedTask;
-    }
-
     #endregion
 
     #region 基础操作

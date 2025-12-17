@@ -11,7 +11,7 @@
     d:DesignHeight="180"
     d:DesignWidth="500"
     mc:Ignorable="d">
-    <Border Background="White">
+    <Border Background="White" Style="{StaticResource BorderRegion}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
