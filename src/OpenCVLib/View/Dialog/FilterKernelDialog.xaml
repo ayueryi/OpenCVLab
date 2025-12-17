@@ -6,56 +6,46 @@
     xmlns:local="clr-namespace:OpenCVLab.View.Dialog"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://Yu-UI.com//2024/xaml"
-    d:DataContext="{d:DesignInstance local:FilterKernelDialog, IsDesignTimeCreatable=False}"
+    d:DataContext="{d:DesignInstance local:FilterKernelDialog,
+                                     IsDesignTimeCreatable=False}"
     d:DesignHeight="180"
     d:DesignWidth="560"
     mc:Ignorable="d">
 
-    <Border Effect="{StaticResource EffectShadow3}"
-            Style="{StaticResource OpenCVLabDialogRootBorder}">
+    <Border Background="White">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <ui:Title MainTitle="滤波参数"
-                    SubTitle="Filter Parameters"/>
+            <ui:Title MainTitle="滤波参数" SubTitle="Filter Parameters" />
 
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
-                <StackPanel Margin="20"
-                        Orientation="Vertical">
-                    <StackPanel Margin="0,4"
-                            Orientation="Horizontal">
-                        <TextBlock Width="110"
-                                VerticalAlignment="Center">核大小</TextBlock>
-                        <ui:NumericBox Width="200"
-                                Value="{Binding BlockSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <StackPanel Margin="20" Orientation="Vertical">
+                    <StackPanel Margin="0,4" Orientation="Horizontal">
+                        <TextBlock Width="110" VerticalAlignment="Center">核大小</TextBlock>
+                        <ui:NumericBox Width="200" Value="{Binding BlockSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </StackPanel>
 
-                <Border Grid.Row="1"
-                        Style="{StaticResource OpenCVLabDialogFooterBorder}">
+                <Border Grid.Row="1">
                     <UniformGrid Columns="2">
-                        <Button Click="Confirm"
-                            Style="{StaticResource OpenCVLabDialogPrimaryButton}">
+                        <Button Click="Confirm">
                             <StackPanel Orientation="Horizontal">
-                                <ui:Icon Kind="CheckCircleOutline"
-                                                        Margin="0,0,8,0" />
+                                <ui:Icon Margin="0,0,8,0" Kind="CheckCircleOutline" />
                                 <TextBlock VerticalAlignment="Center">确认</TextBlock>
                             </StackPanel>
                         </Button>
 
-                        <Button Click="Cancel"
-                            Style="{StaticResource OpenCVLabDialogSecondaryButton}">
+                        <Button Click="Cancel">
                             <StackPanel Orientation="Horizontal">
-                                <ui:Icon Kind="CloseCircleOutline"
-                                                        Margin="0,0,8,0" />
+                                <ui:Icon Margin="0,0,8,0" Kind="CloseCircleOutline" />
                                 <TextBlock VerticalAlignment="Center">取消</TextBlock>
                             </StackPanel>
                         </Button>

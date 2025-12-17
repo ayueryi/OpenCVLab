@@ -16,6 +16,8 @@ using OpenCVLab.View.Page;
 using OpenCvSharp;
 using OpenCvSharp.WpfExtensions;
 
+using HandyControl.Controls;
+
 using Yu.UI;
 
 namespace OpenCVLab.ViewModel.Page;
@@ -261,10 +263,12 @@ public partial class BasicPageViewModel : ObservableObject
 
             OperationsCollection.Add(operation);
             SelectOperation = operation;
+
+            Growl.InfoGlobal($"读取文件成功：{ofd.FileName}");
         }
         catch (Exception exception)
         {
-            Growl.ErrorGlobal(ofd.FileName + "图像读取失败" + exception.Message); ;
+            Growl.ErrorGlobal(ofd.FileName + "图像读取失败" + exception.Message);
         }
 
         return Task.CompletedTask;

@@ -34,6 +34,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="HandyControl" Version="3.5.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
@@ -69,6 +70,10 @@
 	  <Resource Include="Resources\Tips\Threshold\Threshold_Tutorial_Theory_Truncate.png" />
 	  <Resource Include="Resources\Tips\Threshold\Threshold_Tutorial_Theory_Zero.png" />
 	  <Resource Include="Resources\Tips\Threshold\Threshold_Tutorial_Theory_Zero_Inverted.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Themes\" />
 	</ItemGroup>
 
 </Project>

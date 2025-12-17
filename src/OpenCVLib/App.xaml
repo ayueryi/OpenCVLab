@@ -6,11 +6,9 @@
     Startup="App_OnStartup">
     <Application.Resources>
         <ResourceDictionary>
-
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Themes/OpenCVLabTheme.xaml"/>
-                <ResourceDictionary Source="Themes/EnhancedStyles.xaml"/>
-                <ResourceDictionary Source="Themes/ResponsiveStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

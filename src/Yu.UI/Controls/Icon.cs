@@ -39,26 +39,91 @@ internal static class IconGlyphs
     // Uses common Unicode symbols; can be swapped later to a dedicated icon font.
     private static readonly Dictionary<string, string> Map = new(StringComparer.OrdinalIgnoreCase)
     {
+        // Window Controls
         ["CheckCircleOutline"] = "✓",
         ["CloseCircleOutline"] = "×",
         ["Close"] = "×",
         ["Minus"] = "–",
         ["Maximize"] = "□",
 
+        // File Operations
+        ["Folder"] = "📁",
+        ["FolderOpen"] = "📂",
+        ["Save"] = "💾",
+        ["Eye"] = "👁",
         ["Image"] = "🖼",
         ["OpenInBrowser"] = "⤴",
         ["DropSaver"] = "💾",
         ["ShowOutline"] = "👁",
+
+        // Basic Operations
+        ["Settings"] = "⚙",
         ["User"] = "👤",
+        
+        // Color & Palette
         ["Color"] = "🎨",
-        ["ImageFilterBlackWhite"] = "⚙",
+        ["ColorPalette"] = "🎨",
+        ["ColorFill"] = "🖌",
+        
+        // Filters & Blur
         ["Blur"] = "◌",
+        ["BlurRadial"] = "◍",
+        ["Filter"] = "⊚",
+        ["FilterOutline"] = "⊙",
+        ["ImageFilterBlackWhite"] = "⚙",
+        
+        // Morphology & Shapes
+        ["ShapeCirclePlus"] = "⊕",
+        ["ArrowExpand"] = "⤢",
+        ["ArrowCollapse"] = "⤡",
+        ["Gradient"] = "▦",
+        ["CircleOutline"] = "○",
+        ["Circle"] = "●",
+        ["ChartLine"] = "📈",
+        ["HatFedora"] = "🎩",
+        
+        // Threshold & Contrast
+        ["Contrast"] = "◐",
+        ["InvertColors"] = "◑",
+        ["AutoFix"] = "✨",
+        
+        // Edge Detection & Borders
+        ["VectorLine"] = "╱",
+        ["BorderOutside"] = "▢",
+        ["BorderAll"] = "⊞",
+        ["BorderInside"] = "⌗",
+        
+        // Transform
+        ["Transform"] = "⟲",
+        ["Resize"] = "⇔",
+        ["Rotate90DegreesCcw"] = "↶",
+        ["VectorSquare"] = "▱",
+        ["Perspective"] = "⬓",
+        
+        // Advanced Operations
+        ["Star"] = "★",
+        ["MagicWand"] = "✨",
+        
+        // Histogram & Charts
+        ["ChartBar"] = "📊",
+        ["ChartBellCurve"] = "⌢",
+        ["ChartHistogram"] = "▅",
+        
+        // Contours & Vectors
+        ["VectorPolyline"] = "⌇",
+        ["VectorCurve"] = "〰",
+        ["VectorRectangle"] = "▭",
+        ["ShapeOutline"] = "▢",
+        
+        // Search & Match
+        ["ImageSearch"] = "🔍",
+        ["ImageMultiple"] = "🖼",
+        
+        // Other
         ["ImageArea"] = "▦",
         ["Analytics"] = "📊",
         ["ContactlessPaymentCircle"] = "◎",
-
         ["AspectRatio"] = "▭",
-        ["BorderInside"] = "⌗",
     };
 
     public static string GetGlyph(string? kind)

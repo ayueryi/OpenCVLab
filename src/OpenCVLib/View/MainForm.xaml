@@ -12,21 +12,16 @@
     d:DataContext="{d:DesignInstance local:MainForm,
                                      IsDesignTimeCreatable=False}"
     AllowsTransparency="True"
-    Background="Transparent"
+    Background="White"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
 
-    <Border
-        Background="{StaticResource OpenCVLab.Brush.Background}"
-        BorderBrush="{StaticResource OpenCVLab.Brush.Border}"
-        BorderThickness="1"
-        CornerRadius="12"
-        Effect="{StaticResource EffectShadow3}">
+    <Border BorderThickness="1" CornerRadius="12">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <!--  Title Bar: Clean & Minimal  -->
@@ -48,14 +43,13 @@
                         Margin="0,0,12,0"
                         VerticalAlignment="Center"
                         RenderOptions.BitmapScalingMode="HighQuality"
-                        Source="pack://application:,,,/OpenCVLab;component/Resources/logo.png"/>
+                        Source="pack://application:,,,/OpenCVLab;component/Resources/logo.png" />
                     <TextBlock
                         x:Name="SwName"
                         VerticalAlignment="Center"
                         FontSize="16"
                         FontWeight="SemiBold"
-                        Foreground="{StaticResource OpenCVLab.Brush.Text}"
-                        Text="图像处理实验大师"/>
+                        Text="图像处理实验大师" />
                 </StackPanel>
 
                 <StackPanel
@@ -63,33 +57,23 @@
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
 
-                    <Button
-                        Margin="4"
-                        Click="Sw_Minus_Click"
-                        Style="{StaticResource OpenCVLabTitleBarButton}">
-                        <ui:Icon Kind="Minus"/>
+                    <Button Margin="4" Click="Sw_Minus_Click">
+                        <ui:Icon Kind="Minus" />
                     </Button>
 
-                    <Button
-                        Margin="4"
-                        Click="Sw_Maxus_Click"
-                        Style="{StaticResource OpenCVLabTitleBarButton}">
-                        <ui:Icon Kind="Maximize"/>
+                    <Button Margin="4" Click="Sw_Maxus_Click">
+                        <ui:Icon Kind="Maximize" />
                     </Button>
 
-                    <Button
-                        Margin="4"
-                        Click="Sw_Closeus_Click"
-                        Style="{StaticResource OpenCVLabTitleBarButton}">
-                        <ui:Icon Kind="Close"/>
+                    <Button Margin="4" Click="Sw_Closeus_Click">
+                        <ui:Icon Kind="Close" />
                     </Button>
                 </StackPanel>
             </Grid>
 
             <!--  Main Content Area  -->
-            <Grid Grid.Row="1"
-                    Margin="12,0,12,12">
-                <ContentControl Content="{Binding ViewModel.BasicPage}"/>
+            <Grid Grid.Row="1" Margin="12,0,12,12">
+                <ContentControl Content="{Binding ViewModel.BasicPage}" />
 
                 <ui:ContentDialogHost
                     x:Name="RootDialog"
@@ -97,14 +81,14 @@
                     VerticalAlignment="Stretch"
                     Panel.ZIndex="500"
                     CloseOnClickAway="False"
-                    HostName="RootDialog"/>
+                    HostName="RootDialog" />
 
                 <ui:ToastHost
                     Margin="24"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Panel.ZIndex="999"
-                    HostName="Global"/>
+                    HostName="Global" />
             </Grid>
         </Grid>
     </Border>

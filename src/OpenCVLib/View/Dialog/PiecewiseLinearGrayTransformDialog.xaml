@@ -6,117 +6,116 @@
     xmlns:local="clr-namespace:OpenCVLab.View.Dialog"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://Yu-UI.com//2024/xaml"
-    d:DataContext="{d:DesignInstance local:PiecewiseLinearGrayTransformDialog, IsDesignTimeCreatable=False}"
+    d:DataContext="{d:DesignInstance local:PiecewiseLinearGrayTransformDialog,
+                                     IsDesignTimeCreatable=False}"
     d:DesignHeight="280"
     d:DesignWidth="560"
     mc:Ignorable="d">
 
-    <Border Effect="{StaticResource EffectShadow3}"
-            Style="{StaticResource OpenCVLabDialogRootBorder}">
+    <Border Background="White">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <ui:Title MainTitle="分段线性灰度变换"
-                      SubTitle="Piecewise Linear Gray Transform"/>
+            <ui:Title MainTitle="分段线性灰度变换" SubTitle="Piecewise Linear Gray Transform" />
 
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
-                <StackPanel Margin="20"
-                            Orientation="Vertical">
-                    <TextBlock Margin="0,0,0,6"
-                               Opacity="0.8">
+                <StackPanel Margin="20" Orientation="Vertical">
+                    <TextBlock Margin="0,0,0,6" Opacity="0.8">
                         固定端点 (0,0) 与 (255,255)，设置两段拐点 (r1,s1)、(r2,s2)。
                     </TextBlock>
 
                     <Grid Margin="0,8,0,0">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="72"/>
-                            <ColumnDefinition Width="160"/>
-                            <ColumnDefinition Width="56"/>
-                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="72" />
+                            <ColumnDefinition Width="160" />
+                            <ColumnDefinition Width="56" />
+                            <ColumnDefinition Width="160" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Row="0"
-                                   Grid.Column="0"
-                                   VerticalAlignment="Center"
-                                   Opacity="0.85"
-                                   Text="r1"/>
-                        <ui:NumericBox Grid.Row="0"
-                                       Grid.Column="1"
-                                       Minimum="0"
-                                       Maximum="255"
-                                       Value="{Binding R1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="0"
-                                   Grid.Column="2"
-                                   VerticalAlignment="Center"
-                                   Opacity="0.85"
-                                   Text="s1"/>
-                        <ui:NumericBox Grid.Row="0"
-                                       Grid.Column="3"
-                                       Minimum="0"
-                                       Maximum="255"
-                                       Value="{Binding S1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Opacity="0.85"
+                            Text="r1" />
+                        <ui:NumericBox
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Maximum="255"
+                            Minimum="0"
+                            Value="{Binding R1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            VerticalAlignment="Center"
+                            Opacity="0.85"
+                            Text="s1" />
+                        <ui:NumericBox
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            Maximum="255"
+                            Minimum="0"
+                            Value="{Binding S1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                        <TextBlock Grid.Row="1"
-                                   Grid.Column="0"
-                                   Margin="0,8,0,0"
-                                   VerticalAlignment="Center"
-                                   Opacity="0.85"
-                                   Text="r2"/>
-                        <ui:NumericBox Grid.Row="1"
-                                       Grid.Column="1"
-                                       Margin="0,8,0,0"
-                                       Minimum="0"
-                                       Maximum="255"
-                                       Value="{Binding R2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1"
-                                   Grid.Column="2"
-                                   Margin="0,8,0,0"
-                                   VerticalAlignment="Center"
-                                   Opacity="0.85"
-                                   Text="s2"/>
-                        <ui:NumericBox Grid.Row="1"
-                                       Grid.Column="3"
-                                       Margin="0,8,0,0"
-                                       Minimum="0"
-                                       Maximum="255"
-                                       Value="{Binding S2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="0,8,0,0"
+                            VerticalAlignment="Center"
+                            Opacity="0.85"
+                            Text="r2" />
+                        <ui:NumericBox
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="0,8,0,0"
+                            Maximum="255"
+                            Minimum="0"
+                            Value="{Binding R2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Margin="0,8,0,0"
+                            VerticalAlignment="Center"
+                            Opacity="0.85"
+                            Text="s2" />
+                        <ui:NumericBox
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="0,8,0,0"
+                            Maximum="255"
+                            Minimum="0"
+                            Value="{Binding S2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </Grid>
 
-                    <TextBlock Margin="0,8,0,0"
-                               Opacity="0.75">
+                    <TextBlock Margin="0,8,0,0" Opacity="0.75">
                         建议：0 ≤ r1 &lt; r2 ≤ 255。
                     </TextBlock>
                 </StackPanel>
 
-                <Border Grid.Row="1"
-                        Style="{StaticResource OpenCVLabDialogFooterBorder}">
+                <Border Grid.Row="1">
                     <UniformGrid Columns="2">
-                        <Button Click="Confirm"
-                                Style="{StaticResource OpenCVLabDialogPrimaryButton}">
+                        <Button Click="Confirm">
                             <StackPanel Orientation="Horizontal">
-                                <ui:Icon Kind="CheckCircleOutline"
-                                         Margin="0,0,8,0"/>
+                                <ui:Icon Margin="0,0,8,0" Kind="CheckCircleOutline" />
                                 <TextBlock VerticalAlignment="Center">确认</TextBlock>
                             </StackPanel>
                         </Button>
 
-                        <Button Click="Cancel"
-                                Style="{StaticResource OpenCVLabDialogSecondaryButton}">
+                        <Button Click="Cancel">
                             <StackPanel Orientation="Horizontal">
-                                <ui:Icon Kind="CloseCircleOutline"
-                                         Margin="0,0,8,0"/>
+                                <ui:Icon Margin="0,0,8,0" Kind="CloseCircleOutline" />
                                 <TextBlock VerticalAlignment="Center">取消</TextBlock>
                             </StackPanel>
                         </Button>
