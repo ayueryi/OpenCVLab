@@ -45,6 +45,9 @@ internal static class IconGlyphs
         ["Close"] = "×",
         ["Minus"] = "–",
         ["Maximize"] = "□",
+        ["PlusCircleOutline"] = "⊕",
+        ["MinusCircleOutline"] = "⊖",
+        ["Refresh"] = "↻",
 
         // File Operations
         ["Folder"] = "📁",
@@ -59,19 +62,19 @@ internal static class IconGlyphs
         // Basic Operations
         ["Settings"] = "⚙",
         ["User"] = "👤",
-        
+
         // Color & Palette
         ["Color"] = "🎨",
         ["ColorPalette"] = "🎨",
         ["ColorFill"] = "🖌",
-        
+
         // Filters & Blur
         ["Blur"] = "◌",
         ["BlurRadial"] = "◍",
         ["Filter"] = "⊚",
         ["FilterOutline"] = "⊙",
         ["ImageFilterBlackWhite"] = "⚙",
-        
+
         // Morphology & Shapes
         ["ShapeCirclePlus"] = "⊕",
         ["ArrowExpand"] = "⤢",
@@ -81,50 +84,51 @@ internal static class IconGlyphs
         ["Circle"] = "●",
         ["ChartLine"] = "📈",
         ["HatFedora"] = "🎩",
-        
+
         // Threshold & Contrast
         ["Contrast"] = "◐",
         ["InvertColors"] = "◑",
         ["AutoFix"] = "✨",
-        
+
         // Edge Detection & Borders
         ["VectorLine"] = "╱",
         ["BorderOutside"] = "▢",
         ["BorderAll"] = "⊞",
         ["BorderInside"] = "⌗",
-        
+
         // Transform
         ["Transform"] = "⟲",
         ["Resize"] = "⇔",
         ["Rotate90DegreesCcw"] = "↶",
         ["VectorSquare"] = "▱",
         ["Perspective"] = "⬓",
-        
+
         // Advanced Operations
         ["Star"] = "★",
         ["MagicWand"] = "✨",
-        
+
         // Histogram & Charts
         ["ChartBar"] = "📊",
         ["ChartBellCurve"] = "⌢",
         ["ChartHistogram"] = "▅",
-        
+        ["ChartTimelineVariant"] = "⏱",
+
         // Contours & Vectors
         ["VectorPolyline"] = "⌇",
         ["VectorCurve"] = "〰",
         ["VectorRectangle"] = "▭",
         ["ShapeOutline"] = "▢",
-        
+
         // Search & Match
         ["ImageSearch"] = "🔍",
         ["ImageMultiple"] = "🖼",
-        
+
         // Other
         ["ImageArea"] = "▦",
         ["Analytics"] = "📊",
         ["ContactlessPaymentCircle"] = "◎",
         ["AspectRatio"] = "▭",
-        
+
         // Information & Help
         ["InformationOutline"] = "ⓘ",
         ["Information"] = "ℹ",

@@ -8,8 +8,8 @@
     xmlns:ui="http://Yu-UI.com//2024/xaml"
     d:DataContext="{d:DesignInstance local:PiecewiseLinearGrayTransformDialog,
                                      IsDesignTimeCreatable=False}"
-    d:DesignHeight="280"
-    d:DesignWidth="560"
+    d:DesignHeight="560"
+    d:DesignWidth="880"
     mc:Ignorable="d">
 
     <Border Background="White" Style="{StaticResource BorderRegion}">
@@ -17,111 +17,276 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
             <ui:Title MainTitle="分段线性灰度变换" SubTitle="Piecewise Linear Gray Transform" />
 
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="auto" />
-                </Grid.RowDefinitions>
+            <Grid Grid.Row="1" Margin="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="280" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-                <StackPanel Margin="20" Orientation="Vertical">
-                    <TextBlock Margin="0,0,0,6" Opacity="0.8">
-                        固定端点 (0,0) 与 (255,255)，设置两段拐点 (r1,s1)、(r2,s2)。
-                    </TextBlock>
-
-                    <Grid Margin="0,8,0,0">
+                <!--  左侧：分段列表  -->
+                <Border
+                    Grid.Column="0"
+                    Margin="0,0,10,0"
+                    BorderBrush="#E0E0E0"
+                    BorderThickness="1"
+                    CornerRadius="4">
+                    <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="72" />
-                            <ColumnDefinition Width="160" />
-                            <ColumnDefinition Width="56" />
-                            <ColumnDefinition Width="160" />
-                        </Grid.ColumnDefinitions>
 
+                        <!--  标题  -->
                         <TextBlock
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            VerticalAlignment="Center"
-                            Opacity="0.85"
-                            Text="r1" />
-                        <ui:NumericBox
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Maximum="255"
-                            Minimum="0"
-                            Value="{Binding R1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <TextBlock
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            VerticalAlignment="Center"
-                            Opacity="0.85"
-                            Text="s1" />
-                        <ui:NumericBox
-                            Grid.Row="0"
-                            Grid.Column="3"
-                            Maximum="255"
-                            Minimum="0"
-                            Value="{Binding S1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Margin="12,12,12,8"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Text="分段列表" />
 
-                        <TextBlock
+                        <!--  分段列表  -->
+                        <ListBox
                             Grid.Row="1"
-                            Grid.Column="0"
-                            Margin="0,8,0,0"
-                            VerticalAlignment="Center"
-                            Opacity="0.85"
-                            Text="r2" />
-                        <ui:NumericBox
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Margin="0,8,0,0"
-                            Maximum="255"
-                            Minimum="0"
-                            Value="{Binding R2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <TextBlock
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            Margin="0,8,0,0"
-                            VerticalAlignment="Center"
-                            Opacity="0.85"
-                            Text="s2" />
-                        <ui:NumericBox
-                            Grid.Row="1"
-                            Grid.Column="3"
-                            Margin="0,8,0,0"
-                            Maximum="255"
-                            Minimum="0"
-                            Value="{Binding S2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Margin="8"
+                            ItemsSource="{Binding Segments}"
+                            SelectedItem="{Binding SelectedSegment, Mode=TwoWay}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="4">
+                                        <TextBlock
+                                            FontSize="12"
+                                            FontWeight="Medium"
+                                            Text="{Binding DisplayName}" />
+                                        <TextBlock
+                                            Margin="0,2,0,0"
+                                            FontSize="10"
+                                            Foreground="Gray"
+                                            Text="点击编辑参数" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <!--  操作按钮  -->
+                        <UniformGrid
+                            Grid.Row="2"
+                            Margin="8,0,8,8"
+                            Columns="3">
+                            <Button
+                                Margin="2"
+                                Command="{Binding AddSegmentCommand}"
+                                ToolTip="添加分段">
+                                <ui:Icon Kind="PlusCircleOutline" />
+                            </Button>
+                            <Button
+                                Margin="2"
+                                Command="{Binding RemoveSegmentCommand}"
+                                ToolTip="删除分段">
+                                <ui:Icon Kind="MinusCircleOutline" />
+                            </Button>
+                            <Button
+                                Margin="2"
+                                Command="{Binding ResetSegmentsCommand}"
+                                ToolTip="重置">
+                                <ui:Icon Kind="Refresh" />
+                            </Button>
+                        </UniformGrid>
                     </Grid>
+                </Border>
 
-                    <TextBlock Margin="0,8,0,0" Opacity="0.75">
-                        建议：0 ≤ r1 &lt; r2 ≤ 255。
-                    </TextBlock>
-                </StackPanel>
+                <!--  右侧：参数配置和直方图  -->
+                <Border
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    BorderBrush="#E0E0E0"
+                    BorderThickness="1"
+                    CornerRadius="4">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                <Border Grid.Row="1">
-                    <UniformGrid Columns="2">
-                        <Button Click="Confirm">
-                            <StackPanel Orientation="Horizontal">
-                                <ui:Icon Margin="0,0,8,0" Kind="CheckCircleOutline" />
-                                <TextBlock VerticalAlignment="Center">确认</TextBlock>
+                        <!--  标题  -->
+                        <TextBlock
+                            Margin="12,12,12,8"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Text="分段参数配置" />
+
+                        <!--  直方图和参数  -->
+                        <ScrollViewer
+                            Grid.Row="1"
+                            Margin="12,8,12,12"
+                            VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <!--  直方图预览区  -->
+                                <Border
+                                    Height="200"
+                                    Background="#F5F5F5"
+                                    BorderBrush="#E0E0E0"
+                                    BorderThickness="1"
+                                    CornerRadius="4">
+                                    <Grid>
+                                        <Canvas x:Name="HistogramCanvas" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontSize="12"
+                                            Foreground="Gray"
+                                            Text="直方图预览区域" />
+                                    </Grid>
+                                </Border>
+
+                                <!--  参数配置  -->
+                                <StackPanel Margin="0,16,0,0" DataContext="{Binding SelectedSegment}">
+                                    <TextBlock
+                                        Margin="0,0,0,8"
+                                        FontSize="13"
+                                        FontWeight="Medium"
+                                        Text="当前分段参数" />
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="16" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <!--  输入范围  -->
+                                        <TextBlock
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="5"
+                                            Margin="0,0,0,8"
+                                            FontSize="12"
+                                            Foreground="#666"
+                                            Text="输入范围 (Input Range)" />
+
+                                        <TextBlock
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Margin="0,0,8,0"
+                                            VerticalAlignment="Center"
+                                            Text="起始值" />
+                                        <ui:NumericBox
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Maximum="255"
+                                            Minimum="0"
+                                            Value="{Binding InputStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                        <TextBlock
+                                            Grid.Row="1"
+                                            Grid.Column="3"
+                                            Margin="0,0,8,0"
+                                            VerticalAlignment="Center"
+                                            Text="结束值" />
+                                        <ui:NumericBox
+                                            Grid.Row="1"
+                                            Grid.Column="4"
+                                            Maximum="255"
+                                            Minimum="0"
+                                            Value="{Binding InputEnd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                        <!--  输出范围  -->
+                                        <TextBlock
+                                            Grid.Row="2"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="5"
+                                            Margin="0,16,0,8"
+                                            FontSize="12"
+                                            Foreground="#666"
+                                            Text="输出范围 (Output Range)" />
+
+                                        <TextBlock
+                                            Grid.Row="3"
+                                            Grid.Column="0"
+                                            Margin="0,0,8,0"
+                                            VerticalAlignment="Center"
+                                            Text="起始值" />
+                                        <ui:NumericBox
+                                            Grid.Row="3"
+                                            Grid.Column="1"
+                                            Maximum="255"
+                                            Minimum="0"
+                                            Value="{Binding OutputStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                        <TextBlock
+                                            Grid.Row="3"
+                                            Grid.Column="3"
+                                            Margin="0,0,8,0"
+                                            VerticalAlignment="Center"
+                                            Text="结束值" />
+                                        <ui:NumericBox
+                                            Grid.Row="3"
+                                            Grid.Column="4"
+                                            Maximum="255"
+                                            Minimum="0"
+                                            Value="{Binding OutputEnd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </Grid>
+
+                                    <TextBlock
+                                        Margin="0,12,0,0"
+                                        FontSize="11"
+                                        Foreground="#999"
+                                        Text="提示：调整输入输出范围以实现不同的灰度变换效果"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
                             </StackPanel>
-                        </Button>
+                        </ScrollViewer>
 
-                        <Button Click="Cancel">
-                            <StackPanel Orientation="Horizontal">
-                                <ui:Icon Margin="0,0,8,0" Kind="CloseCircleOutline" />
-                                <TextBlock VerticalAlignment="Center">取消</TextBlock>
-                            </StackPanel>
-                        </Button>
-                    </UniformGrid>
+                        <!--  说明文字  -->
+                        <Border
+                            Grid.Row="2"
+                            Margin="12,0,12,12"
+                            Padding="8"
+                            Background="#FFF9E6"
+                            BorderBrush="#FFE58F"
+                            BorderThickness="1"
+                            CornerRadius="4">
+                            <TextBlock
+                                FontSize="11"
+                                Foreground="#666"
+                                Text="分段线性变换通过多个线性段组合实现灰度映射。建议保持分段连续性（前一段结束值=后一段起始值）。"
+                                TextWrapping="Wrap" />
+                        </Border>
+                    </Grid>
                 </Border>
             </Grid>
+
+            <!--  底部按钮  -->
+            <Border Grid.Row="2" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0">
+                <UniformGrid Columns="2">
+                    <Button Click="Confirm">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:Icon Margin="0,0,8,0" Kind="CheckCircleOutline" />
+                            <TextBlock VerticalAlignment="Center">确认</TextBlock>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Click="Cancel">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:Icon Margin="0,0,8,0" Kind="CloseCircleOutline" />
+                            <TextBlock VerticalAlignment="Center">取消</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </UniformGrid>
+            </Border>
         </Grid>
     </Border>
 </UserControl>

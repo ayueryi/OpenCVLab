@@ -12,12 +12,17 @@
     d:DataContext="{d:DesignInstance local:MainForm,
                                      IsDesignTimeCreatable=False}"
     AllowsTransparency="True"
-    Background="White"
+    Background="Transparent"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
 
-    <Border BorderThickness="1" CornerRadius="12">
+    <Border
+        Background="White"
+        BorderBrush="Gray"
+        BorderThickness="1"
+        ClipToBounds="True"
+        CornerRadius="6">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />

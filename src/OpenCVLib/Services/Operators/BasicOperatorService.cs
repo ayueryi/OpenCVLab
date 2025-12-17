@@ -206,12 +206,38 @@ public sealed class BasicOperatorService : IBasicOperatorService
         if (Math.Abs(maxVal - minVal) < 1e-12)
             throw new InvalidOperationException("Image range is constant");
 
-        var alpha = (outMax - outMin) / (maxVal - minVal);
-        var beta = outMin - (minVal * alpha);
+        return LinearGrayTransform(src, (int)Math.Round(minVal), (int)Math.Round(maxVal), outMin, outMax);
+    }
+
+    public OperatorResult LinearGrayTransform(Mat src, int inMin, int inMax, int outMin, int outMax)
+    {
+        if (src is null) throw new ArgumentNullException(nameof(src));
+        if (inMin < 0 || inMin > 255) throw new ArgumentOutOfRangeException(nameof(inMin));
+        if (inMax < 0 || inMax > 255) throw new ArgumentOutOfRangeException(nameof(inMax));
+        if (outMin < 0 || outMin > 255) throw new ArgumentOutOfRangeException(nameof(outMin));
+        if (outMax < 0 || outMax > 255) throw new ArgumentOutOfRangeException(nameof(outMax));
+        if (inMin >= inMax) throw new InvalidOperationException("Input range is invalid");
+
+        var alpha = (outMax - outMin) / (double)(inMax - inMin);
+        var beta = outMin - (inMin * alpha);
+
+        using var clipped = new Mat();
+        Cv2.Min(src, new Scalar(inMax), clipped);
+        Cv2.Max(clipped, new Scalar(inMin), clipped);
 
         var dst = new Mat();
-        src.ConvertTo(dst, MatType.CV_8UC1, alpha, beta);
+        clipped.ConvertTo(dst, MatType.CV_8UC1, alpha, beta);
         return new OperatorResult(dst, $"LinearGrayTransform_min{outMin}_max{outMax}");
+    }
+
+    public OperatorResult LinearAlphaBetaTransform(Mat src, double alpha, double beta)
+    {
+        if (src is null) throw new ArgumentNullException(nameof(src));
+
+        var dst = new Mat();
+        // Saturate cast into 8-bit.
+        src.ConvertTo(dst, MatType.CV_8UC1, alpha, beta);
+        return new OperatorResult(dst, $"LinearAlphaBeta_a{alpha}_b{beta}");
     }
 
     public OperatorResult PiecewiseLinearGrayTransform(Mat src, int r1, int s1, int r2, int s2)
@@ -256,6 +282,15 @@ public sealed class BasicOperatorService : IBasicOperatorService
         var dst = new Mat();
         Cv2.Scharr(src, dst, MatType.CV_8U, 1, 1);
         return new OperatorResult(dst, "Scharr");
+    }
+
+    public OperatorResult Invert(Mat src)
+    {
+        if (src is null) throw new ArgumentNullException(nameof(src));
+
+        var dst = new Mat();
+        Cv2.BitwiseNot(src, dst);
+        return new OperatorResult(dst, "Invert");
     }
 
     public FindContoursResult FindContours(Mat src, RetrievalModes retrievalMode, ContourApproximationModes approximationMode, int selectedRetrievalModes, int selectedContourApproximationModes)

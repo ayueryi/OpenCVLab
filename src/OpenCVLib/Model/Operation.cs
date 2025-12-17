@@ -54,6 +54,7 @@ public partial class Operation : ObservableObject
         {
             "PiecewiseLinearGrayTransform",
             "LinearGrayTransform",
+            "LinearAlphaBeta",
             "MorphologyExBlackHat",
             "MorphologyExGradient",
             "MorphologyExTopHat",
@@ -64,6 +65,7 @@ public partial class Operation : ObservableObject
             "GaussianBlur",
             "MedianBlur",
             "BilateralBlur",
+            "Invert",
             "EqualizeHist",
             "CreateCLAHE",
             "FindContours",
@@ -134,6 +136,8 @@ public partial class Operation : ObservableObject
         string? approxMode = null;
         string? adaptiveType = null;
         string? diameter = null;
+        string? alpha = null;
+        string? beta = null;
 
         foreach (var token in parts.Skip(1))
         {
@@ -169,6 +173,10 @@ public partial class Operation : ObservableObject
                 adaptiveType = token[2..];
             else if (token.StartsWith("d", StringComparison.Ordinal) && token.Length > 1)
                 diameter = token[1..];
+            else if (token.StartsWith("a", StringComparison.Ordinal) && token.Length > 1)
+                alpha = token[1..];
+            else if (token.StartsWith("b", StringComparison.Ordinal) && token.Length > 1)
+                beta = token[1..];
             else
                 thresholdType ??= token;
         }
@@ -188,6 +196,10 @@ public partial class Operation : ObservableObject
             args.Add($"k={kernel}");
         if (!string.IsNullOrWhiteSpace(diameter))
             args.Add($"d={diameter}");
+        if (!string.IsNullOrWhiteSpace(alpha))
+            args.Add($"a={alpha}");
+        if (!string.IsNullOrWhiteSpace(beta))
+            args.Add($"b={beta}");
         if (!string.IsNullOrWhiteSpace(iterations))
             args.Add($"it={iterations}");
         if (!string.IsNullOrWhiteSpace(shape))

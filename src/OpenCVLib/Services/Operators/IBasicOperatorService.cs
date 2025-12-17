@@ -28,12 +28,16 @@ public interface IBasicOperatorService
     OperatorResult CreateClahe(Mat src, double clipLimit = 40, int tileGridSize = 8);
 
     OperatorResult LinearGrayTransform(Mat src, int outMin, int outMax);
+    OperatorResult LinearGrayTransform(Mat src, int inMin, int inMax, int outMin, int outMax);
+    OperatorResult LinearAlphaBetaTransform(Mat src, double alpha, double beta);
     OperatorResult PiecewiseLinearGrayTransform(Mat src, int r1, int s1, int r2, int s2);
 
     OperatorResult Canny(Mat src, int threshold1, int threshold2);
     OperatorResult Sobel(Mat src);
     OperatorResult Laplacian(Mat src);
     OperatorResult Scharr(Mat src);
+
+    OperatorResult Invert(Mat src);
 
     FindContoursResult FindContours(Mat src, RetrievalModes retrievalMode, ContourApproximationModes approximationMode, int selectedRetrievalModes, int selectedContourApproximationModes);
 }

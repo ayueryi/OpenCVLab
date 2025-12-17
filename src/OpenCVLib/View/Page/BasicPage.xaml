@@ -14,9 +14,9 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!--  Card 1: Menu Bar  -->
@@ -27,116 +27,130 @@
             <Menu>
                 <MenuItem Header="文件操作">
                     <MenuItem.Icon>
-                        <ui:Icon Kind="Folder" />
+                        <ui:Icon Kind="Folder"/>
                     </MenuItem.Icon>
 
-                    <MenuItem Command="{Binding ViewModel.OpenImageCommand}" Header="打开图像">
+                    <MenuItem Command="{Binding ViewModel.OpenImageCommand}"
+                              Header="打开图像">
                         <MenuItem.Icon>
-                            <ui:Icon Kind="FolderOpen" />
+                            <ui:Icon Kind="FolderOpen"/>
                         </MenuItem.Icon>
                     </MenuItem>
 
-                    <MenuItem Command="{Binding ViewModel.SaveImageCommand}" Header="保存图像">
+                    <MenuItem Command="{Binding ViewModel.SaveImageCommand}"
+                              Header="保存图像">
                         <MenuItem.Icon>
-                            <ui:Icon Kind="Save" />
+                            <ui:Icon Kind="Save"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
 
                 <MenuItem Header="基础操作">
                     <MenuItem.Icon>
-                        <ui:Icon Kind="Settings" />
+                        <ui:Icon Kind="Settings"/>
                     </MenuItem.Icon>
 
                     <MenuItem Header="色彩空间">
                         <MenuItem.Icon>
-                            <ui:Icon Kind="ColorPalette" />
+                            <ui:Icon Kind="ColorPalette"/>
                         </MenuItem.Icon>
 
-                        <MenuItem Command="{Binding ViewModel.ConvertColorCommand}" Header="颜色空间转换">
+                        <MenuItem Command="{Binding ViewModel.ConvertColorCommand}"
+                                  Header="颜色空间转换">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="ColorFill" />
+                                <ui:Icon Kind="ColorFill"/>
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
 
                     <MenuItem Header="平滑图像(Blur)">
                         <MenuItem.Icon>
-                            <ui:Icon Kind="Blur" />
+                            <ui:Icon Kind="Blur"/>
                         </MenuItem.Icon>
 
-                        <MenuItem Command="{Binding ViewModel.NormalizedBlockFilterCommand}" Header="归一化滤波">
+                        <MenuItem Command="{Binding ViewModel.NormalizedBlockFilterCommand}"
+                                  Header="归一化滤波">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="Filter" />
+                                <ui:Icon Kind="Filter"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Command="{Binding ViewModel.GaussianFilterCommand}" Header="高斯滤波">
+                        <MenuItem Command="{Binding ViewModel.GaussianFilterCommand}"
+                                  Header="高斯滤波">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="BlurRadial" />
+                                <ui:Icon Kind="BlurRadial"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Command="{Binding ViewModel.MedianFilterCommand}" Header="中值滤波">
+                        <MenuItem Command="{Binding ViewModel.MedianFilterCommand}"
+                                  Header="中值滤波">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="Filter" />
+                                <ui:Icon Kind="Filter"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Command="{Binding ViewModel.BilateralFilterCommand}" Header="双边滤波">
+                        <MenuItem Command="{Binding ViewModel.BilateralFilterCommand}"
+                                  Header="双边滤波">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="FilterOutline" />
+                                <ui:Icon Kind="FilterOutline"/>
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
 
                     <MenuItem Header="形态学">
                         <MenuItem.Icon>
-                            <ui:Icon Kind="ShapeCirclePlus" />
+                            <ui:Icon Kind="ShapeCirclePlus"/>
                         </MenuItem.Icon>
 
-                        <MenuItem Command="{Binding ViewModel.DilateCommand}" Header="膨胀">
+                        <MenuItem Command="{Binding ViewModel.DilateCommand}"
+                                  Header="膨胀">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="ArrowExpand" />
+                                <ui:Icon Kind="ArrowExpand"/>
                             </MenuItem.Icon>
                             <MenuItem.ToolTip>
-                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Dilation.png" />
+                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Dilation.png"/>
                             </MenuItem.ToolTip>
                         </MenuItem>
 
-                        <MenuItem Command="{Binding ViewModel.ErodeCommand}" Header="腐蚀">
+                        <MenuItem Command="{Binding ViewModel.ErodeCommand}"
+                                  Header="腐蚀">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="ArrowCollapse" />
+                                <ui:Icon Kind="ArrowCollapse"/>
                             </MenuItem.Icon>
                             <MenuItem.ToolTip>
-                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Erosion.png" />
+                                <Image Source="pack://application:,,,/OpenCVLab;component/Resources/Tips/MorphologyEx/Morphology_2_Tutorial_Theory_Erosion.png"/>
                             </MenuItem.ToolTip>
                         </MenuItem>
 
                         <MenuItem Header="高级形态学变换">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="Gradient" />
+                                <ui:Icon Kind="Gradient"/>
                             </MenuItem.Icon>
-                            <MenuItem Command="{Binding ViewModel.MorphologyExOpenCommand}" Header="开运算">
+                            <MenuItem Command="{Binding ViewModel.MorphologyExOpenCommand}"
+                                      Header="开运算">
                                 <MenuItem.Icon>
-                                    <ui:Icon Kind="CircleOutline" />
+                                    <ui:Icon Kind="CircleOutline"/>
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Command="{Binding ViewModel.MorphologyExCloseCommand}" Header="闭运算">
+                            <MenuItem Command="{Binding ViewModel.MorphologyExCloseCommand}"
+                                      Header="闭运算">
                                 <MenuItem.Icon>
-                                    <ui:Icon Kind="Circle" />
+                                    <ui:Icon Kind="Circle"/>
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Command="{Binding ViewModel.MorphologyExGradientCommand}" Header="梯度">
+                            <MenuItem Command="{Binding ViewModel.MorphologyExGradientCommand}"
+                                      Header="梯度">
                                 <MenuItem.Icon>
-                                    <ui:Icon Kind="ChartLine" />
+                                    <ui:Icon Kind="ChartLine"/>
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Command="{Binding ViewModel.MorphologyExTopHatCommand}" Header="顶帽">
+                            <MenuItem Command="{Binding ViewModel.MorphologyExTopHatCommand}"
+                                      Header="顶帽">
                                 <MenuItem.Icon>
-                                    <ui:Icon Kind="HatFedora" />
+                                    <ui:Icon Kind="HatFedora"/>
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Command="{Binding ViewModel.MorphologyExBlackHatCommand}" Header="黑帽">
+                            <MenuItem Command="{Binding ViewModel.MorphologyExBlackHatCommand}"
+                                      Header="黑帽">
                                 <MenuItem.Icon>
-                                    <ui:Icon Kind="HatFedora" />
+                                    <ui:Icon Kind="HatFedora"/>
                                 </MenuItem.Icon>
                             </MenuItem>
                         </MenuItem>
@@ -144,41 +158,52 @@
 
                     <MenuItem Header="阈值处理">
                         <MenuItem.Icon>
-                            <ui:Icon Kind="Contrast" />
+                            <ui:Icon Kind="Contrast"/>
                         </MenuItem.Icon>
 
-                        <MenuItem Command="{Binding ViewModel.ThresholdProcessingCommand}" Header="二值化处理">
+                        <MenuItem Command="{Binding ViewModel.ThresholdProcessingCommand}"
+                                  Header="二值化处理">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="InvertColors" />
+                                <ui:Icon Kind="InvertColors"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem Command="{Binding ViewModel.InvertCommand}"
+                                  Header="反色变换">
+                            <MenuItem.Icon>
+                                <ui:Icon Kind="InvertColors"/>
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
 
                     <MenuItem Header="边缘检测">
                         <MenuItem.Icon>
-                            <ui:Icon Kind="VectorLine" />
+                            <ui:Icon Kind="VectorLine"/>
                         </MenuItem.Icon>
 
-                        <MenuItem Command="{Binding ViewModel.CannyCommand}" Header="Canny边缘检测">
+                        <MenuItem Command="{Binding ViewModel.CannyCommand}"
+                                  Header="Canny边缘检测">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="BorderOutside" />
+                                <ui:Icon Kind="BorderOutside"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Command="{Binding ViewModel.SobelCommand}" Header="Sobel边缘检测">
+                        <MenuItem Command="{Binding ViewModel.SobelCommand}"
+                                  Header="Sobel边缘检测">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="BorderAll" />
+                                <ui:Icon Kind="BorderAll"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Command="{Binding ViewModel.LaplacianCommand}" Header="Laplacian边缘检测">
+                        <MenuItem Command="{Binding ViewModel.LaplacianCommand}"
+                                  Header="Laplacian边缘检测">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="BorderInside" />
+                                <ui:Icon Kind="BorderInside"/>
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
 
                     <MenuItem Header="图像变换">
                         <MenuItem.Icon>
-                            <ui:Icon Kind="Transform" />
+                            <ui:Icon Kind="Transform"/>
                         </MenuItem.Icon>
 
                         <MenuItem
@@ -186,7 +211,7 @@
                             IsEnabled="False"
                             ToolTip="暂未实现">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="Resize" />
+                                <ui:Icon Kind="Resize"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem
@@ -194,7 +219,7 @@
                             IsEnabled="False"
                             ToolTip="暂未实现">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="Rotate90DegreesCcw" />
+                                <ui:Icon Kind="Rotate90DegreesCcw"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem
@@ -202,7 +227,7 @@
                             IsEnabled="False"
                             ToolTip="暂未实现">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="VectorSquare" />
+                                <ui:Icon Kind="VectorSquare"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem
@@ -210,7 +235,7 @@
                             IsEnabled="False"
                             ToolTip="暂未实现">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="Perspect                                          ive" />
+                                <ui:Icon Kind="Perspect                                          ive"/>
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
@@ -218,46 +243,70 @@
 
                 <MenuItem Header="高级操作">
                     <MenuItem.Icon>
-                        <ui:Icon Kind="Star" />
+                        <ui:Icon Kind="Star"/>
                     </MenuItem.Icon>
 
                     <MenuItem Header="直方图">
                         <MenuItem.Icon>
-                            <ui:Icon Kind="ChartBar" />
+                            <ui:Icon Kind="ChartBar"/>
                         </MenuItem.Icon>
 
-                        <MenuItem Command="{Binding ViewModel.EqualizeHistCommand}" Header="直方图均衡化">
+                        <MenuItem Command="{Binding ViewModel.EqualizeHistCommand}"
+                                  Header="直方图均衡化">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="ChartBellCurve" />
+                                <ui:Icon Kind="ChartBellCurve"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Command="{Binding ViewModel.DrawHistCommand}" Header="计算直方图">
+                        <MenuItem Command="{Binding ViewModel.DrawHistCommand}"
+                                  Header="计算直方图">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="ChartHistogram" />
+                                <ui:Icon Kind="ChartHistogram"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+
+                    <MenuItem Header="灰度变换">
+                        <MenuItem.Icon>
+                            <ui:Icon Kind="Contrast"/>
+                        </MenuItem.Icon>
+
+                        <MenuItem Command="{Binding ViewModel.LinearGrayTransformCommand}"
+                                  Header="线性灰度变换">
+                            <MenuItem.Icon>
+                                <ui:Icon Kind="ChartBellCurve"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem Command="{Binding ViewModel.PiecewiseLinearGrayTransformCommand}"
+                                  Header="分段线性灰度变换">
+                            <MenuItem.Icon>
+                                <ui:Icon Kind="ChartTimelineVariant"/>
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
 
                     <MenuItem Header="轮廓查找">
                         <MenuItem.Icon>
-                            <ui:Icon Kind="VectorPolyline" />
+                            <ui:Icon Kind="VectorPolyline"/>
                         </MenuItem.Icon>
 
-                        <MenuItem Command="{Binding ViewModel.FindContoursCommand}" Header="查找轮廓">
+                        <MenuItem Command="{Binding ViewModel.FindContoursCommand}"
+                                  Header="查找轮廓">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="VectorCurve" />
+                                <ui:Icon Kind="VectorCurve"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Command="{Binding ViewModel.DrawBoundingRectCommand}" Header="绘制轮廓矩形">
+                        <MenuItem Command="{Binding ViewModel.DrawBoundingRectCommand}"
+                                  Header="绘制轮廓矩形">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="VectorRectangle" />
+                                <ui:Icon Kind="VectorRectangle"/>
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
 
                     <MenuItem Header="模板匹配">
                         <MenuItem.Icon>
-                            <ui:Icon Kind="ImageSearch" />
+                            <ui:Icon Kind="ImageSearch"/>
                         </MenuItem.Icon>
 
                         <MenuItem
@@ -265,7 +314,7 @@
                             IsEnabled="False"
                             ToolTip="暂未实现">
                             <MenuItem.Icon>
-                                <ui:Icon Kind="ImageMultiple" />
+                                <ui:Icon Kind="ImageMultiple"/>
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
@@ -280,7 +329,8 @@
             Padding="0"
             Style="{StaticResource BorderRegion}">
             <Grid ClipToBounds="True">
-                <ui:ImagePreviewControl x:Name="uiImagePreviewControl" ImageSource="{Binding ViewModel.SelectOperation.BitmapSource}" />
+                <ui:ImagePreviewControl x:Name="uiImagePreviewControl"
+                                        ImageSource="{Binding ViewModel.SelectOperation.BitmapSource}"/>
 
                 <Expander
                     Margin="16"
@@ -289,46 +339,51 @@
                     ExpandDirection="Down"
                     IsExpanded="True">
                     <Expander.Header>
-                        <TextBlock FontWeight="SemiBold" Text="图像信息" />
+                        <TextBlock FontWeight="SemiBold"
+                                   Text="图像信息"/>
                     </Expander.Header>
                     <Border
                         Padding="12"
                         CornerRadius="0 0 5 5"
                         Style="{StaticResource BorderRegion}">
                         <StackPanel>
-                            <StackPanel Margin="2" Orientation="Horizontal">
-                                <TextBlock Text="通道数：" />
+                            <StackPanel Margin="2"
+                                        Orientation="Horizontal">
+                                <TextBlock Text="通道数："/>
                                 <TextBlock
                                     Margin="4,0"
                                     VerticalAlignment="Center"
                                     FontWeight="Medium"
-                                    Text="{Binding ViewModel.SelectOperation.Channels}" />
+                                    Text="{Binding ViewModel.SelectOperation.Channels}"/>
                             </StackPanel>
 
-                            <StackPanel Margin="2" Orientation="Horizontal">
-                                <TextBlock Text="维度：" />
+                            <StackPanel Margin="2"
+                                        Orientation="Horizontal">
+                                <TextBlock Text="维度："/>
                                 <TextBlock
                                     Margin="4,0"
                                     VerticalAlignment="Center"
                                     FontWeight="Medium"
-                                    Text="{Binding ViewModel.SelectOperation.ImageMat.Dims}" />
+                                    Text="{Binding ViewModel.SelectOperation.ImageMat.Dims}"/>
                             </StackPanel>
 
-                            <StackPanel Margin="2" Orientation="Horizontal">
-                                <TextBlock Text="尺寸：" />
+                            <StackPanel Margin="2"
+                                        Orientation="Horizontal">
+                                <TextBlock Text="尺寸："/>
                                 <TextBlock
                                     Margin="4,0"
                                     VerticalAlignment="Center"
                                     FontWeight="Medium"
-                                    Text="{Binding ViewModel.SelectOperation.ImageMat.Cols}" />
-                                <TextBlock Margin="2,0" VerticalAlignment="Center">
+                                    Text="{Binding ViewModel.SelectOperation.ImageMat.Cols}"/>
+                                <TextBlock Margin="2,0"
+                                           VerticalAlignment="Center">
                                     ×
                                 </TextBlock>
                                 <TextBlock
                                     Margin="4,0"
                                     VerticalAlignment="Center"
                                     FontWeight="Medium"
-                                    Text="{Binding ViewModel.SelectOperation.ImageMat.Rows}" />
+                                    Text="{Binding ViewModel.SelectOperation.ImageMat.Rows}"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -340,12 +395,13 @@
                     Margin="16"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
-                    Source="{Binding ViewModel.HistImageSource}" />
+                    Source="{Binding ViewModel.HistImageSource}"/>
             </Grid>
         </Border>
 
         <!--  Card 3: Operation History  -->
-        <Border Grid.Row="2" Style="{StaticResource BorderRegion}">
+        <Border Grid.Row="2"
+                Style="{StaticResource BorderRegion}">
             <ListBox
                 d:ItemsSource="{d:SampleData ItemCount=5}"
                 ItemsSource="{Binding ViewModel.OperationsCollection}"
@@ -365,13 +421,13 @@
                                         Direction="270"
                                         Opacity="0.15"
                                         ShadowDepth="2"
-                                        Color="Black" />
+                                        Color="Black"/>
                                 </Border.Effect>
                                 <Image
                                     Width="180"
                                     Height="100"
                                     Source="{Binding BitmapSource}"
-                                    Stretch="Uniform" />
+                                    Stretch="Uniform"/>
                             </Border>
                             <TextBlock
                                 Width="180"
@@ -383,18 +439,24 @@
                                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                 Text="{Binding DisplayName}"
                                 TextTrimming="CharacterEllipsis"
-                                TextWrapping="NoWrap" />
+                                TextWrapping="NoWrap"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
-                        <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="BorderThickness" Value="2" />
-                        <Setter Property="BorderBrush" Value="Transparent" />
-                        <Setter Property="Margin" Value="6,4" />
-                        <Setter Property="Padding" Value="6" />
-                        <Setter Property="Cursor" Value="Hand" />
+                        <Setter Property="Background"
+                                Value="Transparent"/>
+                        <Setter Property="BorderThickness"
+                                Value="2"/>
+                        <Setter Property="BorderBrush"
+                                Value="Transparent"/>
+                        <Setter Property="Margin"
+                                Value="6,4"/>
+                        <Setter Property="Padding"
+                                Value="6"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListBoxItem">
@@ -407,26 +469,34 @@
                                         CornerRadius="10"
                                         SnapsToDevicePixels="true">
                                         <Border.RenderTransform>
-                                            <ScaleTransform x:Name="ScaleTransform" ScaleX="1" ScaleY="1" />
+                                            <ScaleTransform x:Name="ScaleTransform"
+                                                            ScaleX="1"
+                                                            ScaleY="1"/>
                                         </Border.RenderTransform>
                                         <Border.RenderTransformOrigin>
-                                            <Point X="0.5" Y="0.5" />
+                                            <Point X="0.5"
+                                                   Y="0.5"/>
                                         </Border.RenderTransformOrigin>
                                         <ContentPresenter
                                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                                     </Border>
                                     <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="Bd" Property="Background">
+                                        <Trigger Property="IsMouseOver"
+                                                 Value="True">
+                                            <Setter TargetName="Bd"
+                                                    Property="Background">
                                                 <Setter.Value>
-                                                    <SolidColorBrush Opacity="0.08" Color="{DynamicResource SystemAccentColor}" />
+                                                    <SolidColorBrush Opacity="0.08"
+                                                                     Color="{DynamicResource SystemAccentColor}"/>
                                                 </Setter.Value>
                                             </Setter>
-                                            <Setter TargetName="Bd" Property="BorderBrush">
+                                            <Setter TargetName="Bd"
+                                                    Property="BorderBrush">
                                                 <Setter.Value>
-                                                    <SolidColorBrush Opacity="0.3" Color="{DynamicResource SystemAccentColor}" />
+                                                    <SolidColorBrush Opacity="0.3"
+                                                                     Color="{DynamicResource SystemAccentColor}"/>
                                                 </Setter.Value>
                                             </Setter>
                                             <Trigger.EnterActions>
@@ -438,7 +508,8 @@
                                                             To="1.05"
                                                             Duration="0:0:0.2">
                                                             <DoubleAnimation.EasingFunction>
-                                                                <BackEase Amplitude="0.3" EasingMode="EaseOut" />
+                                                                <BackEase Amplitude="0.3"
+                                                                          EasingMode="EaseOut"/>
                                                             </DoubleAnimation.EasingFunction>
                                                         </DoubleAnimation>
                                                         <DoubleAnimation
@@ -447,7 +518,8 @@
                                                             To="1.05"
                                                             Duration="0:0:0.2">
                                                             <DoubleAnimation.EasingFunction>
-                                                                <BackEase Amplitude="0.3" EasingMode="EaseOut" />
+                                                                <BackEase Amplitude="0.3"
+                                                                          EasingMode="EaseOut"/>
                                                             </DoubleAnimation.EasingFunction>
                                                         </DoubleAnimation>
                                                     </Storyboard>
@@ -462,7 +534,7 @@
                                                             To="1"
                                                             Duration="0:0:0.2">
                                                             <DoubleAnimation.EasingFunction>
-                                                                <CubicEase EasingMode="EaseOut" />
+                                                                <CubicEase EasingMode="EaseOut"/>
                                                             </DoubleAnimation.EasingFunction>
                                                         </DoubleAnimation>
                                                         <DoubleAnimation
@@ -471,32 +543,42 @@
                                                             To="1"
                                                             Duration="0:0:0.2">
                                                             <DoubleAnimation.EasingFunction>
-                                                                <CubicEase EasingMode="EaseOut" />
+                                                                <CubicEase EasingMode="EaseOut"/>
                                                             </DoubleAnimation.EasingFunction>
                                                         </DoubleAnimation>
                                                     </Storyboard>
                                                 </BeginStoryboard>
                                             </Trigger.ExitActions>
                                         </Trigger>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="Bd" Property="Background">
+                                        <Trigger Property="IsSelected"
+                                                 Value="True">
+                                            <Setter TargetName="Bd"
+                                                    Property="Background">
                                                 <Setter.Value>
-                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                        <GradientStop Offset="0" Color="#26409CFF" />
-                                                        <GradientStop Offset="1" Color="#14409CFF" />
+                                                    <LinearGradientBrush StartPoint="0,0"
+                                                                         EndPoint="0,1">
+                                                        <GradientStop Offset="0"
+                                                                      Color="#26409CFF"/>
+                                                        <GradientStop Offset="1"
+                                                                      Color="#14409CFF"/>
                                                     </LinearGradientBrush>
                                                 </Setter.Value>
                                             </Setter>
-                                            <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource SystemAccentColorBrush}" />
-                                            <Setter TargetName="Bd" Property="BorderThickness" Value="2.5" />
-                                            <Setter TargetName="Bd" Property="Effect">
+                                            <Setter TargetName="Bd"
+                                                    Property="BorderBrush"
+                                                    Value="{DynamicResource SystemAccentColorBrush}"/>
+                                            <Setter TargetName="Bd"
+                                                    Property="BorderThickness"
+                                                    Value="2.5"/>
+                                            <Setter TargetName="Bd"
+                                                    Property="Effect">
                                                 <Setter.Value>
                                                     <DropShadowEffect
                                                         BlurRadius="12"
                                                         Direction="270"
                                                         Opacity="0.3"
                                                         ShadowDepth="3"
-                                                        Color="#409CFF" />
+                                                        Color="#409CFF"/>
                                                 </Setter.Value>
                                             </Setter>
                                             <Trigger.EnterActions>
@@ -508,7 +590,8 @@
                                                             To="1.02"
                                                             Duration="0:0:0.25">
                                                             <DoubleAnimation.EasingFunction>
-                                                                <BackEase Amplitude="0.4" EasingMode="EaseOut" />
+                                                                <BackEase Amplitude="0.4"
+                                                                          EasingMode="EaseOut"/>
                                                             </DoubleAnimation.EasingFunction>
                                                         </DoubleAnimation>
                                                         <DoubleAnimation
@@ -517,7 +600,8 @@
                                                             To="1.02"
                                                             Duration="0:0:0.25">
                                                             <DoubleAnimation.EasingFunction>
-                                                                <BackEase Amplitude="0.4" EasingMode="EaseOut" />
+                                                                <BackEase Amplitude="0.4"
+                                                                          EasingMode="EaseOut"/>
                                                             </DoubleAnimation.EasingFunction>
                                                         </DoubleAnimation>
                                                     </Storyboard>
@@ -532,7 +616,7 @@
                                                             To="1"
                                                             Duration="0:0:0.2">
                                                             <DoubleAnimation.EasingFunction>
-                                                                <CubicEase EasingMode="EaseOut" />
+                                                                <CubicEase EasingMode="EaseOut"/>
                                                             </DoubleAnimation.EasingFunction>
                                                         </DoubleAnimation>
                                                         <DoubleAnimation
@@ -541,7 +625,7 @@
                                                             To="1"
                                                             Duration="0:0:0.2">
                                                             <DoubleAnimation.EasingFunction>
-                                                                <CubicEase EasingMode="EaseOut" />
+                                                                <CubicEase EasingMode="EaseOut"/>
                                                             </DoubleAnimation.EasingFunction>
                                                         </DoubleAnimation>
                                                     </Storyboard>
@@ -550,25 +634,32 @@
                                         </Trigger>
                                         <MultiTrigger>
                                             <MultiTrigger.Conditions>
-                                                <Condition Property="IsSelected" Value="True" />
-                                                <Condition Property="IsMouseOver" Value="True" />
+                                                <Condition Property="IsSelected"
+                                                           Value="True"/>
+                                                <Condition Property="IsMouseOver"
+                                                           Value="True"/>
                                             </MultiTrigger.Conditions>
-                                            <Setter TargetName="Bd" Property="Background">
+                                            <Setter TargetName="Bd"
+                                                    Property="Background">
                                                 <Setter.Value>
-                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                        <GradientStop Offset="0" Color="#38409CFF" />
-                                                        <GradientStop Offset="1" Color="#1E409CFF" />
+                                                    <LinearGradientBrush StartPoint="0,0"
+                                                                         EndPoint="0,1">
+                                                        <GradientStop Offset="0"
+                                                                      Color="#38409CFF"/>
+                                                        <GradientStop Offset="1"
+                                                                      Color="#1E409CFF"/>
                                                     </LinearGradientBrush>
                                                 </Setter.Value>
                                             </Setter>
-                                            <Setter TargetName="Bd" Property="Effect">
+                                            <Setter TargetName="Bd"
+                                                    Property="Effect">
                                                 <Setter.Value>
                                                     <DropShadowEffect
                                                         BlurRadius="16"
                                                         Direction="270"
                                                         Opacity="0.4"
                                                         ShadowDepth="4"
-                                                        Color="#409CFF" />
+                                                        Color="#409CFF"/>
                                                 </Setter.Value>
                                             </Setter>
                                         </MultiTrigger>
@@ -580,12 +671,13 @@
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" />
+                        <StackPanel Orientation="Horizontal"/>
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Command="{Binding ViewModel.DeleteOperationCommand}" Header="删除选中" />
+                        <MenuItem Command="{Binding ViewModel.DeleteOperationCommand}"
+                                  Header="删除选中"/>
                     </ContextMenu>
                 </ListBox.ContextMenu>
             </ListBox>

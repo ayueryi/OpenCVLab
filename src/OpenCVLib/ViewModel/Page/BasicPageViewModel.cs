@@ -91,6 +91,25 @@ public partial class BasicPageViewModel : ObservableObject
     [ObservableProperty] private int _linearOutMax = 255;
 
     /// <summary>
+    /// 线性灰度变换：输入最小灰度（用于直方图选点/裁剪）
+    /// </summary>
+    [ObservableProperty] private int _linearInMin = 0;
+
+    /// <summary>
+    /// 线性灰度变换：输入最大灰度（用于直方图选点/裁剪）
+    /// </summary>
+    [ObservableProperty] private int _linearInMax = 255;
+
+    /// <summary>
+    /// 线性灰度变换：预设选择（0=自定义）
+    /// </summary>
+    [ObservableProperty] private int _linearPresetIndex = 0;
+
+    [ObservableProperty] private double _linearPresetAlpha = 1;
+
+    [ObservableProperty] private double _linearPresetBeta = 0;
+
+    /// <summary>
     /// 分段线性灰度变换参数：r1
     /// </summary>
     [ObservableProperty] private int _piecewiseR1 = 70;
@@ -730,6 +749,32 @@ public partial class BasicPageViewModel : ObservableObject
             Growl.ErrorGlobal("阈值处理失败: " + exception.Message);
         }
     }
+
+    /// <summary>
+    /// 反色变换（图像反转）
+    /// </summary>
+    [RelayCommand]
+    private Task Invert()
+    {
+        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty())
+        {
+            Growl.ErrorGlobal("图像为空");
+            return Task.CompletedTask;
+        }
+
+        try
+        {
+            var result = basicOperatorService.Invert(SelectOperation.ImageMat);
+            AddDerivedOperation(result.Mat, result.Suffix);
+            Growl.SuccessGlobal("反色变换完成");
+        }
+        catch (Exception exception)
+        {
+            Growl.ErrorGlobal("反色变换失败: " + exception.Message);
+        }
+
+        return Task.CompletedTask;
+    }
     #endregion
 
     #region 直方图
@@ -924,6 +969,34 @@ public partial class BasicPageViewModel : ObservableObject
         var confirmed = await ConfirmLinearGrayTransformAsync();
         if (!confirmed) return;
 
+        // Preset alpha/beta mode
+        if (LinearPresetIndex != 0)
+        {
+            try
+            {
+                var result = basicOperatorService.LinearAlphaBetaTransform(src, LinearPresetAlpha, LinearPresetBeta);
+                AddDerivedOperation(result.Mat, result.Suffix);
+            }
+            catch (Exception exception)
+            {
+                Growl.ErrorGlobal("线性预设变换失败：" + exception.Message);
+            }
+
+            return;
+        }
+
+        if (LinearInMin is < 0 or > 255 || LinearInMax is < 0 or > 255)
+        {
+            Growl.ErrorGlobal("输入灰度范围必须在 0~255 之间");
+            return;
+        }
+
+        if (LinearInMin >= LinearInMax)
+        {
+            Growl.ErrorGlobal("输入最小灰度必须小于输入最大灰度");
+            return;
+        }
+
         if (LinearOutMin is < 0 or > 255 || LinearOutMax is < 0 or > 255)
         {
             Growl.ErrorGlobal("输出灰度范围必须在 0~255 之间");
@@ -938,7 +1011,7 @@ public partial class BasicPageViewModel : ObservableObject
 
         try
         {
-            var result = basicOperatorService.LinearGrayTransform(src, LinearOutMin, LinearOutMax);
+            var result = basicOperatorService.LinearGrayTransform(src, LinearInMin, LinearInMax, LinearOutMin, LinearOutMax);
             AddDerivedOperation(result.Mat, result.Suffix);
         }
         catch (InvalidOperationException)
@@ -984,6 +1057,7 @@ public partial class BasicPageViewModel : ObservableObject
 
         try
         {
+            // 使用对话框返回的参数执行变换
             var result = basicOperatorService.PiecewiseLinearGrayTransform(src, PiecewiseR1, PiecewiseS1, PiecewiseR2, PiecewiseS2);
             AddDerivedOperation(result.Mat, result.Suffix);
         }
@@ -1278,12 +1352,49 @@ public partial class BasicPageViewModel : ObservableObject
 
         dialog.OutMin = LinearOutMin;
         dialog.OutMax = LinearOutMax;
+        dialog.SelectedPresetIndex = LinearPresetIndex;
+
+        // Default input range: use previous selection when available; otherwise fall back to image min/max.
+        if (SelectOperation?.ImageMat is { } src && !src.Empty())
+        {
+            try
+            {
+                Cv2.MinMaxLoc(src, out double minVal, out double maxVal);
+                var minInt = (int)Math.Round(minVal);
+                var maxInt = (int)Math.Round(maxVal);
+                if (minInt < 0) minInt = 0;
+                if (maxInt > 255) maxInt = 255;
+
+                if (LinearInMin == 0 && LinearInMax == 255)
+                {
+                    dialog.InMin = minInt;
+                    dialog.InMax = maxInt;
+                }
+                else
+                {
+                    dialog.InMin = LinearInMin;
+                    dialog.InMax = LinearInMax;
+                }
+
+                using var hist = basicOperatorService.BuildChannelHistogramImage(src, histSize: 256, width: 300, height: 150);
+                dialog.HistogramImageSource = hist.ToBitmapSource();
+            }
+            catch
+            {
+                // Histogram is optional; selection can still work via numeric boxes.
+            }
+        }
 
         var confirmed = await ShowConfirmDialogAsync(dialog);
         if (!confirmed) return false;
 
         LinearOutMin = dialog.OutMin;
         LinearOutMax = dialog.OutMax;
+        LinearInMin = dialog.InMin;
+        LinearInMax = dialog.InMax;
+        LinearPresetIndex = dialog.SelectedPresetIndex;
+        LinearPresetAlpha = dialog.PresetAlpha;
+        LinearPresetBeta = dialog.PresetBeta;
         return true;
     }
 
@@ -1295,18 +1406,20 @@ public partial class BasicPageViewModel : ObservableObject
             return false;
         }
 
-        dialog.R1 = PiecewiseR1;
-        dialog.S1 = PiecewiseS1;
-        dialog.R2 = PiecewiseR2;
-        dialog.S2 = PiecewiseS2;
-
         var confirmed = await ShowConfirmDialogAsync(dialog);
         if (!confirmed) return false;
 
-        PiecewiseR1 = dialog.R1;
-        PiecewiseS1 = dialog.S1;
-        PiecewiseR2 = dialog.R2;
-        PiecewiseS2 = dialog.S2;
+        // 从对话框的分段集合中提取参数
+        // 暂时保持向后兼容，使用前两个分段的拐点
+        if (dialog.Segments.Count >= 2)
+        {
+            var seg1 = dialog.Segments[0];
+            var seg2 = dialog.Segments[1];
+            PiecewiseR1 = seg1.InputEnd;
+            PiecewiseS1 = seg1.OutputEnd;
+            PiecewiseR2 = seg2.InputEnd;
+            PiecewiseS2 = seg2.OutputEnd;
+        }
 
         return true;
     }
