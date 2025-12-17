@@ -129,6 +129,26 @@ public partial class BasicPageViewModel : ObservableObject
     /// </summary>
     [ObservableProperty] private int _piecewiseS2 = 220;
 
+    /// <summary>
+    /// 伽马变换参数
+    /// </summary>
+    [ObservableProperty] private double _gamma = 1.0;
+
+    /// <summary>
+    /// 伽马变换预设选择（0=自定义）
+    /// </summary>
+    [ObservableProperty] private int _gammaPresetIndex = 0;
+
+    /// <summary>
+    /// CLAHE对比度限制
+    /// </summary>
+    [ObservableProperty] private double _clipLimit = 40.0;
+
+    /// <summary>
+    /// CLAHE分块大小
+    /// </summary>
+    [ObservableProperty] private int _tileGridSize = 8;
+
     #endregion
 
     #region 算法参数
@@ -925,31 +945,44 @@ public partial class BasicPageViewModel : ObservableObject
     }
 
     /// <summary>
-    /// 自适应直方图均衡
+    /// 自适应直方图均衡 (CLAHE)
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private Task CreateCLAHE()
+    private async Task CreateCLAHE()
     {
         Mat? src = SelectOperation?.ImageMat;
 
         if (src is null || src.Empty() || src.Channels() > 1)
         {
             Growl.ErrorGlobal("无法读取图像！");
-            return Task.CompletedTask;
+            return;
+        }
+
+        var confirmed = await ConfirmClaheAsync();
+        if (!confirmed) return;
+
+        if (ClipLimit <= 0)
+        {
+            Growl.ErrorGlobal("对比度限制必须大于 0");
+            return;
+        }
+
+        if (TileGridSize < 2)
+        {
+            Growl.ErrorGlobal("分块大小必须至少为 2");
+            return;
         }
 
         try
         {
-            var result = basicOperatorService.CreateClahe(src);
+            var result = basicOperatorService.CreateClahe(src, ClipLimit, TileGridSize);
             AddDerivedOperation(result.Mat, result.Suffix);
         }
         catch (Exception exception)
         {
-            Growl.ErrorGlobal($"{exception.Message}");
+            Growl.ErrorGlobal("CLAHE处理失败：" + exception.Message);
         }
-
-        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -1064,6 +1097,41 @@ public partial class BasicPageViewModel : ObservableObject
         catch (Exception exception)
         {
             Growl.ErrorGlobal("分段线性灰度变换失败：" + exception.Message);
+        }
+    }
+
+    /// <summary>
+    /// 图像伽马变换
+    /// Dst = 255 × (Src / 255)^γ
+    /// </summary>
+    [RelayCommand]
+    private async Task GammaTransform()
+    {
+        Mat? src = SelectOperation?.ImageMat;
+
+        if (src is null || src.Empty())
+        {
+            Growl.ErrorGlobal("无法读取图像！");
+            return;
+        }
+
+        var confirmed = await ConfirmGammaTransformAsync();
+        if (!confirmed) return;
+
+        if (Gamma <= 0)
+        {
+            Growl.ErrorGlobal("伽马值必须大于 0");
+            return;
+        }
+
+        try
+        {
+            var result = basicOperatorService.GammaTransform(src, Gamma);
+            AddDerivedOperation(result.Mat, result.Suffix);
+        }
+        catch (Exception exception)
+        {
+            Growl.ErrorGlobal("伽马变换失败：" + exception.Message);
         }
     }
 
@@ -1421,6 +1489,72 @@ public partial class BasicPageViewModel : ObservableObject
             PiecewiseS2 = seg2.OutputEnd;
         }
 
+        return true;
+    }
+
+    private async Task<bool> ConfirmGammaTransformAsync()
+    {
+        if (App.ServiceProvider.GetKeyedService(typeof(IContentControl), nameof(GammaTransformDialog)) is not GammaTransformDialog dialog)
+        {
+            Growl.ErrorGlobal("伽马变换参数对话框未找到");
+            return false;
+        }
+
+        Mat? src = SelectOperation?.ImageMat;
+        if (src != null && !src.Empty())
+        {
+            try
+            {
+                using var histImage = basicOperatorService.BuildChannelHistogramImage(src, histSize: 256, width: 300, height: 150);
+                dialog.HistogramImageSource = histImage.ToBitmapSource();
+            }
+            catch
+            {
+                // 直方图生成失败时忽略
+            }
+        }
+
+        dialog.Gamma = Gamma;
+        dialog.SelectedPresetIndex = GammaPresetIndex;
+
+        var confirmed = await ShowConfirmDialogAsync(dialog);
+        if (!confirmed) return false;
+
+        Gamma = dialog.Gamma;
+        GammaPresetIndex = dialog.SelectedPresetIndex;
+        return true;
+    }
+
+    private async Task<bool> ConfirmClaheAsync()
+    {
+        if (App.ServiceProvider.GetKeyedService(typeof(IContentControl), nameof(ClaheDialog)) is not ClaheDialog dialog)
+        {
+            Growl.ErrorGlobal("CLAHE参数对话框未找到");
+            return false;
+        }
+
+        Mat? src = SelectOperation?.ImageMat;
+        if (src != null && !src.Empty())
+        {
+            try
+            {
+                using var histImage = basicOperatorService.BuildChannelHistogramImage(src, histSize: 256, width: 300, height: 150);
+                dialog.HistogramImageSource = histImage.ToBitmapSource();
+            }
+            catch
+            {
+                // 直方图生成失败时忽略
+            }
+        }
+
+        dialog.ClipLimit = ClipLimit;
+        dialog.TileGridSize = TileGridSize;
+
+        var confirmed = await ShowConfirmDialogAsync(dialog);
+        if (!confirmed) return false;
+
+        ClipLimit = dialog.ClipLimit;
+        TileGridSize = dialog.TileGridSize;
         return true;
     }
 

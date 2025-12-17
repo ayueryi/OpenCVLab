@@ -31,6 +31,7 @@ public interface IBasicOperatorService
     OperatorResult LinearGrayTransform(Mat src, int inMin, int inMax, int outMin, int outMax);
     OperatorResult LinearAlphaBetaTransform(Mat src, double alpha, double beta);
     OperatorResult PiecewiseLinearGrayTransform(Mat src, int r1, int s1, int r2, int s2);
+    OperatorResult GammaTransform(Mat src, double gamma);
 
     OperatorResult Canny(Mat src, int threshold1, int threshold2);
     OperatorResult Sobel(Mat src);

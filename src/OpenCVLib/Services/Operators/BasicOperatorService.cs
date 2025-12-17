@@ -252,6 +252,26 @@ public sealed class BasicOperatorService : IBasicOperatorService
         return new OperatorResult(dst, $"PiecewiseLinearGrayTransform_r1{r1}_s1{s1}_r2{r2}_s2{s2}");
     }
 
+    public OperatorResult GammaTransform(Mat src, double gamma)
+    {
+        if (src is null) throw new ArgumentNullException(nameof(src));
+        if (gamma <= 0) throw new ArgumentOutOfRangeException(nameof(gamma), "Gamma must be positive");
+
+        // 构建伽马查找表
+        var lutBytes = new byte[256];
+        for (var i = 0; i < 256; i++)
+        {
+            var normalized = i / 255.0;
+            var corrected = Math.Pow(normalized, gamma);
+            lutBytes[i] = (byte)Math.Clamp(corrected * 255.0, 0, 255);
+        }
+
+        using var lut = Mat.FromArray(lutBytes);
+        var dst = new Mat();
+        Cv2.LUT(src, lut, dst);
+        return new OperatorResult(dst, $"GammaTransform_g{gamma:F2}");
+    }
+
     public OperatorResult Canny(Mat src, int threshold1, int threshold2)
     {
         if (src is null) throw new ArgumentNullException(nameof(src));

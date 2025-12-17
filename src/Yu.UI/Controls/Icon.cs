@@ -112,6 +112,10 @@ internal static class IconGlyphs
         ["ChartBellCurve"] = "⌢",
         ["ChartHistogram"] = "▅",
         ["ChartTimelineVariant"] = "⏱",
+        ["ChartAreaspline"] = "〰",
+
+        // Gamma
+        ["Gamma"] = "γ",
 
         // Contours & Vectors
         ["VectorPolyline"] = "⌇",

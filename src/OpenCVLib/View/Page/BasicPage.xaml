@@ -257,6 +257,12 @@
                                 <ui:Icon Kind="ChartBellCurve"/>
                             </MenuItem.Icon>
                         </MenuItem>
+                        <MenuItem Command="{Binding ViewModel.CreateCLAHECommand}"
+                                  Header="局部直方图均衡 (CLAHE)">
+                            <MenuItem.Icon>
+                                <ui:Icon Kind="ChartAreaspline"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
                         <MenuItem Command="{Binding ViewModel.DrawHistCommand}"
                                   Header="计算直方图">
                             <MenuItem.Icon>
@@ -281,6 +287,13 @@
                                   Header="分段线性灰度变换">
                             <MenuItem.Icon>
                                 <ui:Icon Kind="ChartTimelineVariant"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem Command="{Binding ViewModel.GammaTransformCommand}"
+                                  Header="伽马变换">
+                            <MenuItem.Icon>
+                                <ui:Icon Kind="Gamma"/>
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
