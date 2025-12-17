@@ -5,55 +5,64 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Yu.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="32"
+    d:DesignHeight="24"
     d:DesignWidth="200"
     mc:Ignorable="d">
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="28"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="28" />
         </Grid.ColumnDefinitions>
 
-        <Border CornerRadius="6"
-                BorderThickness="1"
-                BorderBrush="#22000000"
-                Background="White">
+        <Border
+            Margin="0"
+            Padding="0"
+            Background="White"
+            BorderBrush="#22000000"
+            BorderThickness="1"
+            CornerRadius="6">
             <TextBox
                 x:Name="PART_Text"
-                Margin="8,4"
-                BorderThickness="0"
-                Background="Transparent"
                 VerticalContentAlignment="Center"
-                Text="{Binding Value, RelativeSource={RelativeSource AncestorType=local:NumericBox}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                Background="Transparent"
+                BorderThickness="0"
+                Text="{Binding Value, RelativeSource={RelativeSource AncestorType=local:NumericBox}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </Border>
 
-        <Grid Grid.Column="1"
-                Margin="4,0,0,0">
+        <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Button Grid.Row="0"
-                    Padding="0"
-                    Click="Up_Click"
-                    BorderThickness="0"
-                    Background="#0A000000">
-                <TextBlock Text="▲"
-                        FontSize="10"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"/>
+            <Button
+                Grid.Row="0"
+                Height="12"
+                Margin="0"
+                Padding="0"
+                BorderThickness="0"
+                Click="Up_Click"
+                Style="{StaticResource ButtonDefault}">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="10"
+                    Text="▲" />
             </Button>
-            <Button Grid.Row="1"
-                    Padding="0"
-                    Click="Down_Click"
-                    BorderThickness="0"
-                    Background="#0A000000">
-                <TextBlock Text="▼"
-                        FontSize="10"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"/>
+            <Button
+                Grid.Row="1"
+                Height="12"
+                Margin="0"
+                Padding="0"
+                BorderThickness="0"
+                Click="Down_Click"
+                Style="{StaticResource ButtonDefault}">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="10"
+                    Text="▼" />
             </Button>
         </Grid>
     </Grid>

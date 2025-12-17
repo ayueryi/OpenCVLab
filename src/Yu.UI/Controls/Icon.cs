@@ -124,6 +124,12 @@ internal static class IconGlyphs
         ["Analytics"] = "📊",
         ["ContactlessPaymentCircle"] = "◎",
         ["AspectRatio"] = "▭",
+        
+        // Information & Help
+        ["InformationOutline"] = "ⓘ",
+        ["Information"] = "ℹ",
+        ["HelpCircleOutline"] = "?",
+        ["HelpCircle"] = "❓",
     };
 
     public static string GetGlyph(string? kind)

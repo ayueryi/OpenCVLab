@@ -8,7 +8,6 @@
     xmlns:ui="http://Yu-UI.com//2024/xaml"
     d:DataContext="{d:DesignInstance local:AdaptiveThresholdDialog,
                                      IsDesignTimeCreatable=False}"
-    d:DesignHeight="240"
     d:DesignWidth="560"
     mc:Ignorable="d">
 
@@ -28,22 +27,197 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Margin="20" Orientation="Vertical">
+                    <!--  邻域大小  -->
                     <StackPanel Margin="0,4" Orientation="Horizontal">
-                        <TextBlock Width="110" VerticalAlignment="Center">BlockSize</TextBlock>
+                        <TextBlock Width="110" VerticalAlignment="Center">邻域大小</TextBlock>
                         <ui:NumericBox Width="200" Value="{Binding BlockSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Grid Margin="4,0,0,0">
+                            <ui:Icon
+                                x:Name="BlockSizeInfoIcon"
+                                VerticalAlignment="Center"
+                                Cursor="Hand"
+                                Foreground="#666666"
+                                Kind="InformationOutline"
+                                MouseEnter="InfoIcon_MouseEnter"
+                                MouseLeave="InfoIcon_MouseLeave" />
+                            <Popup
+                                x:Name="BlockSizePopup"
+                                AllowsTransparency="True"
+                                Placement="Right"
+                                PlacementTarget="{Binding ElementName=BlockSizeInfoIcon}"
+                                StaysOpen="False">
+                                <Border
+                                    MaxWidth="320"
+                                    Margin="8,0,0,0"
+                                    Background="White"
+                                    BorderBrush="#CCCCCC"
+                                    BorderThickness="1"
+                                    CornerRadius="4">
+                                    <Border.Effect>
+                                        <DropShadowEffect
+                                            BlurRadius="8"
+                                            Opacity="0.3"
+                                            ShadowDepth="2"
+                                            Color="Black" />
+                                    </Border.Effect>
+                                    <StackPanel Margin="12" Orientation="Vertical">
+                                        <TextBlock
+                                            FontSize="13"
+                                            FontWeight="SemiBold"
+                                            Text="邻域大小 (BlockSize)" />
+                                        <TextBlock
+                                            Margin="0,8,0,0"
+                                            FontSize="12"
+                                            Foreground="#333333"
+                                            Text="用于计算阈值的像素邻域大小，必须是大于1的奇数。"
+                                            TextWrapping="Wrap" />
+                                        <TextBlock
+                                            Margin="0,6,0,0"
+                                            FontSize="11"
+                                            Foreground="#555555"
+                                            TextWrapping="Wrap">
+                                            <Run Text="• 较小值（3、5）：对细节敏感" />
+                                            <LineBreak />
+                                            <Run Text="• 较大值（11、15）：平滑效果强" />
+                                            <LineBreak />
+                                            <Run Text="• 推荐：5-15之间的奇数" />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                            </Popup>
+                        </Grid>
                     </StackPanel>
 
+                    <!--  阈值类型  -->
                     <StackPanel Margin="0,4" Orientation="Horizontal">
                         <TextBlock Width="110" VerticalAlignment="Center">阈值类型</TextBlock>
                         <ComboBox Width="200" SelectedIndex="{Binding SelectedThresholdTypes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            <ComboBoxItem Content="Binary" />
-                            <ComboBoxItem Content="BinaryInv" />
+                            <ComboBoxItem Content="二值化 (Binary)" />
+                            <ComboBoxItem Content="反二值化 (BinaryInv)" />
                         </ComboBox>
+                        <Grid Margin="4,0,0,0">
+                            <ui:Icon
+                                x:Name="ThresholdTypeInfoIcon"
+                                VerticalAlignment="Center"
+                                Cursor="Hand"
+                                Foreground="#666666"
+                                Kind="InformationOutline"
+                                MouseEnter="InfoIcon_MouseEnter"
+                                MouseLeave="InfoIcon_MouseLeave" />
+                            <Popup
+                                x:Name="ThresholdTypePopup"
+                                AllowsTransparency="True"
+                                Placement="Right"
+                                PlacementTarget="{Binding ElementName=ThresholdTypeInfoIcon}"
+                                StaysOpen="False">
+                                <Border
+                                    MaxWidth="320"
+                                    Margin="8,0,0,0"
+                                    Background="White"
+                                    BorderBrush="#CCCCCC"
+                                    BorderThickness="1"
+                                    CornerRadius="4">
+                                    <Border.Effect>
+                                        <DropShadowEffect
+                                            BlurRadius="8"
+                                            Opacity="0.3"
+                                            ShadowDepth="2"
+                                            Color="Black" />
+                                    </Border.Effect>
+                                    <StackPanel Margin="12" Orientation="Vertical">
+                                        <TextBlock
+                                            FontSize="13"
+                                            FontWeight="SemiBold"
+                                            Text="阈值类型" />
+                                        <TextBlock
+                                            Margin="0,8,0,0"
+                                            FontSize="11"
+                                            Foreground="#555555"
+                                            TextWrapping="Wrap">
+                                            <Run FontWeight="SemiBold" Text="二值化 (Binary)" />
+                                            <LineBreak />
+                                            <Run Text="像素值 &gt; 阈值 → 最大值" />
+                                            <LineBreak />
+                                            <Run Text="像素值 ≤ 阈值 → 0" />
+                                            <LineBreak />
+                                            <Run Foreground="#999999" Text="适合提取亮色目标" />
+                                        </TextBlock>
+                                        <TextBlock
+                                            Margin="0,8,0,0"
+                                            FontSize="11"
+                                            Foreground="#555555"
+                                            TextWrapping="Wrap">
+                                            <Run FontWeight="SemiBold" Text="反二值化 (BinaryInv)" />
+                                            <LineBreak />
+                                            <Run Text="像素值 &gt; 阈值 → 0" />
+                                            <LineBreak />
+                                            <Run Text="像素值 ≤ 阈值 → 最大值" />
+                                            <LineBreak />
+                                            <Run Foreground="#999999" Text="适合提取暗色目标" />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                            </Popup>
+                        </Grid>
                     </StackPanel>
 
+                    <!--  最大值  -->
                     <StackPanel Margin="0,4" Orientation="Horizontal">
-                        <TextBlock Width="110" VerticalAlignment="Center">MaxValue</TextBlock>
+                        <TextBlock Width="110" VerticalAlignment="Center">最大值</TextBlock>
                         <ui:NumericBox Width="200" Value="{Binding ThresholdMaxValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Grid Margin="4,0,0,0">
+                            <ui:Icon
+                                x:Name="MaxValueInfoIcon"
+                                VerticalAlignment="Center"
+                                Cursor="Hand"
+                                Foreground="#666666"
+                                Kind="InformationOutline"
+                                MouseEnter="InfoIcon_MouseEnter"
+                                MouseLeave="InfoIcon_MouseLeave" />
+                            <Popup
+                                x:Name="MaxValuePopup"
+                                AllowsTransparency="True"
+                                Placement="Right"
+                                PlacementTarget="{Binding ElementName=MaxValueInfoIcon}"
+                                StaysOpen="False">
+                                <Border
+                                    MaxWidth="320"
+                                    Margin="8,0,0,0"
+                                    Background="White"
+                                    BorderBrush="#CCCCCC"
+                                    BorderThickness="1"
+                                    CornerRadius="4">
+                                    <Border.Effect>
+                                        <DropShadowEffect
+                                            BlurRadius="8"
+                                            Opacity="0.3"
+                                            ShadowDepth="2"
+                                            Color="Black" />
+                                    </Border.Effect>
+                                    <StackPanel Margin="12" Orientation="Vertical">
+                                        <TextBlock
+                                            FontSize="13"
+                                            FontWeight="SemiBold"
+                                            Text="最大值 (MaxValue)" />
+                                        <TextBlock
+                                            Margin="0,8,0,0"
+                                            FontSize="12"
+                                            Foreground="#333333"
+                                            Text="二值化后赋予像素的最大值。"
+                                            TextWrapping="Wrap" />
+                                        <TextBlock
+                                            Margin="0,6,0,0"
+                                            FontSize="11"
+                                            Foreground="#555555"
+                                            TextWrapping="Wrap">
+                                            <Run Text="• 8位灰度图：通常为 255" />
+                                            <LineBreak />
+                                            <Run Text="• 取值范围：0-255" />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                            </Popup>
+                        </Grid>
                     </StackPanel>
                 </StackPanel>
 

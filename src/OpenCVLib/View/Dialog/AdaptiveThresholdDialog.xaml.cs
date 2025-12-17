@@ -2,6 +2,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 using OpenCVLab.Help;
 
+using System.Windows;
+
 using Yu.UI;
 
 #pragma warning disable CS8625
@@ -32,4 +34,29 @@ public partial class AdaptiveThresholdDialog : IContentControl
     private void Confirm(object sender, System.Windows.RoutedEventArgs e) => SuccCallback?.Invoke(null);
 
     private void Cancel(object sender, System.Windows.RoutedEventArgs e) => CancelCallback?.Invoke(null);
+
+    private void InfoIcon_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+    {
+        if (sender is FrameworkElement icon)
+        {
+            // 根据图标名称打开对应的 Popup
+            var popup = icon.Name switch
+            {
+                "BlockSizeInfoIcon" => FindName("BlockSizePopup") as System.Windows.Controls.Primitives.Popup,
+                "ThresholdTypeInfoIcon" => FindName("ThresholdTypePopup") as System.Windows.Controls.Primitives.Popup,
+                "MaxValueInfoIcon" => FindName("MaxValuePopup") as System.Windows.Controls.Primitives.Popup,
+                _ => null
+            };
+
+            if (popup != null)
+            {
+                popup.IsOpen = true;
+            }
+        }
+    }
+
+    private void InfoIcon_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+    {
+        // Popup 的 StaysOpen="False" 会自动处理关闭
+    }
 }

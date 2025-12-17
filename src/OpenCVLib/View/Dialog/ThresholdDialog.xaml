@@ -8,7 +8,7 @@
     xmlns:ui="http://Yu-UI.com//2024/xaml"
     d:DataContext="{d:DesignInstance local:ThresholdDialog,
                                      IsDesignTimeCreatable=False}"
-    d:DesignHeight="200"
+    d:DesignHeight="300"
     d:DesignWidth="560"
     mc:Ignorable="d">
 
@@ -19,7 +19,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <ui:Title MainTitle="阈值参数" SubTitle="Threshold Parameters" />
+            <ui:Title MainTitle="二值化处理" SubTitle="Threshold Processing" />
 
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
@@ -27,17 +27,73 @@
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
-                <StackPanel Margin="20" Orientation="Vertical">
-                    <StackPanel Margin="0,4" Orientation="Horizontal">
-                        <TextBlock Width="110" VerticalAlignment="Center">阈值</TextBlock>
-                        <ui:NumericBox Width="200" Value="{Binding ThresholdValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="20" Orientation="Vertical">
+                        <!--  阈值类型选择  -->
+                        <StackPanel Margin="0,4" Orientation="Horizontal">
+                            <TextBlock Width="110" VerticalAlignment="Center">阈值类型</TextBlock>
+                            <ComboBox
+                                Width="200"
+                                SelectedIndex="{Binding SelectedThresholdType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <ComboBoxItem Content="标准二值化 (Binary)" />
+                                <ComboBoxItem Content="反转二值化 (BinaryInv)" />
+                                <ComboBoxItem Content="截断二值化 (Trunc)" />
+                                <ComboBoxItem Content="阈值至零 (Tozero)" />
+                                <ComboBoxItem Content="阈值至零反转 (TozeroInv)" />
+                                <ComboBoxItem Content="自适应阈值 (Adaptive)" />
+                                <ComboBoxItem Content="Otsu阈值" />
+                                <ComboBoxItem Content="Triangle阈值" />
+                            </ComboBox>
+                        </StackPanel>
 
-                    <StackPanel Margin="0,4" Orientation="Horizontal">
-                        <TextBlock Width="110" VerticalAlignment="Center">MaxValue</TextBlock>
-                        <ui:NumericBox Width="200" Value="{Binding ThresholdMaxValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <!--  简单阈值参数 (Binary, BinaryInv, Trunc, Tozero, TozeroInv)  -->
+                        <StackPanel
+                            Margin="0,4"
+                            Orientation="Horizontal"
+                            Visibility="{Binding ShowSimpleThresholdParams, Converter={StaticResource Boolean2VisibilityConverter}}">
+                            <TextBlock Width="110" VerticalAlignment="Center">阈值</TextBlock>
+                            <ui:NumericBox Width="200" Value="{Binding ThresholdValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+
+                        <!--  MaxValue参数 (所有类型都需要，除了自适应阈值用作最大值)  -->
+                        <StackPanel Margin="0,4" Orientation="Horizontal">
+                            <TextBlock Width="110" VerticalAlignment="Center">MaxValue</TextBlock>
+                            <ui:NumericBox Width="200" Value="{Binding ThresholdMaxValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+
+                        <!--  自适应阈值特有参数  -->
+                        <StackPanel Visibility="{Binding ShowAdaptiveParams, Converter={StaticResource Boolean2VisibilityConverter}}">
+                            <StackPanel Margin="0,4" Orientation="Horizontal">
+                                <TextBlock Width="110" VerticalAlignment="Center">BlockSize</TextBlock>
+                                <ui:NumericBox
+                                    Width="200"
+                                    ToolTip="必须为大于1的奇数"
+                                    Value="{Binding BlockSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="0,4" Orientation="Horizontal">
+                                <TextBlock Width="110" VerticalAlignment="Center">二值化类型</TextBlock>
+                                <ComboBox Width="200" SelectedIndex="{Binding AdaptiveBinaryType, Mode=TwoWay}">
+                                    <ComboBoxItem Content="二值化 (Binary)" />
+                                    <ComboBoxItem Content="反二值化 (BinaryInv)" />
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!--  说明文本  -->
+                        <Border
+                            Margin="0,12,0,0"
+                            Padding="12"
+                            Background="#F5F5F5"
+                            CornerRadius="4">
+                            <TextBlock
+                                FontSize="12"
+                                Foreground="#666"
+                                Text="{Binding ThresholdDescription}"
+                                TextWrapping="Wrap" />
+                        </Border>
                     </StackPanel>
-                </StackPanel>
+                </ScrollViewer>
 
                 <Border Grid.Row="1">
                     <UniformGrid Columns="2">

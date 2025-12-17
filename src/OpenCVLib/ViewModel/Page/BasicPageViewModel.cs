@@ -10,6 +10,7 @@ using Microsoft.Win32;
 using OpenCVLab.Help;
 using OpenCVLab.Model;
 using OpenCVLab.Model.DedectResult;
+using OpenCVLab.Services.Operators;
 using OpenCVLab.View.Dialog;
 using OpenCVLab.View.Page;
 
@@ -25,9 +26,12 @@ namespace OpenCVLab.ViewModel.Page;
 [Inject]
 public partial class BasicPageViewModel : ObservableObject
 {
-    public BasicPageViewModel(IContentDialogService contentDialogService)
+    private readonly IBasicOperatorService basicOperatorService;
+
+    public BasicPageViewModel(IContentDialogService contentDialogService, IBasicOperatorService basicOperatorService)
     {
         this.contentDialogService = contentDialogService;
+        this.basicOperatorService = basicOperatorService;
     }
 
     #region 视图模型
@@ -130,79 +134,15 @@ public partial class BasicPageViewModel : ObservableObject
             return;
         }
 
-        // 定义直方图参数
-        int histSize = 256;
-        Rangef histRange = new Rangef(0, 256);
-        bool uniform = true;
-        bool accumulate = false;
-
-        // 根据通道数处理
-        int channelCount = src.Channels();
-        Mat[] hists = new Mat[channelCount];
-
-        // 计算每个通道的直方图
-        for (int c = 0; c < channelCount; c++)
+        try
         {
-            // 分离通道
-            Mat channel = new Mat();
-            Cv2.ExtractChannel(src, channel, c);
-
-            // 计算直方图
-            Mat[] images = { channel };
-            hists[c] = new Mat();
-            int[] channels = { 0 };
-            Mat mask = new Mat();
-            Cv2.CalcHist(images, channels, mask, hists[c], 1, new int[] { histSize }, new Rangef[] { histRange }, uniform, accumulate);
-
-            channel.Dispose();
+            using var histImage = basicOperatorService.BuildChannelHistogramImage(src, histSize: 256, width: 300, height: 150);
+            HistImageSource = histImage.ToBitmapSource();
         }
-
-        // 创建直方图图像
-        int hist_w = 300;
-        int hist_h = 150;
-        int bin_w = (int)Math.Round((double)hist_w / histSize);
-
-        Mat histImage = new Mat(hist_h, hist_w, MatType.CV_8UC3, Scalar.All(0));
-
-        // 绘制每个通道的直方图
-        for (int c = 0; c < channelCount; c++)
+        catch
         {
-            // 归一化直方图
-            Cv2.Normalize(hists[c], hists[c], 0, histImage.Rows, NormTypes.MinMax, -1, new Mat());
-
-            Scalar color;
-            switch (c)
-            {
-                case 0:
-                    color = Scalar.Blue;
-                    break;
-                case 1:
-                    color = Scalar.Green;
-                    break;
-                case 2:
-                    color = Scalar.Red;
-                    break;
-                default:
-                    color = Scalar.White;
-                    break;
-            }
-
-            for (int i = 1; i < histSize; i++)
-            {
-                Cv2.Line(histImage, new Point(bin_w * (i - 1), hist_h - (int)Math.Round(hists[c].Get<float>(i - 1))),
-                                 new Point(bin_w * (i), hist_h - (int)Math.Round(hists[c].Get<float>(i))),
-                                 color, 2, LineTypes.AntiAlias, 0);
-            }
+            // 不阻塞 UI；直方图失败时忽略
         }
-
-        HistImageSource = histImage.ToBitmapSource();
-
-        // 释放资源
-        foreach (var hist in hists)
-        {
-            hist.Dispose();
-        }
-        histImage.Dispose();
     }
 
     #endregion
@@ -339,15 +279,8 @@ public partial class BasicPageViewModel : ObservableObject
         }
         try
         {
-            Mat dst = new Mat();
-            Cv2.CvtColor(SelectOperation.ImageMat, dst, colorConversionCode);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_{requestedName}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.ConvertColor(SelectOperation.ImageMat, colorConversionCode, requestedName);
+            AddDerivedOperation(result.Mat, result.Suffix);
             Growl.SuccessGlobal($"颜色空间转换完成: {requestedName}");
         }
         catch (Exception exception)
@@ -380,21 +313,14 @@ public partial class BasicPageViewModel : ObservableObject
 
         try
         {
-            Mat dst = new Mat();
-            Cv2.Blur(SelectOperation.ImageMat, dst, new Size(BlockSize, BlockSize));
-
-            if (dst.Empty())
+            var result = basicOperatorService.Blur(SelectOperation.ImageMat, BlockSize);
+            if (result.Mat.Empty())
             {
                 Growl.ErrorGlobal("滤波结果为空");
                 return;
             }
 
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_Blur_k{BlockSize}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            AddDerivedOperation(result.Mat, result.Suffix);
             Growl.SuccessGlobal($"归一化滤波完成，卷积核: {BlockSize}");
         }
         catch (Exception exception)
@@ -429,15 +355,8 @@ public partial class BasicPageViewModel : ObservableObject
 
         try
         {
-            Mat dst = new Mat();
-            Cv2.GaussianBlur(SelectOperation.ImageMat, dst, new Size(BlockSize, BlockSize), 0);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_GaussianBlur_k{BlockSize}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.GaussianBlur(SelectOperation.ImageMat, BlockSize);
+            AddDerivedOperation(result.Mat, result.Suffix);
             Growl.SuccessGlobal($"高斯滤波完成，卷积核: {BlockSize}");
         }
         catch (Exception exception)
@@ -471,15 +390,8 @@ public partial class BasicPageViewModel : ObservableObject
         }
         try
         {
-            Mat dst = new Mat();
-            Cv2.MedianBlur(SelectOperation.ImageMat, dst, BlockSize);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_MedianBlur_k{BlockSize}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.MedianBlur(SelectOperation.ImageMat, BlockSize);
+            AddDerivedOperation(result.Mat, result.Suffix);
             Growl.SuccessGlobal($"中值滤波完成，卷积核: {BlockSize}");
         }
         catch (Exception exception)
@@ -507,15 +419,8 @@ public partial class BasicPageViewModel : ObservableObject
         }
         try
         {
-            Mat dst = new Mat();
-            Cv2.BilateralFilter(SelectOperation.ImageMat, dst, BlockSize, BlockSize * 2, BlockSize / 2);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_BilateralBlur_d{BlockSize}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.BilateralFilter(SelectOperation.ImageMat, BlockSize);
+            AddDerivedOperation(result.Mat, result.Suffix);
             Growl.SuccessGlobal($"双边滤波完成，参数: {BlockSize}");
         }
         catch (Exception exception)
@@ -547,16 +452,8 @@ public partial class BasicPageViewModel : ObservableObject
         }
         try
         {
-            Mat dst = new Mat();
-            Mat kernal = Cv2.GetStructuringElement(KernelShape, new Size(BlockSize, BlockSize));
-            Cv2.Erode(SelectOperation.ImageMat, dst, kernal, new Point(-1, -1), Iterations);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_Erode_k{BlockSize}_it{Iterations}_s{SelectedKernelShape}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.Erode(SelectOperation.ImageMat, KernelShape, BlockSize, Iterations, SelectedKernelShape);
+            AddDerivedOperation(result.Mat, result.Suffix);
         }
         catch (Exception exception)
         {
@@ -583,16 +480,8 @@ public partial class BasicPageViewModel : ObservableObject
         }
         try
         {
-            Mat dst = new Mat();
-            Mat kernal = Cv2.GetStructuringElement(KernelShape, new Size(BlockSize, BlockSize));
-            Cv2.Dilate(SelectOperation.ImageMat, dst, kernal, new Point(-1, -1), Iterations);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_Dilate_k{BlockSize}_it{Iterations}_s{SelectedKernelShape}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.Dilate(SelectOperation.ImageMat, KernelShape, BlockSize, Iterations, SelectedKernelShape);
+            AddDerivedOperation(result.Mat, result.Suffix);
         }
         catch (Exception exception)
         {
@@ -623,16 +512,8 @@ public partial class BasicPageViewModel : ObservableObject
         }
         try
         {
-            Mat dst = new Mat();
-            Mat kernal = Cv2.GetStructuringElement(KernelShape, new Size(BlockSize, BlockSize));
-            Cv2.MorphologyEx(SelectOperation.ImageMat, dst, MorphTypes.Open, kernal, new Point(-1, -1), Iterations);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_MorphologyExOpen_k{BlockSize}_it{Iterations}_s{SelectedKernelShape}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.MorphologyEx(SelectOperation.ImageMat, MorphTypes.Open, KernelShape, BlockSize, Iterations, SelectedKernelShape);
+            AddDerivedOperation(result.Mat, result.Suffix);
         }
         catch (Exception exception)
         {
@@ -659,16 +540,8 @@ public partial class BasicPageViewModel : ObservableObject
         }
         try
         {
-            Mat dst = new Mat();
-            Mat kernal = Cv2.GetStructuringElement(KernelShape, new Size(BlockSize, BlockSize));
-            Cv2.MorphologyEx(SelectOperation.ImageMat, dst, MorphTypes.Close, kernal, new Point(-1, -1), Iterations);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_MorphologyExClose_k{BlockSize}_it{Iterations}_s{SelectedKernelShape}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.MorphologyEx(SelectOperation.ImageMat, MorphTypes.Close, KernelShape, BlockSize, Iterations, SelectedKernelShape);
+            AddDerivedOperation(result.Mat, result.Suffix);
         }
         catch (Exception exception)
         {
@@ -695,16 +568,8 @@ public partial class BasicPageViewModel : ObservableObject
         }
         try
         {
-            Mat dst = new Mat();
-            Mat kernal = Cv2.GetStructuringElement(KernelShape, new Size(BlockSize, BlockSize));
-            Cv2.MorphologyEx(SelectOperation.ImageMat, dst, MorphTypes.Gradient, kernal, new Point(-1, -1), Iterations);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_MorphologyExGradient_k{BlockSize}_it{Iterations}_s{SelectedKernelShape}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.MorphologyEx(SelectOperation.ImageMat, MorphTypes.Gradient, KernelShape, BlockSize, Iterations, SelectedKernelShape);
+            AddDerivedOperation(result.Mat, result.Suffix);
         }
         catch (Exception exception)
         {
@@ -731,16 +596,8 @@ public partial class BasicPageViewModel : ObservableObject
         }
         try
         {
-            Mat dst = new Mat();
-            Mat kernal = Cv2.GetStructuringElement(KernelShape, new Size(BlockSize, BlockSize));
-            Cv2.MorphologyEx(SelectOperation.ImageMat, dst, MorphTypes.TopHat, kernal, new Point(-1, -1), Iterations);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_MorphologyExTopHat_k{BlockSize}_it{Iterations}_s{SelectedKernelShape}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.MorphologyEx(SelectOperation.ImageMat, MorphTypes.TopHat, KernelShape, BlockSize, Iterations, SelectedKernelShape);
+            AddDerivedOperation(result.Mat, result.Suffix);
         }
         catch (Exception exception)
         {
@@ -767,16 +624,8 @@ public partial class BasicPageViewModel : ObservableObject
         }
         try
         {
-            Mat dst = new Mat();
-            Mat kernal = Cv2.GetStructuringElement(KernelShape, new Size(BlockSize, BlockSize));
-            Cv2.MorphologyEx(SelectOperation.ImageMat, dst, MorphTypes.BlackHat, kernal, new Point(-1, -1), Iterations);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_MorphologyExBlackHat_k{BlockSize}_it{Iterations}_s{SelectedKernelShape}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.MorphologyEx(SelectOperation.ImageMat, MorphTypes.BlackHat, KernelShape, BlockSize, Iterations, SelectedKernelShape);
+            AddDerivedOperation(result.Mat, result.Suffix);
         }
         catch (Exception exception)
         {
@@ -790,100 +639,95 @@ public partial class BasicPageViewModel : ObservableObject
     #region 阈值处理
 
     /// <summary>
-    /// 简单阈值处理
+    /// 统一的二值化处理入口
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private async Task Threshold(string ThresholdType)
+    private async Task ThresholdProcessing()
     {
         if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
 
-        var confirmed = await ConfirmThresholdAsync();
+        if (App.ServiceProvider.GetKeyedService(typeof(IContentControl), nameof(ThresholdDialog)) is not ThresholdDialog dialog)
+        {
+            Growl.ErrorGlobal("阈值处理对话框未找到");
+            return;
+        }
+
+        // 初始化对话框参数
+        dialog.ThresholdValue = ThresholdValue;
+        dialog.ThresholdMaxValue = ThresholdMaxValue;
+        dialog.BlockSize = BlockSize;
+
+        var confirmed = await ShowConfirmDialogAsync(dialog);
         if (!confirmed) return;
 
-        Enum.TryParse(ThresholdType, out ThresholdTypes thresholdType);
+        // 保存参数
+        ThresholdValue = dialog.ThresholdValue;
+        ThresholdMaxValue = dialog.ThresholdMaxValue;
+        BlockSize = dialog.BlockSize;
 
         try
         {
-            Mat dst = new Mat();
-            Cv2.Threshold(SelectOperation.ImageMat, dst, ThresholdValue, ThresholdMaxValue, thresholdType);
+            OperatorResult result;
+            string operationName;
 
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_Threshold_{ThresholdType}_th{ThresholdValue}_max{ThresholdMaxValue}";
+            switch (dialog.SelectedThresholdType)
+            {
+                case 0: // Binary
+                    result = basicOperatorService.Threshold(SelectOperation.ImageMat, ThresholdTypes.Binary, ThresholdValue, ThresholdMaxValue, "Binary");
+                    operationName = "标准二值化";
+                    break;
+                case 1: // BinaryInv
+                    result = basicOperatorService.Threshold(SelectOperation.ImageMat, ThresholdTypes.BinaryInv, ThresholdValue, ThresholdMaxValue, "BinaryInv");
+                    operationName = "反转二值化";
+                    break;
+                case 2: // Trunc
+                    result = basicOperatorService.Threshold(SelectOperation.ImageMat, ThresholdTypes.Trunc, ThresholdValue, ThresholdMaxValue, "Trunc");
+                    operationName = "截断二值化";
+                    break;
+                case 3: // Tozero
+                    result = basicOperatorService.Threshold(SelectOperation.ImageMat, ThresholdTypes.Tozero, ThresholdValue, ThresholdMaxValue, "Tozero");
+                    operationName = "阈值至零";
+                    break;
+                case 4: // TozeroInv
+                    result = basicOperatorService.Threshold(SelectOperation.ImageMat, ThresholdTypes.TozeroInv, ThresholdValue, ThresholdMaxValue, "TozeroInv");
+                    operationName = "阈值至零反转";
+                    break;
+                case 5: // Adaptive
+                    if (BlockSize <= 1 || BlockSize % 2 == 0)
+                    {
+                        Growl.ErrorGlobal("自适应阈值 BlockSize 必须为大于 1 的奇数");
+                        return;
+                    }
+                    var adaptiveBinaryType = dialog.AdaptiveBinaryType == 0 ? ThresholdTypes.Binary : ThresholdTypes.BinaryInv;
+                    result = basicOperatorService.AdaptiveThreshold(
+                        SelectOperation.ImageMat,
+                        AdaptiveThresholdTypes.GaussianC,
+                        adaptiveBinaryType,
+                        BlockSize,
+                        ThresholdMaxValue,
+                        dialog.AdaptiveBinaryType);
+                    operationName = "自适应阈值";
+                    break;
+                case 6: // Otsu
+                    result = basicOperatorService.OtsuThreshold(SelectOperation.ImageMat, ThresholdMaxValue);
+                    operationName = "Otsu阈值";
+                    break;
+                case 7: // Triangle
+                    result = basicOperatorService.TriangleThreshold(SelectOperation.ImageMat, ThresholdMaxValue);
+                    operationName = "Triangle阈值";
+                    break;
+                default:
+                    Growl.ErrorGlobal("未知的阈值类型");
+                    return;
+            }
 
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
-            Growl.SuccessGlobal($"阈值处理完成: {ThresholdType}");
+            AddDerivedOperation(result.Mat, result.Suffix);
+            Growl.SuccessGlobal($"{operationName}处理完成");
         }
         catch (Exception exception)
         {
             Growl.ErrorGlobal("阈值处理失败: " + exception.Message);
-        }
-    }
-
-    /// <summary>
-    /// 自适应阈值处理
-    /// </summary>
-    /// <returns></returns>
-    [RelayCommand]
-    private async Task AdaptiveThreshold()
-    {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
-
-        var confirmed = await ConfirmAdaptiveThresholdAsync();
-        if (!confirmed) return;
-
-        if (BlockSize <= 1 || BlockSize % 2 == 0)
-        {
-            Growl.ErrorGlobal("自适应阈值 BlockSize 必须为大于 1 的奇数");
-            return;
-        }
-        try
-        {
-            Mat dst = new Mat();
-            Cv2.AdaptiveThreshold(SelectOperation.ImageMat, dst, ThresholdMaxValue, AdaptiveThresholdTypes.GaussianC, (ThresholdTypes)SelectedThresholdTypes, BlockSize, 2);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_AdaptiveThreshold_k{BlockSize}_tt{SelectedThresholdTypes}_max{ThresholdMaxValue}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
-        }
-        catch (Exception exception)
-        {
-            Growl.ErrorGlobal("自适应阈值处理失败" + exception.Message);
-        }
-    }
-
-    /// <summary>
-    /// Otsu阈值处理
-    /// </summary>
-    /// <returns></returns>
-    [RelayCommand]
-    private async Task OtsuThreshold()
-    {
-        if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return;
-
-        var confirmed = await ConfirmMaxValueAsync();
-        if (!confirmed) return;
-
-        try
-        {
-            Mat dst = new Mat();
-            Cv2.Threshold(SelectOperation.ImageMat, dst, 0, ThresholdMaxValue, ThresholdTypes.Binary | ThresholdTypes.Otsu);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_OtsuThreshold_max{ThresholdMaxValue}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
-        }
-        catch (Exception exception)
-        {
-            Growl.ErrorGlobal("Otsu阈值处理失败" + exception.Message);
         }
     }
     #endregion
@@ -1024,16 +868,8 @@ public partial class BasicPageViewModel : ObservableObject
 
         try
         {
-            // 直方图均衡化
-            Mat dst = new Mat();
-            Cv2.EqualizeHist(src, dst);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation!.ImageName}_EqualizeHist";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.EqualizeHist(src);
+            AddDerivedOperation(result.Mat, result.Suffix);
         }
         catch (Exception exception)
         {
@@ -1060,19 +896,8 @@ public partial class BasicPageViewModel : ObservableObject
 
         try
         {
-            // 创建CLAHE对象
-            CLAHE clahe = Cv2.CreateCLAHE(40, new Size(8, 8));
-
-            // 应用CLAHE
-            Mat dst = new Mat();
-            clahe.Apply(src, dst);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-
-            operation.ImageName = $"{SelectOperation!.ImageName}_CreateCLAHE";
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.CreateClahe(src);
+            AddDerivedOperation(result.Mat, result.Suffix);
         }
         catch (Exception exception)
         {
@@ -1113,28 +938,12 @@ public partial class BasicPageViewModel : ObservableObject
 
         try
         {
-            double minVal;
-            double maxVal;
-            Cv2.MinMaxLoc(src, out minVal, out maxVal);
-
-            if (Math.Abs(maxVal - minVal) < 1e-12)
-            {
-                Growl.ErrorGlobal("图像灰度范围为常量，无法进行线性拉伸");
-                return;
-            }
-
-            var alpha = (LinearOutMax - LinearOutMin) / (maxVal - minVal);
-            var beta = LinearOutMin - (minVal * alpha);
-
-            Mat dst = new Mat();
-            src.ConvertTo(dst, MatType.CV_8UC1, alpha, beta);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation!.ImageName}_LinearGrayTransform_min{LinearOutMin}_max{LinearOutMax}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.LinearGrayTransform(src, LinearOutMin, LinearOutMax);
+            AddDerivedOperation(result.Mat, result.Suffix);
+        }
+        catch (InvalidOperationException)
+        {
+            Growl.ErrorGlobal("图像灰度范围为常量，无法进行线性拉伸");
         }
         catch (Exception exception)
         {
@@ -1175,57 +984,13 @@ public partial class BasicPageViewModel : ObservableObject
 
         try
         {
-            byte[] lutBytes = BuildPiecewiseLut(PiecewiseR1, PiecewiseS1, PiecewiseR2, PiecewiseS2);
-            using Mat lut = Mat.FromArray(lutBytes);
-
-            Mat dst = new Mat();
-            Cv2.LUT(src, lut, dst);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation!.ImageName}_PiecewiseLinearGrayTransform_r1{PiecewiseR1}_s1{PiecewiseS1}_r2{PiecewiseR2}_s2{PiecewiseS2}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.PiecewiseLinearGrayTransform(src, PiecewiseR1, PiecewiseS1, PiecewiseR2, PiecewiseS2);
+            AddDerivedOperation(result.Mat, result.Suffix);
         }
         catch (Exception exception)
         {
             Growl.ErrorGlobal("分段线性灰度变换失败：" + exception.Message);
         }
-    }
-
-    private static byte[] BuildPiecewiseLut(int r1, int s1, int r2, int s2)
-    {
-        static byte Clamp(double v)
-        {
-            if (v < 0) return 0;
-            if (v > 255) return 255;
-            return (byte)Math.Round(v);
-        }
-
-        var lut = new byte[256];
-
-        for (int i = 0; i < 256; i++)
-        {
-            double v;
-
-            if (i <= r1)
-            {
-                v = r1 == 0 ? s1 : (double)s1 * i / r1;
-            }
-            else if (i <= r2)
-            {
-                v = (double)s1 + (double)(s2 - s1) * (i - r1) / (r2 - r1);
-            }
-            else
-            {
-                v = r2 == 255 ? 255 : (double)s2 + (double)(255 - s2) * (i - r2) / (255 - r2);
-            }
-
-            lut[i] = Clamp(v);
-        }
-
-        return lut;
     }
 
     #endregion
@@ -1245,15 +1010,8 @@ public partial class BasicPageViewModel : ObservableObject
         if (!confirmed) return;
         try
         {
-            Mat dst = new Mat();
-            Cv2.Canny(SelectOperation.ImageMat, dst, ThresholdValue, ThresholdMaxValue);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_Canny_t1{ThresholdValue}_t2{ThresholdMaxValue}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.Canny(SelectOperation.ImageMat, ThresholdValue, ThresholdMaxValue);
+            AddDerivedOperation(result.Mat, result.Suffix);
         }
         catch (Exception exception)
         {
@@ -1271,15 +1029,8 @@ public partial class BasicPageViewModel : ObservableObject
         if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
         try
         {
-            Mat dst = new Mat();
-            Cv2.Sobel(SelectOperation.ImageMat, dst, MatType.CV_8U, 1, 1);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_Sobel";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.Sobel(SelectOperation.ImageMat);
+            AddDerivedOperation(result.Mat, result.Suffix);
         }
         catch (Exception exception)
         {
@@ -1299,15 +1050,8 @@ public partial class BasicPageViewModel : ObservableObject
         if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
         try
         {
-            Mat dst = new Mat();
-            Cv2.Laplacian(SelectOperation.ImageMat, dst, MatType.CV_8U);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_Laplacian";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.Laplacian(SelectOperation.ImageMat);
+            AddDerivedOperation(result.Mat, result.Suffix);
         }
         catch (Exception exception)
         {
@@ -1327,15 +1071,8 @@ public partial class BasicPageViewModel : ObservableObject
         if (SelectOperation is null || SelectOperation.ImageMat is null || SelectOperation.ImageMat.Empty()) return Task.CompletedTask;
         try
         {
-            Mat dst = new Mat();
-            Cv2.Scharr(SelectOperation.ImageMat, dst, MatType.CV_8U, 1, 1);
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_Scharr";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
+            var result = basicOperatorService.Scharr(SelectOperation.ImageMat);
+            AddDerivedOperation(result.Mat, result.Suffix);
         }
         catch (Exception exception)
         {
@@ -1367,42 +1104,16 @@ public partial class BasicPageViewModel : ObservableObject
 
         try
         {
-            List<ContourObject> contourObjects = new List<ContourObject>();
+            var result = basicOperatorService.FindContours(
+                SelectOperation.ImageMat,
+                (RetrievalModes)SelectedRetrievalModes,
+                (ContourApproximationModes)SelectedContourApproximationModes,
+                SelectedRetrievalModes,
+                SelectedContourApproximationModes);
 
-            Mat dst = new Mat(SelectOperation.ImageMat.Width, SelectOperation.ImageMat.Height, MatType.CV_8UC3);
-            Cv2.FindContours(SelectOperation.ImageMat, out Point[][] contours, out HierarchyIndex[] hierarchy, (RetrievalModes)SelectedRetrievalModes, (ContourApproximationModes)SelectedContourApproximationModes);
-
-            Random random = new Random();
-            for (int i = 0; i < contours.Length; i++)
-            {
-                // 随机生成颜色
-                int r = random.Next(0, 256);
-                int g = random.Next(0, 256);
-                int b = random.Next(0, 256);
-                Scalar color = new Scalar(b, g, r);
-
-                Cv2.DrawContours(dst, contours, i, color);
-
-                // 创建一个新的 ContourObject 实例
-                var contourObject = new ContourObject
-                {
-                    Mask = dst.Clone(),
-                    ContourPoints = [contours[i]],
-                    Area = Cv2.ContourArea(contours[i]),
-                    Perimeter = Cv2.ArcLength(contours[i], true),
-                    BoundingRect = Cv2.BoundingRect(contours[i])
-                };
-
-                contourObjects.Add(contourObject);
-            }
-
-            Operation operation = new Operation();
-            operation.ImageMat = dst;
-            operation.ImageName = $"{SelectOperation.ImageName}_FindContours_rm{SelectedRetrievalModes}_am{SelectedContourApproximationModes}";
-
-            OperationsCollection.Add(operation);
-            SelectOperation = operation;
-            SelectOperation.ContourObjectList = contourObjects;
+            AddDerivedOperation(result.Mat, result.Suffix);
+            if (SelectOperation is not null)
+                SelectOperation.ContourObjectList = result.Contours;
         }
         catch (Exception exception)
         {
@@ -1482,6 +1193,20 @@ public partial class BasicPageViewModel : ObservableObject
 
     #region 辅助方法
 
+    private void AddDerivedOperation(Mat dst, string suffix)
+    {
+        if (SelectOperation is null) return;
+
+        var operation = new Operation
+        {
+            ImageMat = dst,
+            ImageName = $"{SelectOperation.ImageName}_{suffix}"
+        };
+
+        OperationsCollection.Add(operation);
+        SelectOperation = operation;
+    }
+
     private static void ResetDialogCallbacks(IContentControl dialog)
     {
         dialog.CloseCallback = null;
@@ -1540,63 +1265,6 @@ public partial class BasicPageViewModel : ObservableObject
         BlockSize = dialog.BlockSize;
         Iterations = dialog.Iterations;
         SelectedKernelShape = dialog.SelectedKernelShape;
-        return true;
-    }
-
-    private async Task<bool> ConfirmThresholdAsync()
-    {
-        if (App.ServiceProvider.GetKeyedService(typeof(IContentControl), nameof(ThresholdDialog)) is not ThresholdDialog dialog)
-        {
-            Growl.ErrorGlobal("阈值参数对话框未找到");
-            return false;
-        }
-
-        dialog.ThresholdValue = ThresholdValue;
-        dialog.ThresholdMaxValue = ThresholdMaxValue;
-
-        var confirmed = await ShowConfirmDialogAsync(dialog);
-        if (!confirmed) return false;
-
-        ThresholdValue = dialog.ThresholdValue;
-        ThresholdMaxValue = dialog.ThresholdMaxValue;
-        return true;
-    }
-
-    private async Task<bool> ConfirmAdaptiveThresholdAsync()
-    {
-        if (App.ServiceProvider.GetKeyedService(typeof(IContentControl), nameof(AdaptiveThresholdDialog)) is not AdaptiveThresholdDialog dialog)
-        {
-            Growl.ErrorGlobal("自适应阈值参数对话框未找到");
-            return false;
-        }
-
-        dialog.BlockSize = BlockSize;
-        dialog.SelectedThresholdTypes = SelectedThresholdTypes;
-        dialog.ThresholdMaxValue = ThresholdMaxValue;
-
-        var confirmed = await ShowConfirmDialogAsync(dialog);
-        if (!confirmed) return false;
-
-        BlockSize = dialog.BlockSize;
-        SelectedThresholdTypes = dialog.SelectedThresholdTypes;
-        ThresholdMaxValue = dialog.ThresholdMaxValue;
-        return true;
-    }
-
-    private async Task<bool> ConfirmMaxValueAsync()
-    {
-        if (App.ServiceProvider.GetKeyedService(typeof(IContentControl), nameof(MaxValueDialog)) is not MaxValueDialog dialog)
-        {
-            Growl.ErrorGlobal("MaxValue 参数对话框未找到");
-            return false;
-        }
-
-        dialog.ThresholdMaxValue = ThresholdMaxValue;
-
-        var confirmed = await ShowConfirmDialogAsync(dialog);
-        if (!confirmed) return false;
-
-        ThresholdMaxValue = dialog.ThresholdMaxValue;
         return true;
     }
 

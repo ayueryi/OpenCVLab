@@ -5,6 +5,8 @@ using Yu.UI;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using OpenCVLab.Services.Operators;
+
 namespace OpenCVLab.Help;
 
 /// <summary>
@@ -18,6 +20,9 @@ public static class IocHelper
 
         // 注册对话框服务
         services.AddSingleton<IContentDialogService, ContentDialogService>();
+
+        // 注册基础算子服务
+        services.AddSingleton<IBasicOperatorService, BasicOperatorService>();
 
         #endregion
 

@@ -147,14 +147,9 @@
                             <ui:Icon Kind="Contrast" />
                         </MenuItem.Icon>
 
-                        <MenuItem Command="{Binding ViewModel.ThresholdCommand}" Header="简单阈值">
+                        <MenuItem Command="{Binding ViewModel.ThresholdProcessingCommand}" Header="二值化处理">
                             <MenuItem.Icon>
                                 <ui:Icon Kind="InvertColors" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Command="{Binding ViewModel.AdaptiveThresholdCommand}" Header="自适应阈值">
-                            <MenuItem.Icon>
-                                <ui:Icon Kind="AutoFix" />
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
@@ -346,39 +341,6 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Source="{Binding ViewModel.HistImageSource}" />
-
-                <Expander
-                    Margin="16"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    ExpandDirection="Right"
-                    IsExpanded="False">
-                    <Expander.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock FontWeight="SemiBold">
-                                <TextBlock.LayoutTransform>
-                                    <RotateTransform Angle="90" />
-                                </TextBlock.LayoutTransform>
-                                操
-                            </TextBlock>
-                            <TextBlock FontWeight="SemiBold">
-                                <TextBlock.LayoutTransform>
-                                    <RotateTransform Angle="90" />
-                                </TextBlock.LayoutTransform>
-                                作
-                            </TextBlock>
-                        </StackPanel>
-                    </Expander.Header>
-
-                    <Border Padding="8" CornerRadius="8">
-                        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
-                            <ToggleButton
-                                Checked="DrawBoundingRectCanvas"
-                                Content="绘制轮廓矩形"
-                                Unchecked="ClearCanvas" />
-                        </StackPanel>
-                    </Border>
-                </Expander>
             </Grid>
         </Border>
 
